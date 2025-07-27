@@ -1,5 +1,7 @@
-﻿using CertiBlock.Services.Users.Infrastructure.DAL;
+﻿using CertiBlock.Services.Users.Infrastructure.Auth;
+using CertiBlock.Services.Users.Infrastructure.DAL;
 using CertiBlock.Services.Users.Infrastructure.Errors;
+using CertiBlock.Services.Users.Infrastructure.Security;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +17,14 @@ public static class Extensions
         
         services.AddErrorHandling();
         services.AddControllers();
+
+        // Password Hasher
+        services.AddSecurity();
+        
+        // JWT Token
+        services.AddAuth(configuration);
+        services.AddHttpContextAccessor();
+        
         return services;
     }
 
@@ -22,6 +32,10 @@ public static class Extensions
     {
         app.UseErrorHandling();
         app.UseRouting();
+        
+        app.UseAuthentication();
+        app.UseAuthorization();
+        
         return app;
     }
     

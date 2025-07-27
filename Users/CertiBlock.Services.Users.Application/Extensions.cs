@@ -1,4 +1,5 @@
 ﻿using CertiBlock.Services.Users.Application.Abstractions;
+using CertiBlock.Services.Users.Application.Services.Clock;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,6 +14,8 @@ public static class Extensions
             .AddClasses(c => c.AssignableTo(typeof(ICommandHandler<>)))
             .AsImplementedInterfaces()
             .WithScopedLifetime());
+
+        services.AddSingleton<IClock, Clock>();
         
         return services;
     }
