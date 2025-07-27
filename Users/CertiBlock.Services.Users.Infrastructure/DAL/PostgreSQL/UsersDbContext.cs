@@ -15,6 +15,7 @@ public sealed class UsersDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
+        modelBuilder.HasDefaultSchema("users");
         
         foreach (var entity in modelBuilder.Model.GetEntityTypes())
         {

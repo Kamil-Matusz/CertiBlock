@@ -1,4 +1,5 @@
-﻿using CertiBlock.Services.Users.Infrastructure.Errors;
+﻿using CertiBlock.Services.Users.Infrastructure.DAL;
+using CertiBlock.Services.Users.Infrastructure.Errors;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,6 +10,9 @@ public static class Extensions
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        // PostgreSQL
+        services.AddPostgres(configuration);
+        
         services.AddErrorHandling();
         services.AddControllers();
         return services;
