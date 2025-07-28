@@ -10,4 +10,14 @@ public class User
     public Role Role { get; set; }
     public bool IsActive { get; set; }
     public DateTime CreatedAt { get; set; }
+
+    public User(Guid userId, string email, string password, Role role, bool isActive, DateTime createdAt)
+    {
+        UserId = userId;
+        Email = email;
+        Password = password;
+        Role = role;
+        IsActive = isActive;
+        CreatedAt = createdAt;
+    }
 }
