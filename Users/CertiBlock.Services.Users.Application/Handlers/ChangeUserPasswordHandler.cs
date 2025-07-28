@@ -5,7 +5,7 @@ using CertiBlock.Services.Users.Core.Repositories;
 
 namespace CertiBlock.Services.Users.Application.Handlers;
 
-internal sealed class ChangeUserPasswordHandler : ICommandHandler<ChangeUserPassword>
+public sealed class ChangeUserPasswordHandler : ICommandHandler<ChangeUserPassword>
 {
     private readonly IPasswordManager _passwordManager;
     private readonly IUserRepository _userRepository;

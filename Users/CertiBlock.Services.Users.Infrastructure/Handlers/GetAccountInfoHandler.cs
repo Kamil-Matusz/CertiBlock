@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CertiBlock.Services.Users.Infrastructure.Handlers;
 
-internal sealed class GetAccountInfoHandler : IQueryHandler<GetAccountInfo, AccountDto>
+public sealed class GetAccountInfoHandler : IQueryHandler<GetAccountInfo, AccountDto>
 {
     private readonly UsersDbContext _dbContext;
 

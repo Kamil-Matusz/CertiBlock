@@ -7,7 +7,7 @@ using CertiBlock.Services.Users.Core.Repositories;
 
 namespace CertiBlock.Services.Users.Application.Handlers;
 
-internal sealed class SignInHandler : ICommandHandler<SignIn>
+public sealed class SignInHandler : ICommandHandler<SignIn>
 {
     private readonly IUserRepository _userRepository;
     private readonly IAuthenticator _authenticator;

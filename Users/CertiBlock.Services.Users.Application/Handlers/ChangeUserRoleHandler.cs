@@ -6,7 +6,7 @@ using CertiBlock.Services.Users.Core.ValueObjects;
 
 namespace CertiBlock.Services.Users.Application.Handlers;
 
-internal sealed class ChangeUserRoleHandler : ICommandHandler<ChangeUserRole>
+public sealed class ChangeUserRoleHandler : ICommandHandler<ChangeUserRole>
 {
     private readonly IUserRepository _userRepository;
 

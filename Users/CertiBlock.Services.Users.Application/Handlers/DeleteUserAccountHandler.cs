@@ -5,7 +5,7 @@ using CertiBlock.Services.Users.Core.Repositories;
 
 namespace CertiBlock.Services.Users.Application.Handlers;
 
-internal sealed class DeleteUserAccountHandler : ICommandHandler<DeleteUserAccount>
+public sealed class DeleteUserAccountHandler : ICommandHandler<DeleteUserAccount>
 {
     private readonly IUserRepository _userRepository;
 

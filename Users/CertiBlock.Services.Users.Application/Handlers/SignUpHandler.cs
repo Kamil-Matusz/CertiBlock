@@ -9,7 +9,7 @@ using CertiBlock.Services.Users.Core.ValueObjects;
 
 namespace CertiBlock.Services.Users.Application.Handlers;
 
-internal sealed class SignUpHandler : ICommandHandler<SignUp>
+public sealed class SignUpHandler : ICommandHandler<SignUp>
 {
     private readonly IClock _clock;
     private readonly IPasswordManager _passwordManager;
