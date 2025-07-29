@@ -12,6 +12,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CertiBlock.Services.Users.I
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CertiBlock.Services.Users.UnitTests", "tests\Users\CertiBlock.Services.Users.UnitTests\CertiBlock.Services.Users.UnitTests.csproj", "{F7F0B4C3-5796-4978-846A-B5D12BFEF3F9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Certificate", "Certificate", "{B8551210-6E95-41AC-B8A5-309F5905842A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CertiBlock.Services.Certificates.Api", "src\Certificate\CertiBlock.Services.Certificates.Api\CertiBlock.Services.Certificates.Api.csproj", "{92336820-2248-46DD-8C90-9038F62EFBA0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CertiBlock.Services.Certificates.Core", "src\Certificate\CertiBlock.Services.Certificates.Core\CertiBlock.Services.Certificates.Core.csproj", "{64450F12-2A0A-4C8D-B623-B43C50EA67FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +29,8 @@ Global
 		{530129CF-B565-42DA-97B2-7D5DB72914BC} = {BE312EC4-FCE3-4CFB-9C19-9D910885C0B8}
 		{212D5DCB-649A-49FD-947F-3872AE54F817} = {BE312EC4-FCE3-4CFB-9C19-9D910885C0B8}
 		{F7F0B4C3-5796-4978-846A-B5D12BFEF3F9} = {BE312EC4-FCE3-4CFB-9C19-9D910885C0B8}
+		{92336820-2248-46DD-8C90-9038F62EFBA0} = {B8551210-6E95-41AC-B8A5-309F5905842A}
+		{64450F12-2A0A-4C8D-B623-B43C50EA67FF} = {B8551210-6E95-41AC-B8A5-309F5905842A}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{A2B8A0BA-19F2-46C9-8DC9-E4D81576880D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -45,5 +53,13 @@ Global
 		{F7F0B4C3-5796-4978-846A-B5D12BFEF3F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7F0B4C3-5796-4978-846A-B5D12BFEF3F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7F0B4C3-5796-4978-846A-B5D12BFEF3F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92336820-2248-46DD-8C90-9038F62EFBA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92336820-2248-46DD-8C90-9038F62EFBA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92336820-2248-46DD-8C90-9038F62EFBA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92336820-2248-46DD-8C90-9038F62EFBA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64450F12-2A0A-4C8D-B623-B43C50EA67FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64450F12-2A0A-4C8D-B623-B43C50EA67FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64450F12-2A0A-4C8D-B623-B43C50EA67FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64450F12-2A0A-4C8D-B623-B43C50EA67FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
