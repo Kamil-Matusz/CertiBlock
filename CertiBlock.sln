@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CertiBlock.Services.Users.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CertiBlock.Services.Users.Infrastructure", "src\Users\CertiBlock.Services.Users.Infrastructure\CertiBlock.Services.Users.Infrastructure.csproj", "{212D5DCB-649A-49FD-947F-3872AE54F817}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CertiBlock.Services.Users.UnitTests", "tests\Users\CertiBlock.Services.Users.UnitTests\CertiBlock.Services.Users.UnitTests.csproj", "{F7F0B4C3-5796-4978-846A-B5D12BFEF3F9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +22,7 @@ Global
 		{F7AF1425-2C1E-4941-8A10-80BC741E299E} = {BE312EC4-FCE3-4CFB-9C19-9D910885C0B8}
 		{530129CF-B565-42DA-97B2-7D5DB72914BC} = {BE312EC4-FCE3-4CFB-9C19-9D910885C0B8}
 		{212D5DCB-649A-49FD-947F-3872AE54F817} = {BE312EC4-FCE3-4CFB-9C19-9D910885C0B8}
+		{F7F0B4C3-5796-4978-846A-B5D12BFEF3F9} = {BE312EC4-FCE3-4CFB-9C19-9D910885C0B8}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{A2B8A0BA-19F2-46C9-8DC9-E4D81576880D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -38,5 +41,9 @@ Global
 		{212D5DCB-649A-49FD-947F-3872AE54F817}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{212D5DCB-649A-49FD-947F-3872AE54F817}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{212D5DCB-649A-49FD-947F-3872AE54F817}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7F0B4C3-5796-4978-846A-B5D12BFEF3F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7F0B4C3-5796-4978-846A-B5D12BFEF3F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7F0B4C3-5796-4978-846A-B5D12BFEF3F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7F0B4C3-5796-4978-846A-B5D12BFEF3F9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
