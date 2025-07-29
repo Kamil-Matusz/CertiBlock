@@ -1,0 +1,56 @@
+@CertiBlock.Services.Users.Api_HostAddress = http://localhost:5097
+
+GET {{CertiBlock.Services.Users.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+
+@UsersService_Host = http://localhost:5000
+@access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzNmJjODg4MS1hNzg2LTQzMmYtYjVkZS1iY2EwM2Y4MTkzYmEiLCJ1bmlxdWVfbmFtZSI6IjM2YmM4ODgxLWE3ODYtNDMyZi1iNWRlLWJjYTAzZjgxOTNiYSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwibmJmIjoxNzUzNzMyOTU5LCJleHAiOjE3NTM3MzY1NTksImlzcyI6ImNlcnRpQmxvY2staXNzdWVyIiwiYXVkIjoiY2VydGlCbG9jay1hdWRpZW5jZSJ9.Fbe68L0KtIYleUfqQKxGlNHksKcq9Iu4lr7pzMSUQdE
+@userId = 3fa85f64-5717-4562-b3fc-2c963f66afa6
+@pageIndex = 1
+@pageSize = 2
+
+POST {{UsersService_Host}}/users-service/Users/signUp
+Accept: */*
+Content-Type: application/json
+
+{
+  "userId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "email": "admin@admin.com",
+  "password": "password",
+  "role": "Admin",
+  "isActive": true
+}
+
+###
+
+POST {{UsersService_Host}}/users-service/Users/signIn
+Accept: text/plain
+Content-Type: application/json
+
+{
+  "email": "admin@admin.com",
+  "password": "password"
+}
+
+###
+
+DELETE {{UsersService_Host}}/users-service/Users/{{userId}}
+Accept: */*
+Authorization: Bearer {{access_token}}
+
+###
+
+GET {{UsersService_Host}}/users-service/Users/myAccount
+Accept: text/plain
+Authorization: Bearer {{access_token}}
+
+###
+
+GET {{UsersService_Host}}/users-service/Users?PageIndex={{pageIndex}}&PageSize={{pageSize}}
+Accept: application/json
+Authorization: Bearer {{access_token}}
+
+
+
