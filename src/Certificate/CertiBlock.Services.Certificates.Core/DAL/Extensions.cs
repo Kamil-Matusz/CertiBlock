@@ -1,4 +1,5 @@
 ﻿using CertiBlock.Services.Certificates.Core.DAL.MongoDB;
+using CertiBlock.Services.Certificates.Core.DAL.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
@@ -14,14 +15,15 @@ public static class Extensions
         var section = configuration.GetSection(MongoSectionName);
         services.Configure<MongoDBOptions>(section);
         var options = configuration.GetOptions<MongoDBOptions>(MongoSectionName);
-        Console.WriteLine($"Mongo connection string: {options.ConnectionString}");
-        Console.WriteLine($"Mongo database: {options.Database}"); // <- Sprawdź czy nie null
 
         var client = new MongoClient(options.ConnectionString);
         var database = client.GetDatabase(options.Database);
 
         services.AddSingleton<IMongoClient>(client);
         services.AddSingleton(database);
+        
+        // Repositories
+        services.AddScoped<ICertificateRepository, CertificateRepository>();
 
         return services;
     }
