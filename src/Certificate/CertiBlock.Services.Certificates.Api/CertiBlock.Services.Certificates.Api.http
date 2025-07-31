@@ -1,6 +1,15 @@
 @CertiBlock.Services.Certificates.Api_HostAddress = http://localhost:5052
+@access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ...TwójToken...
 
-GET {{CertiBlock.Services.Certificates.Api_HostAddress}}/weatherforecast/
-Accept: application/json
+POST {{CertiBlock.Services.Certificates.Api_HostAddress}}/certificate-service/
+Accept: */*
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
 
-###
+{
+  "ownerName": "Kamil Matusz",
+  "title": "Uniwersystet",
+  "issuedBy": "Kamil Matusz",
+  "issuedDate": "2025-07-31T18:41:26.394Z",
+  "blockchain": "polygon"
+}

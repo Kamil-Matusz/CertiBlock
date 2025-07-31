@@ -25,4 +25,8 @@ app.MapOpenApi();
 
 app.UseHttpsRedirection();
 
+app.UseInfrastructure();
+
+app.MapControllers();
+
 app.Run();
