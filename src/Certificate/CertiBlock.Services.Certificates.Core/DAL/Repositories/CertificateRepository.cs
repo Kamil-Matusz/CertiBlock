@@ -36,4 +36,10 @@ public class CertificateRepository : ICertificateRepository
         var filter = Builders<Certificate>.Filter.Eq(x => x.IssuerId, issuerId);
         return await _collection.Find(filter).ToListAsync();
     }
+
+    public async Task DeleteCertificateAsync(Guid id)
+    {
+        var filter = Builders<Certificate>.Filter.Eq(c => c.Id, id);
+        await _collection.DeleteOneAsync(filter);
+    }
 }

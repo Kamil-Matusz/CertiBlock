@@ -63,4 +63,64 @@ public class CertificateService : ICertificateService
             RegisteredAt = entity.CreatedAt
         };
     }
+
+    public async Task DeleteCertificateAsync(Guid id)
+    {
+        var certificate = await _certificateRepository.GetCertificateByIdAsync(id);
+        if (certificate is null)
+        {
+            throw new Exception("Certificate not found");
+        }
+
+        await _certificateRepository.DeleteCertificateAsync(id);
+    }
+
+    public async Task<IEnumerable<CertificateDto>> GetAllCertificatesAsync()
+    {
+        var certificates = await _certificateRepository.GetAllCertificatesAsync();
+        return MapAll<CertificateDto>(certificates);
+    }
+
+    public async Task<IEnumerable<CertificateDto>> GetCertificatesByUserIdAsync(Guid userId)
+    {
+        var certificates = await _certificateRepository.GetCertificateByIssuerIdAsync(userId.ToString());
+
+        if (!certificates.Any())
+        {
+            throw new Exception("No certificates found for this user.");
+        }
+
+        return MapAll<CertificateDto>(certificates);
+    }
+
+    public async Task<CertificateDto> GetCertificateByIdAsync(Guid certificateId)
+    {
+        var certificate = await _certificateRepository.GetCertificateByIdAsync(certificateId);
+
+        if (certificate is null)
+        {
+            throw new Exception("Certificate not found");
+        }
+
+        return Map<CertificateDto>(certificate);
+    }
+
+    private static T Map<T>(Certificate certificate) where T : CertificateDto, new() => new T()
+    {
+       Id = certificate.Id,
+       OwnerName = certificate.OwnerName,
+       Title = certificate.Title,
+       IssuedBy = certificate.IssuedBy,
+       IssuedDate = certificate.IssuedDate,
+       CertificateHash = certificate.CertificateHash,
+       Blockchain = certificate.Blockchain,
+       TransactionHash = certificate.TransactionHash,
+       IssuerId = certificate.IssuerId,
+       CreatedAt = certificate.CreatedAt
+    };
+    
+    public static IEnumerable<T> MapAll<T>(IEnumerable<Certificate> certificates) where T : CertificateDto, new()
+    {
+        return certificates.Select(c => Map<T>(c));
+    }
 }
