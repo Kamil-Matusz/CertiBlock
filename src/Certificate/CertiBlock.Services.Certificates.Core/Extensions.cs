@@ -1,4 +1,5 @@
-﻿using CertiBlock.Services.Certificates.Core.Clients;
+﻿using CertiBlock.Services.Certificates.Core.Auth;
+using CertiBlock.Services.Certificates.Core.Clients;
 using CertiBlock.Services.Certificates.Core.DAL;
 using CertiBlock.Services.Certificates.Core.Services;
 using CertiBlock.Services.Certificates.Core.Validators;
@@ -25,6 +26,9 @@ public static class Extensions
         });
         
         services.AddControllers();
+        
+        // JWT Token
+        services.AddAuth(configuration);
         
         return services;
     }
