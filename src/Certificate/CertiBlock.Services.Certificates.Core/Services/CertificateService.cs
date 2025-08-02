@@ -5,6 +5,7 @@ using CertiBlock.Services.Certificates.Core.Clients;
 using CertiBlock.Services.Certificates.Core.DAL.Repositories;
 using CertiBlock.Services.Certificates.Core.DTO;
 using CertiBlock.Services.Certificates.Core.Entities;
+using CertiBlock.Services.Certificates.Core.Exceptions;
 
 namespace CertiBlock.Services.Certificates.Core.Services;
 
@@ -69,7 +70,7 @@ public class CertificateService : ICertificateService
         var certificate = await _certificateRepository.GetCertificateByIdAsync(id);
         if (certificate is null)
         {
-            throw new Exception("Certificate not found");
+            throw new CetrtificateNotFoundException(id);
         }
 
         await _certificateRepository.DeleteCertificateAsync(id);
@@ -87,7 +88,7 @@ public class CertificateService : ICertificateService
 
         if (!certificates.Any())
         {
-            throw new Exception("No certificates found for this user.");
+            throw new CetrtificateForUserNotFoundException(userId);
         }
 
         return MapAll<CertificateDto>(certificates);
@@ -99,7 +100,7 @@ public class CertificateService : ICertificateService
 
         if (certificate is null)
         {
-            throw new Exception("Certificate not found");
+            throw new CetrtificateNotFoundException(certificateId);
         }
 
         return Map<CertificateDto>(certificate);

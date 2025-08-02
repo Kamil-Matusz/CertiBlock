@@ -14,4 +14,8 @@
       <PackageReference Include="System.Text.Json" Version="9.0.6" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\Shared\CertiBlock.Shared\CertiBlock.Shared.csproj" />
+    </ItemGroup>
+
 </Project>
