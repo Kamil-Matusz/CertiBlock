@@ -1,6 +1,6 @@
 ﻿using CertiBlock.Services.Certificates.Core.DTO;
-using CertiBlock.Services.Certificates.Core.Helpers;
 using CertiBlock.Services.Certificates.Core.Services;
+using CertiBlock.Shared.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

@@ -6,6 +6,7 @@ using CertiBlock.Services.Certificates.Core.DAL.Repositories;
 using CertiBlock.Services.Certificates.Core.DTO;
 using CertiBlock.Services.Certificates.Core.Entities;
 using CertiBlock.Services.Certificates.Core.Exceptions;
+using CertiBlock.Shared.DTO;
 
 namespace CertiBlock.Services.Certificates.Core.Services;
 

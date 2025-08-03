@@ -1,4 +1,4 @@
-﻿namespace CertiBlock.Services.Certificates.Core.DTO;
+﻿namespace CertiBlock.Shared.DTO;
 
 public class UserContext
 {

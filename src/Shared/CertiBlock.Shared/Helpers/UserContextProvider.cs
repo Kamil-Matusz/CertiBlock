@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
-using CertiBlock.Services.Certificates.Core.DTO;
+using CertiBlock.Shared.DTO;
 
-namespace CertiBlock.Services.Certificates.Core.Helpers;
+namespace CertiBlock.Shared.Helpers;
 
 public static class UserContextProvider
 {
