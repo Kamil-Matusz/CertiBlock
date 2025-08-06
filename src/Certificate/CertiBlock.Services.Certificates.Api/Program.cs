@@ -1,6 +1,4 @@
-using CertiBlock.Services.Users.Application;
-using CertiBlock.Services.Users.Core;
-using CertiBlock.Services.Users.Infrastructure;
+using CertiBlock.Services.Certificates.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,10 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
 
-builder.Services
-    .AddCore()
-    .AddApplication(builder.Configuration)
-    .AddInfrastructure(builder.Configuration);
+builder.Services.AddCore(builder.Configuration);
 
 var app = builder.Build();
 
