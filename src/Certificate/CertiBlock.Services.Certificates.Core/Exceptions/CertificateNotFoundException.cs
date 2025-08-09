@@ -2,11 +2,11 @@
 
 namespace CertiBlock.Services.Certificates.Core.Exceptions;
 
-public class CetrtificateNotFoundException : CustomException
+public class CertificateNotFoundException : CustomException
 {
     public Guid Id { get; set; }
     
-    public CetrtificateNotFoundException(Guid id) : base($"Certificate with ID: '{id}' was not found.")
+    public CertificateNotFoundException(Guid id) : base($"Certificate with ID: '{id}' was not found.")
     {
         Id = id;
     }

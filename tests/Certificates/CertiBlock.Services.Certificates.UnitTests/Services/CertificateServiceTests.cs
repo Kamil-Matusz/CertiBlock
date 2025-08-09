@@ -47,7 +47,7 @@ public class CertificateServiceTests
             .ReturnsAsync((Certificate?)null);
 
         // Act & Assert
-        await Should.ThrowAsync<CetrtificateNotFoundException>(() => _service.DeleteCertificateAsync(certId));
+        await Should.ThrowAsync<CertificateNotFoundException>(() => _service.DeleteCertificateAsync(certId));
     }
     
     [Fact]
@@ -90,7 +90,7 @@ public class CertificateServiceTests
             .ReturnsAsync((Certificate?)null);
 
         // Act & Assert
-        await Should.ThrowAsync<CetrtificateNotFoundException>(() => _service.GetCertificateByIdAsync(id));
+        await Should.ThrowAsync<CertificateNotFoundException>(() => _service.GetCertificateByIdAsync(id));
     }
     
     [Fact]

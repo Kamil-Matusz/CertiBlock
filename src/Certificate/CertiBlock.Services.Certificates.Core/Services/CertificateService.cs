@@ -6,6 +6,7 @@ using CertiBlock.Services.Certificates.Core.DAL.Repositories;
 using CertiBlock.Services.Certificates.Core.DTO;
 using CertiBlock.Services.Certificates.Core.Entities;
 using CertiBlock.Services.Certificates.Core.Exceptions;
+using CertiBlock.Services.Certificates.Core.Mappers;
 using CertiBlock.Shared.DTO;
 
 namespace CertiBlock.Services.Certificates.Core.Services;
@@ -71,7 +72,7 @@ public class CertificateService : ICertificateService
         var certificate = await _certificateRepository.GetCertificateByIdAsync(id);
         if (certificate is null)
         {
-            throw new CetrtificateNotFoundException(id);
+            throw new CertificateNotFoundException(id);
         }
 
         await _certificateRepository.DeleteCertificateAsync(id);
@@ -80,7 +81,7 @@ public class CertificateService : ICertificateService
     public async Task<IEnumerable<CertificateDto>> GetAllCertificatesAsync()
     {
         var certificates = await _certificateRepository.GetAllCertificatesAsync();
-        return MapAll<CertificateDto>(certificates);
+        return CertificateMapper.MapAll<CertificateDto>(certificates);
     }
 
     public async Task<IEnumerable<CertificateDto>> GetCertificatesByUserIdAsync(Guid userId)
@@ -92,7 +93,7 @@ public class CertificateService : ICertificateService
             throw new CetrtificateForUserNotFoundException(userId);
         }
 
-        return MapAll<CertificateDto>(certificates);
+        return CertificateMapper.MapAll<CertificateDto>(certificates);
     }
 
     public async Task<CertificateDto> GetCertificateByIdAsync(Guid certificateId)
@@ -101,28 +102,9 @@ public class CertificateService : ICertificateService
 
         if (certificate is null)
         {
-            throw new CetrtificateNotFoundException(certificateId);
+            throw new CertificateNotFoundException(certificateId);
         }
 
-        return Map<CertificateDto>(certificate);
-    }
-
-    private static T Map<T>(Certificate certificate) where T : CertificateDto, new() => new T()
-    {
-       Id = certificate.Id,
-       OwnerName = certificate.OwnerName,
-       Title = certificate.Title,
-       IssuedBy = certificate.IssuedBy,
-       IssuedDate = certificate.IssuedDate,
-       CertificateHash = certificate.CertificateHash,
-       Blockchain = certificate.Blockchain,
-       TransactionHash = certificate.TransactionHash,
-       IssuerId = certificate.IssuerId,
-       CreatedAt = certificate.CreatedAt
-    };
-    
-    public static IEnumerable<T> MapAll<T>(IEnumerable<Certificate> certificates) where T : CertificateDto, new()
-    {
-        return certificates.Select(c => Map<T>(c));
+        return CertificateMapper.Map<CertificateDto>(certificate);
     }
 }
