@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using CertiBlock.Shared.Enums;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace CertiBlock.Services.Certificates.Core.Entities;
@@ -16,7 +17,7 @@ public class Certificate
 
     public string CertificateHash { get; set; }
     public string TransactionHash { get; set; }
-    public string Blockchain { get; set; }
+    public Blockchain Blockchain { get; set; }
 
     public string IssuerId { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

@@ -3,8 +3,7 @@ using CertiBlock.Services.Certificates.Core.DAL.Repositories;
 using CertiBlock.Services.Certificates.Core.Entities;
 using CertiBlock.Services.Certificates.Core.Exceptions;
 using CertiBlock.Services.Certificates.Core.Services;
-
-
+using CertiBlock.Shared.Enums;
 using Moq;
 using Shouldly;
 
@@ -62,7 +61,7 @@ public class CertificateServiceTests
             Title = "Test",
             IssuedBy = "Org",
             CertificateHash = "hash",
-            Blockchain = "Ethereum",
+            Blockchain = Blockchain.Ethereum,
             TransactionHash = "tx",
             CreatedAt = DateTime.UtcNow
         };

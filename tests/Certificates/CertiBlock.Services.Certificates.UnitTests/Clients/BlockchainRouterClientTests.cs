@@ -1,5 +1,6 @@
 ﻿using CertiBlock.Services.Certificates.Core.Clients;
 using CertiBlock.Services.Certificates.Core.DTO;
+using CertiBlock.Shared.Enums;
 using Shouldly;
 
 namespace CertiBlock.Services.Certificates.UnitTests.Clients;
@@ -16,7 +17,7 @@ public class BlockchainRouterClientTests
         {
             Hash = "CERT123",
             Issuer = "Kamil Matusz",
-            Blockchain = "Blockchain 101"
+            Blockchain = Blockchain.Ethereum
         };
 
         // Act
