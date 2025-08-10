@@ -60,6 +60,7 @@ public class CertificateService : ICertificateService
         // 6. Zwróć odpowiedź
         return new CertificateResponse
         {
+            CertificateId = entity.Id,
             TransactionHash = txHash,
             Blockchain = request.Blockchain,
             CertificateHash = certificateHash,
