@@ -1,6 +1,4 @@
-﻿version: '3.9'
-
-services:
+﻿services:
   postgres:
     image: postgres
     shm_size: '4gb'
@@ -26,8 +24,23 @@ services:
     volumes:
       - mongo:/data/db
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: certiBlock_rabbitmq
+    restart: unless-stopped
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq
+
 volumes:
   postgres:
     driver: local
   mongo:
+    driver: local
+  rabbitmq:
     driver: local

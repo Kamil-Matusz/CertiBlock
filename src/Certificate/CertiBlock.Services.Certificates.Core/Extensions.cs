@@ -1,6 +1,7 @@
 ﻿using CertiBlock.Services.Certificates.Core.Auth;
 using CertiBlock.Services.Certificates.Core.Clients;
 using CertiBlock.Services.Certificates.Core.DAL;
+using CertiBlock.Services.Certificates.Core.MassTransit;
 using CertiBlock.Services.Certificates.Core.Services;
 using CertiBlock.Services.Certificates.Core.Validators;
 using Microsoft.AspNetCore.Builder;
@@ -14,7 +15,12 @@ public static class Extensions
     public static IServiceCollection AddCore(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddFluentValidator();
+        
+        // MongoDB
         services.AddMongo(configuration);
+        
+        // MassTransit
+        services.AddMassTransitWithRabbitMq();
 
         // Services
         services.AddScoped<ICertificateService, CertificateService>();
