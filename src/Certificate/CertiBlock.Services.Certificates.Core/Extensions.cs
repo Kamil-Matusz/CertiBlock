@@ -1,5 +1,4 @@
 ﻿using CertiBlock.Services.Certificates.Core.Auth;
-using CertiBlock.Services.Certificates.Core.Clients;
 using CertiBlock.Services.Certificates.Core.DAL;
 using CertiBlock.Services.Certificates.Core.MassTransit;
 using CertiBlock.Services.Certificates.Core.Services;
@@ -24,12 +23,6 @@ public static class Extensions
 
         // Services
         services.AddScoped<ICertificateService, CertificateService>();
-        
-        // HTTP Client
-        services.AddHttpClient<IBlockchainRouterClient, BlockchainRouterClient>(client =>
-        {
-            client.BaseAddress = new Uri(configuration["BlockchainRouter:BaseUrl"]);
-        });
         
         services.AddControllers();
         

@@ -1,3 +1,5 @@
-﻿namespace CertiBlock.Services.Certificates.Core.Events;
+﻿using CertiBlock.Shared.Enums;
 
-public record CertificateRegistered (Guid CertificateId, string CertificateHash, string Issuer, string Blockchain);
+namespace CertiBlock.Services.Certificates.Core.Events;
+
+public record CertificateRegistered (Guid CertificateId, string CertificateHash, string Issuer, Blockchain Blockchain);
