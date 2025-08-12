@@ -29,6 +29,9 @@ public static class Extensions
         // JWT Token
         services.AddAuth(configuration);
         
+        // Logger
+        services.AddLogging();
+        
         return services;
     }
     

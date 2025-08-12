@@ -9,20 +9,13 @@ using CertiBlock.Services.Certificates.Core.Exceptions;
 using CertiBlock.Services.Certificates.Core.Mappers;
 using CertiBlock.Shared.DTO;
 using MassTransit;
+using Microsoft.Extensions.Logging;
 
 namespace CertiBlock.Services.Certificates.Core.Services;
 
-public class CertificateService : ICertificateService
+public class CertificateService(ICertificateRepository certificateRepository, IPublishEndpoint publishEndpoint,
+    ILogger<CertificateService> logger) : ICertificateService
 {
-    private readonly ICertificateRepository _certificateRepository;
-    private readonly IPublishEndpoint _publishEndpoint;
-
-    public CertificateService(ICertificateRepository certificateRepository, IPublishEndpoint publishEndpoint)
-    {
-        _certificateRepository = certificateRepository;
-        _publishEndpoint = publishEndpoint;
-    }
-
     public async Task<CertificateResponse> RegisterCertificateAsync(CertificateRequest request, UserContext userContext)
     {
         var json = JsonSerializer.Serialize(request);
@@ -41,14 +34,22 @@ public class CertificateService : ICertificateService
             IssuerId = userContext.UserId,
         };
         
-        await _certificateRepository.SaveCertificateAsync(entity);
+        await certificateRepository.SaveCertificateAsync(entity);
         
-        await _publishEndpoint.Publish(new CertificateRegistered(
-            entity.Id,
-            certificateHash,
-            request.IssuedBy,
-            request.Blockchain
-        ));
+        try
+        {
+            await publishEndpoint.Publish(new CertificateRegistered(
+                entity.Id,
+                certificateHash,
+                request.IssuedBy,
+                request.Blockchain
+            ));
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Failed to publish CertificateRegistered event for CertificateId={CertificateId}", entity.Id);
+        }
+
         
         return new CertificateResponse
         {
@@ -61,24 +62,24 @@ public class CertificateService : ICertificateService
 
     public async Task DeleteCertificateAsync(Guid id)
     {
-        var certificate = await _certificateRepository.GetCertificateByIdAsync(id);
+        var certificate = await certificateRepository.GetCertificateByIdAsync(id);
         if (certificate is null)
         {
             throw new CertificateNotFoundException(id);
         }
 
-        await _certificateRepository.DeleteCertificateAsync(id);
+        await certificateRepository.DeleteCertificateAsync(id);
     }
 
     public async Task<IEnumerable<CertificateDto>> GetAllCertificatesAsync()
     {
-        var certificates = await _certificateRepository.GetAllCertificatesAsync();
+        var certificates = await certificateRepository.GetAllCertificatesAsync();
         return CertificateMapper.MapAll<CertificateDto>(certificates);
     }
 
     public async Task<IEnumerable<CertificateDto>> GetCertificatesByUserIdAsync(Guid userId)
     {
-        var certificates = await _certificateRepository.GetCertificateByIssuerIdAsync(userId.ToString());
+        var certificates = await certificateRepository.GetCertificateByIssuerIdAsync(userId.ToString());
 
         if (!certificates.Any())
         {
@@ -90,7 +91,7 @@ public class CertificateService : ICertificateService
 
     public async Task<CertificateDto> GetCertificateByIdAsync(Guid certificateId)
     {
-        var certificate = await _certificateRepository.GetCertificateByIdAsync(certificateId);
+        var certificate = await certificateRepository.GetCertificateByIdAsync(certificateId);
 
         if (certificate is null)
         {

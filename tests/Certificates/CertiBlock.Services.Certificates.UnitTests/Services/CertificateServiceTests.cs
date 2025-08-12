@@ -5,6 +5,7 @@ using CertiBlock.Services.Certificates.Core.Exceptions;
 using CertiBlock.Services.Certificates.Core.Services;
 using CertiBlock.Shared.Enums;
 using MassTransit;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Shouldly;
 
@@ -14,11 +15,12 @@ public class CertificateServiceTests
 {
     private readonly Mock<ICertificateRepository> _repositoryMock = new();
     private readonly Mock<IPublishEndpoint> _publishEndpointMock = new();
+    private readonly Mock<ILogger<CertificateService>> _loggerMock = new();
     private readonly CertificateService _service;
 
     public CertificateServiceTests()
     {
-        _service = new CertificateService(_repositoryMock.Object, _publishEndpointMock.Object);
+        _service = new CertificateService(_repositoryMock.Object, _publishEndpointMock.Object, _loggerMock.Object);
     }
     
     [Fact]
