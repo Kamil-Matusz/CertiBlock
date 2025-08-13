@@ -1,4 +1,6 @@
-﻿namespace CertiBlock.Services.Certificates.Core.DTO;
+﻿using CertiBlock.Shared.Enums;
+
+namespace CertiBlock.Services.Certificates.Core.DTO;
 
 public class CertificateDto
 {
@@ -9,7 +11,7 @@ public class CertificateDto
     public DateTime IssuedDate { get; set; }
     public string CertificateHash { get; set; }
     public string TransactionHash { get; set; }
-    public string Blockchain { get; set; }
+    public Blockchain Blockchain { get; set; }
     public string IssuerId { get; set; }
     public DateTime CreatedAt { get; set; }
 }

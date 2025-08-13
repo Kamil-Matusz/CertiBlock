@@ -1,11 +1,6 @@
 ﻿namespace CertiBlock.Services.Users.Core.Exceptions;
 
-public class UserNotFoundException : CustomException
+public class UserNotFoundException(Guid id) : CustomException($"User with ID: '{id}' was not found.")
 {
-    public Guid Id { get; set; }
-    
-    public UserNotFoundException(Guid id) : base($"User with ID: '{id}' was not found.")
-    {
-        Id = id;
-    }
+    public Guid Id { get; set; } = id;
 }

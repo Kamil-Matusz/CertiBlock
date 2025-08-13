@@ -1,11 +1,8 @@
-﻿namespace CertiBlock.Services.Users.Core.Exceptions;
+﻿using CertiBlock.Shared.Exceptions;
 
-public class AccountIsNotActiveException : CustomException
+namespace CertiBlock.Services.Users.Core.Exceptions;
+
+public class AccountIsNotActiveException(string email) : CustomException("The account is inactive. Unable to Sign In.")
 {
-    public string Email { get; }
-    
-    public AccountIsNotActiveException(string email) : base("The account is inactive. Unable to Sign In.")
-    {
-        Email = email;
-    }
+    public string Email { get; } = email;
 }

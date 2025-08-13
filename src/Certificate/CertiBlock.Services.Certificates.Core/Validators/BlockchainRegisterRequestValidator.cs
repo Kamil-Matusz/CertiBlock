@@ -17,8 +17,6 @@ public class BlockchainRegisterRequestValidator : AbstractValidator<BlockchainRe
             .MaximumLength(100).WithMessage("Issuer name must not exceed 100 characters.");
 
         RuleFor(x => x.Blockchain)
-            .NotEmpty().WithMessage("Blockchain type is required.")
-            .Must(b => b.ToLower() == "polygon" || b.ToLower() == "ethereum")
-            .WithMessage("Blockchain must be either 'polygon' or 'ethereum'.");
+            .NotEmpty().WithMessage("Blockchain type is required.");
     }
 }

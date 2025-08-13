@@ -1,6 +1,6 @@
 ﻿using CertiBlock.Services.Certificates.Core.Auth;
-using CertiBlock.Services.Certificates.Core.Clients;
 using CertiBlock.Services.Certificates.Core.DAL;
+using CertiBlock.Services.Certificates.Core.MassTransit;
 using CertiBlock.Services.Certificates.Core.Services;
 using CertiBlock.Services.Certificates.Core.Validators;
 using Microsoft.AspNetCore.Builder;
@@ -14,21 +14,23 @@ public static class Extensions
     public static IServiceCollection AddCore(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddFluentValidator();
+        
+        // MongoDB
         services.AddMongo(configuration);
+        
+        // MassTransit
+        services.AddMassTransitWithRabbitMq();
 
         // Services
         services.AddScoped<ICertificateService, CertificateService>();
-        
-        // HTTP Client
-        services.AddHttpClient<IBlockchainRouterClient, BlockchainRouterClient>(client =>
-        {
-            client.BaseAddress = new Uri(configuration["BlockchainRouter:BaseUrl"]);
-        });
         
         services.AddControllers();
         
         // JWT Token
         services.AddAuth(configuration);
+        
+        // Logger
+        services.AddLogging();
         
         return services;
     }

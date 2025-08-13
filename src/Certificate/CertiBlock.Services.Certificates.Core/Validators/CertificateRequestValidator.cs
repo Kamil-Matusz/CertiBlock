@@ -24,8 +24,6 @@ public class CertificateRequestValidator : AbstractValidator<CertificateRequest>
             .WithMessage("Issue date cannot be in the future.");
 
         RuleFor(x => x.Blockchain)
-            .NotEmpty().WithMessage("Blockchain type is required.")
-            .Must(b => b.ToLower() == "polygon" || b.ToLower() == "ethereum")
-            .WithMessage("Blockchain must be either 'polygon' or 'ethereum'.");
+            .NotEmpty().WithMessage("Blockchain type is required.");
     }
 }

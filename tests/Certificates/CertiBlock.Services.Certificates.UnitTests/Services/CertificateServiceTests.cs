@@ -1,10 +1,11 @@
-﻿using CertiBlock.Services.Certificates.Core.Clients;
+﻿
 using CertiBlock.Services.Certificates.Core.DAL.Repositories;
 using CertiBlock.Services.Certificates.Core.Entities;
 using CertiBlock.Services.Certificates.Core.Exceptions;
 using CertiBlock.Services.Certificates.Core.Services;
-
-
+using CertiBlock.Shared.Enums;
+using MassTransit;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Shouldly;
 
@@ -13,12 +14,13 @@ namespace CertiBlock.Services.Certificates.UnitTests.Services;
 public class CertificateServiceTests
 {
     private readonly Mock<ICertificateRepository> _repositoryMock = new();
-    private readonly Mock<IBlockchainRouterClient> _blockchainClientMock = new();
+    private readonly Mock<IPublishEndpoint> _publishEndpointMock = new();
+    private readonly Mock<ILogger<CertificateService>> _loggerMock = new();
     private readonly CertificateService _service;
 
     public CertificateServiceTests()
     {
-        _service = new CertificateService(_repositoryMock.Object, _blockchainClientMock.Object);
+        _service = new CertificateService(_repositoryMock.Object, _publishEndpointMock.Object, _loggerMock.Object);
     }
     
     [Fact]
@@ -47,7 +49,7 @@ public class CertificateServiceTests
             .ReturnsAsync((Certificate?)null);
 
         // Act & Assert
-        await Should.ThrowAsync<CetrtificateNotFoundException>(() => _service.DeleteCertificateAsync(certId));
+        await Should.ThrowAsync<CertificateNotFoundException>(() => _service.DeleteCertificateAsync(certId));
     }
     
     [Fact]
@@ -62,7 +64,7 @@ public class CertificateServiceTests
             Title = "Test",
             IssuedBy = "Org",
             CertificateHash = "hash",
-            Blockchain = "Ethereum",
+            Blockchain = Blockchain.Ethereum,
             TransactionHash = "tx",
             CreatedAt = DateTime.UtcNow
         };
@@ -90,7 +92,7 @@ public class CertificateServiceTests
             .ReturnsAsync((Certificate?)null);
 
         // Act & Assert
-        await Should.ThrowAsync<CetrtificateNotFoundException>(() => _service.GetCertificateByIdAsync(id));
+        await Should.ThrowAsync<CertificateNotFoundException>(() => _service.GetCertificateByIdAsync(id));
     }
     
     [Fact]
