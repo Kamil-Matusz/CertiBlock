@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddCore();
+builder.Services.AddCore(builder.Configuration);
 
 var app = builder.Build();
 
