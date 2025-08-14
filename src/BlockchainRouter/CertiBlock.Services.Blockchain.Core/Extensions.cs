@@ -8,13 +8,13 @@ namespace CertiBlock.Services.Blockchain.Core;
 
 public static class Extensions
 {
-    public static IServiceCollection AddCore(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddCore(this IServiceCollection services)
     {
         // MassTransit
         services.AddMassTransitWithRabbitMq();
         
         // HttpClients
-        services.AddClients(configuration);
+        services.AddClients();
         
         // Logger
         services.AddLogging();
