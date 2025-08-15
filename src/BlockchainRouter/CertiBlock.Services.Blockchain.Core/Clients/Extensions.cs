@@ -3,6 +3,8 @@ using CertiBlock.Services.Blockchain.Core.Clients.Polygon;
 using CertiBlock.Services.Blockchain.Core.Exceptions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Polly;
+using Polly.Extensions.Http;
 
 namespace CertiBlock.Services.Blockchain.Core.Clients;
 
@@ -18,16 +20,28 @@ public static class Extensions
 
         if (string.IsNullOrWhiteSpace(options.Polygon))
             throw new BlockchainConfigurationException("Polygon", "BlockchainClients:Polygon");
+        
+        // Polly Config
+        var retryPolicy = HttpPolicyExtensions
+            .HandleTransientHttpError()
+            .WaitAndRetryAsync(
+                retryCount: options.RetryCount,
+                sleepDurationProvider: retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
 
+        // Http Clients
         services.AddHttpClient<IEthereumClient, EthereumClient>(client =>
         {
             client.BaseAddress = new Uri(options.Ethereum);
-        });
+            client.Timeout = TimeSpan.FromSeconds(options.TimeoutSeconds);
+        })
+            .AddPolicyHandler(retryPolicy);
 
         services.AddHttpClient<IPolygonClient, PolygonClient>(client =>
         {
             client.BaseAddress = new Uri(options.Polygon);
-        });
+            client.Timeout = TimeSpan.FromSeconds(options.TimeoutSeconds);
+        })
+            .AddPolicyHandler(retryPolicy);
 
         return services;
     }
