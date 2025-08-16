@@ -19,6 +19,8 @@ public static class Extensions
         // Logger
         services.AddLogging();
         
+        services.AddControllers();
+        
         return services;
     }
     

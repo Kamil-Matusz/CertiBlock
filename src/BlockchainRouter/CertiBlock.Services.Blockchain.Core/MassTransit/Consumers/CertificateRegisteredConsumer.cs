@@ -11,7 +11,7 @@ public class CertificateRegisteredConsumer(ILogger<CertificateRegisteredConsumer
     {
         var message = context.Message;
         
-        logger.LogInformation(
+        logger.LogError(
             "Otrzymano wiadomość CertificateRegistered - CertificateId: {CertificateId}, Hash: {Hash}, Issuer: {Issuer}, Blockchain: {Blockchain}",
             message.CertificateId,
             message.CertificateHash,
