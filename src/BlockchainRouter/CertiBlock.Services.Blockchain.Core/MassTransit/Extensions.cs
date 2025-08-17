@@ -1,5 +1,4 @@
-﻿using CertiBlock.Services.Blockchain.Core.MassTransit.Consumers;
-using MassTransit;
+﻿using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,11 +10,11 @@ internal static class Extensions
     {
         var options = services.GetOptions<MassTransitOptions>("MassTransit:RabbitMq");
         services.AddSingleton(options);
-
+        
         services.AddMassTransit(x =>
         {
-            x.AddConsumer<CertificateRegisteredConsumer>();
-            
+            x.AddConsumers(typeof(Extensions).Assembly);
+    
             x.UsingRabbitMq((context, cfg) =>
             {
                 cfg.Host(options.Host, options.VirtualHost, h =>
@@ -23,10 +22,15 @@ internal static class Extensions
                     h.Username(options.Username);
                     h.Password(options.Password);
                 });
-                
-                cfg.ConfigureEndpoints(context);
+        
+                cfg.ReceiveEndpoint(options.Queue, e =>
+                {
+                    e.ConfigureConsumers(context);
+                });
             });
         });
+        
+        services.AddMassTransitHostedService();
 
         return services;
     }

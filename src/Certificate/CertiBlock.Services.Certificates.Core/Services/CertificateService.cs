@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CertiBlock.Services.Certificates.Core.Services;
 
-public class CertificateService(ICertificateRepository certificateRepository, IPublishEndpoint publishEndpoint,
+public class CertificateService(ICertificateRepository certificateRepository, IBus bus,
     ILogger<CertificateService> logger) : ICertificateService
 {
     public async Task<CertificateResponse> RegisterCertificateAsync(CertificateRequest request, UserContext userContext)
@@ -38,7 +38,7 @@ public class CertificateService(ICertificateRepository certificateRepository, IP
         
         try
         {
-            await publishEndpoint.Publish(new CertificateRegistered(
+            await bus.Send(new CertificateRegistered(
                 entity.Id,
                 certificateHash,
                 request.IssuedBy,
@@ -47,9 +47,8 @@ public class CertificateService(ICertificateRepository certificateRepository, IP
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Failed to publish CertificateRegistered event for CertificateId={CertificateId}", entity.Id);
+            logger.LogError(ex, "Failed to send CertificateRegistered message for CertificateId={CertificateId}", entity.Id);
         }
-
         
         return new CertificateResponse
         {

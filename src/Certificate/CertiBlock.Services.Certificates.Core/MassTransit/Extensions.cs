@@ -1,4 +1,5 @@
-﻿using MassTransit;
+﻿using CertiBlock.Services.Certificates.Core.Events;
+using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -20,6 +21,8 @@ internal static class Extensions
                     h.Username(options.Username);
                     h.Password(options.Password);
                 });
+                
+                EndpointConvention.Map<CertificateRegistered>(new Uri("queue:certificate-registered-queue"));
             });
         });
 
