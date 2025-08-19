@@ -3,6 +3,7 @@ using CertiBlock.Services.Certificates.Core.DAL;
 using CertiBlock.Services.Certificates.Core.MassTransit;
 using CertiBlock.Services.Certificates.Core.Services;
 using CertiBlock.Services.Certificates.Core.Validators;
+using CertiBlock.Shared.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,6 +32,9 @@ public static class Extensions
         
         // Logger
         services.AddLogging();
+        
+        // Seq
+        services.AddSeqLogging(configuration);
         
         return services;
     }
