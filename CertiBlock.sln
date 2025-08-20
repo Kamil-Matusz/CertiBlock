@@ -30,6 +30,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CertiBlock.Services.Blockch
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CertiBlock.Services.Blockchain.Api", "src\BlockchainRouter\CertiBlock.Services.Blockchain.Api\CertiBlock.Services.Blockchain.Api.csproj", "{A750E2A4-8F97-4F70-BAA6-CBA07F195B8F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CertiBlock.Services.Blockchain.UnitTests", "tests\BlockchainRouter\CertiBlock.Services.Blockchain.UnitTests\CertiBlock.Services.Blockchain.UnitTests.csproj", "{CB7AB7A4-2E2A-4331-AB3C-5592D8D1AAA4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,7 @@ Global
 		{C380CDDE-0947-4FA8-84AF-B4CD45884A72} = {B8551210-6E95-41AC-B8A5-309F5905842A}
 		{70373FAD-E894-427C-A7CE-8F6626F25AA2} = {F2E7B75C-90B8-4DB1-88F5-F3A89BA45D46}
 		{A750E2A4-8F97-4F70-BAA6-CBA07F195B8F} = {F2E7B75C-90B8-4DB1-88F5-F3A89BA45D46}
+		{CB7AB7A4-2E2A-4331-AB3C-5592D8D1AAA4} = {F2E7B75C-90B8-4DB1-88F5-F3A89BA45D46}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{A2B8A0BA-19F2-46C9-8DC9-E4D81576880D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -93,5 +96,9 @@ Global
 		{A750E2A4-8F97-4F70-BAA6-CBA07F195B8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A750E2A4-8F97-4F70-BAA6-CBA07F195B8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A750E2A4-8F97-4F70-BAA6-CBA07F195B8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB7AB7A4-2E2A-4331-AB3C-5592D8D1AAA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB7AB7A4-2E2A-4331-AB3C-5592D8D1AAA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB7AB7A4-2E2A-4331-AB3C-5592D8D1AAA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB7AB7A4-2E2A-4331-AB3C-5592D8D1AAA4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
