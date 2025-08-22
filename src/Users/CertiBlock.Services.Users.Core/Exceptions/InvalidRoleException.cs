@@ -1,4 +1,6 @@
-﻿namespace CertiBlock.Services.Users.Core.Exceptions;
+﻿using CertiBlock.Shared.Exceptions;
+
+namespace CertiBlock.Services.Users.Core.Exceptions;
 
 public sealed class InvalidRoleException(string role) : CustomException($"Role: '{role}' is invalid.")
 {

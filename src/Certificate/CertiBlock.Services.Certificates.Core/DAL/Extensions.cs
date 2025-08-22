@@ -8,7 +8,7 @@ namespace CertiBlock.Services.Certificates.Core.DAL;
 
 public static class Extensions
 {
-    private const string MongoSectionName = "mongo";
+    private const string MongoSectionName = "Mongo";
 
     public static IServiceCollection AddMongo(this IServiceCollection services, IConfiguration configuration)
     {

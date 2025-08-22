@@ -2,6 +2,7 @@
 using System.Net;
 using CertiBlock.Services.Users.Core.Exceptions;
 using CertiBlock.Services.Users.Infrastructure.Exceptions;
+using CertiBlock.Shared.Exceptions;
 using Humanizer;
 
 namespace CertiBlock.Services.Users.Infrastructure.Errors;

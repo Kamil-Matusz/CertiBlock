@@ -9,7 +9,7 @@ namespace CertiBlock.Services.Certificates.Core.Auth;
 
 internal static class Extensions
 {
-    private const string SectionName = "auth";
+    private const string SectionName = "Auth";
 
     public static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration)
     {
