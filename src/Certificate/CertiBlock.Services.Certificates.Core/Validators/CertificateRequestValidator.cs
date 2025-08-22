@@ -23,7 +23,8 @@ public class CertificateRequestValidator : AbstractValidator<CertificateRequest>
             .LessThanOrEqualTo(DateTime.UtcNow)
             .WithMessage("Issue date cannot be in the future.");
 
-        RuleFor(x => x.Blockchain)
-            .NotEmpty().WithMessage("Blockchain type is required.");
+        /*RuleFor(x => x.Blockchain)
+            .NotEmpty().WithMessage("Blockchain type is required.")
+            .IsInEnum().WithMessage("Invalid blockchain type. Supported: Polygon, Ethereum.");*/
     }
 }
