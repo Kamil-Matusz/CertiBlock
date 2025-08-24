@@ -1,5 +1,6 @@
 ﻿using CertiBlock.Services.Certificates.Core.Auth;
 using CertiBlock.Services.Certificates.Core.DAL;
+using CertiBlock.Services.Certificates.Core.DAL.Repositories;
 using CertiBlock.Services.Certificates.Core.MassTransit;
 using CertiBlock.Services.Certificates.Core.Services;
 using CertiBlock.Services.Certificates.Core.Validators;
@@ -21,6 +22,9 @@ public static class Extensions
         
         // MassTransit
         services.AddMassTransitWithRabbitMq();
+
+        // Repositories
+        services.AddRepositories();
 
         // Services
         services.AddScoped<ICertificateService, CertificateService>();

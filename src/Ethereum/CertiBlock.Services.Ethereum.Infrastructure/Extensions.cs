@@ -1,4 +1,5 @@
 ﻿using CertiBlock.Shared.Logging;
+using CertiBlock.Shared.Mongo;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +12,9 @@ public static class Extensions
     {
         // Seq
         services.AddSeqLogging(configuration);
+
+        // MongoDB
+        services.AddMongo(configuration);
         
         services.AddControllers();
         return services;
