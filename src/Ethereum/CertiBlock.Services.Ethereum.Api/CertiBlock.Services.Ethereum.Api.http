@@ -1,0 +1,6 @@
+@CertiBlock.Services.Ethereum.Api_HostAddress = http://localhost:5136
+
+GET {{CertiBlock.Services.Ethereum.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
