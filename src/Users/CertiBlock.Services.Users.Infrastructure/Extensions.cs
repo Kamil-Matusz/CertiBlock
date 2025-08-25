@@ -3,6 +3,7 @@ using CertiBlock.Services.Users.Infrastructure.Auth;
 using CertiBlock.Services.Users.Infrastructure.DAL;
 using CertiBlock.Services.Users.Infrastructure.Errors;
 using CertiBlock.Services.Users.Infrastructure.Security;
+using CertiBlock.Shared.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,6 +25,9 @@ public static class Extensions
         
         services.AddErrorHandling();
         services.AddControllers();
+
+        // Logging
+        services.AddSeqLogging(configuration);
 
         // Password Hasher
         services.AddSecurity();

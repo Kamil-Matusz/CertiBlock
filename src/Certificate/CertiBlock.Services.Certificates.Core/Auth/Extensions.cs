@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using CertiBlock.Services.Certificates.Core.DAL;
+using CertiBlock.Services.Certificates.Core.MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,5 +41,14 @@ internal static class Extensions
         services.AddAuthorization();
 
         return services;
+    }
+    
+    private static T GetOptions<T>(this IConfiguration configuration, string sectionName) where T : class, new()
+    {
+        var options = new T();
+        var section = configuration.GetSection(sectionName);
+        section.Bind(options);
+
+        return options;
     }
 }
