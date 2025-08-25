@@ -8,6 +8,11 @@
 
     <ItemGroup>
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.6" />
+      <PackageReference Include="MongoDB.Bson" Version="3.4.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Shared\CertiBlock.Shared\CertiBlock.Shared.csproj" />
     </ItemGroup>
 
 </Project>

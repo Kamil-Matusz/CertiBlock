@@ -9,5 +9,5 @@ public static class Extensions
         services.AddScoped<ICertificateRepository, CertificateRepository>();
         
         return services;
-    } 
+    }
 }

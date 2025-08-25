@@ -1,4 +1,5 @@
-﻿using CertiBlock.Shared.Logging;
+﻿using CertiBlock.Services.Ethereum.Infrastructure.DAL;
+using CertiBlock.Shared.Logging;
 using CertiBlock.Shared.Mongo;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -10,11 +11,17 @@ public static class Extensions
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        // Logger
+        services.AddLogging();
+        
         // Seq
         services.AddSeqLogging(configuration);
 
         // MongoDB
         services.AddMongo(configuration);
+
+        // Repositories
+        services.AddRepositories();
         
         services.AddControllers();
         return services;
