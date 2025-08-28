@@ -1,4 +1,5 @@
 ﻿using CertiBlock.Services.Ethereum.Infrastructure.DAL;
+using CertiBlock.Services.Ethereum.Infrastructure.Ethereum;
 using CertiBlock.Shared.Logging;
 using CertiBlock.Shared.Mongo;
 using Microsoft.AspNetCore.Builder;
@@ -22,6 +23,9 @@ public static class Extensions
 
         // Repositories
         services.AddRepositories();
+
+        // Ethereum
+        services.AddEthereum(configuration);
         
         services.AddControllers();
         return services;
