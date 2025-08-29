@@ -10,4 +10,5 @@ public interface IEthereumService
     Task<BlockchainTransactionDto> GetBlockchainTransactionByIdAsync(Guid id);
     Task<BlockchainTransactionDto> GetBlockchainTransactionByCertificateIdAsync(Guid certificateId);
     Task DeleteEthereumTransactionAsync(Guid id);
+    Task<decimal> GetEthBalanceAsync(string address);
 }

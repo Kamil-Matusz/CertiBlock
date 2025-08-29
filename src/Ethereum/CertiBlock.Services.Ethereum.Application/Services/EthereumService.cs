@@ -3,11 +3,13 @@ using CertiBlock.Services.Ethereum.Application.Mappers;
 using CertiBlock.Services.Ethereum.Core.Entities;
 using CertiBlock.Services.Ethereum.Core.Exceptions;
 using CertiBlock.Services.Ethereum.Core.Repositories;
+using Microsoft.Extensions.Logging;
+using Nethereum.Web3;
 using Serilog;
 
 namespace CertiBlock.Services.Ethereum.Application.Services;
 
-public class EthereumService(IEthereumRepository ethereumRepository, ILogger logger) : IEthereumService
+public class EthereumService(IEthereumRepository ethereumRepository, ILogger<EthereumService> logger, IWeb3 web3) : IEthereumService
 {
     public Task<BlockchainTransaction> RegisterEthereumTransactionAsync(BlockchainTransactionDto blockchainTransactionDto)
     {
@@ -46,5 +48,23 @@ public class EthereumService(IEthereumRepository ethereumRepository, ILogger log
         }
 
         await ethereumRepository.DeleteBlockchainTransactionAsync(id);
+    }
+
+    public async Task<decimal> GetEthBalanceAsync(string address)
+    {
+        if (string.IsNullOrWhiteSpace(address))
+            throw new ArgumentException("Address cannot be null or empty", nameof(address));
+
+        try
+        {
+            var balanceWei = await web3.Eth.GetBalance.SendRequestAsync(address);
+            var balanceEth = Web3.Convert.FromWei(balanceWei);
+            return balanceEth;
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error while fetching ETH balance for {Address}", address);
+            throw;
+        }
     }
 }
