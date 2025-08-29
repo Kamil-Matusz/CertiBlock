@@ -1,5 +1,5 @@
-﻿using CertiBlock.Services.Ethereum.Application.DTO;
-using CertiBlock.Services.Ethereum.Application.Mappers;
+﻿using CertiBlock.Services.Ethereum.Application.Mappers;
+using CertiBlock.Services.Ethereum.Core.DTO;
 using CertiBlock.Services.Ethereum.Core.Entities;
 using CertiBlock.Services.Ethereum.Core.Exceptions;
 using CertiBlock.Services.Ethereum.Core.Repositories;
@@ -50,21 +50,19 @@ public class EthereumService(IEthereumRepository ethereumRepository, ILogger<Eth
         await ethereumRepository.DeleteBlockchainTransactionAsync(id);
     }
 
-    public async Task<decimal> GetEthBalanceAsync(string address)
+    public async Task<EthereumBalanceDto> GetEthBalanceAsync(string walletAddress)
     {
-        if (string.IsNullOrWhiteSpace(address))
-            throw new ArgumentException("Address cannot be null or empty", nameof(address));
-
         try
         {
-            var balanceWei = await web3.Eth.GetBalance.SendRequestAsync(address);
+            var balanceWei = await web3.Eth.GetBalance.SendRequestAsync(walletAddress);
             var balanceEth = Web3.Convert.FromWei(balanceWei);
-            return balanceEth;
+        
+            return EthBalanceMapper.MapToDto(walletAddress, balanceEth);
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error while fetching ETH balance for {Address}", address);
-            throw;
+            logger.LogError(ex, "Error while fetching ETH balance for {Address}: {ErrorMessage}", walletAddress, ex.Message);
+            throw new EthereumBalanceException(walletAddress);
         }
     }
 }

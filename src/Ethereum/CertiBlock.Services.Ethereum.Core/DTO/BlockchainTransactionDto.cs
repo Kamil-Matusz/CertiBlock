@@ -1,6 +1,6 @@
 ﻿using CertiBlock.Shared.Enums;
 
-namespace CertiBlock.Services.Ethereum.Application.DTO;
+namespace CertiBlock.Services.Ethereum.Core.DTO;
 
 public class BlockchainTransactionDto
 {

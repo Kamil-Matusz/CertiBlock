@@ -1,4 +1,4 @@
-﻿using CertiBlock.Services.Ethereum.Application.DTO;
+﻿using CertiBlock.Services.Ethereum.Core.DTO;
 using CertiBlock.Services.Ethereum.Core.Entities;
 
 namespace CertiBlock.Services.Ethereum.Application.Services;
@@ -10,5 +10,5 @@ public interface IEthereumService
     Task<BlockchainTransactionDto> GetBlockchainTransactionByIdAsync(Guid id);
     Task<BlockchainTransactionDto> GetBlockchainTransactionByCertificateIdAsync(Guid certificateId);
     Task DeleteEthereumTransactionAsync(Guid id);
-    Task<decimal> GetEthBalanceAsync(string address);
+    Task<EthereumBalanceDto> GetEthBalanceAsync(string walletAddress);
 }

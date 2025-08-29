@@ -1,24 +1,17 @@
 ﻿using CertiBlock.Services.Ethereum.Application.Services;
+using CertiBlock.Services.Ethereum.Core.DTO;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CertiBlock.Services.Ethereum.Api.Controllers;
 
 public class EthereumController(IEthereumService ethereumService) : BaseController
 {
-    [HttpGet("balance/{address}")]
-    public async Task<IActionResult> GetBalance(string address)
+    [HttpGet("getEthBalanceByWalletAddress/{walletAddress}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<EthereumBalanceDto>> GetEthereumBalanceByWalletAddress(string walletAddress)
     {
-        if (string.IsNullOrWhiteSpace(address))
-            return BadRequest("Address cannot be empty");
-
-        try
-        {
-            var balance = await ethereumService.GetEthBalanceAsync(address);
-            return Ok(new { Address = address, Balance = balance, Unit = "ETH" });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { Message = "Error while fetching balance", Details = ex.Message });
-        }
+        var balanceDto = await ethereumService.GetEthBalanceAsync(walletAddress);
+        return Ok(balanceDto);
     }
 }

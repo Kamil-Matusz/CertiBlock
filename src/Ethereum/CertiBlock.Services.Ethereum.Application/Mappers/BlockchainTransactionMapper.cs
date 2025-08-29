@@ -1,4 +1,4 @@
-﻿using CertiBlock.Services.Ethereum.Application.DTO;
+﻿using CertiBlock.Services.Ethereum.Core.DTO;
 using CertiBlock.Services.Ethereum.Core.Entities;
 
 namespace CertiBlock.Services.Ethereum.Application.Mappers;
