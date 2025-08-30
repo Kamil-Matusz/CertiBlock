@@ -10,6 +10,7 @@ public class BlockchainTransaction
     [BsonRepresentation(BsonType.String)]
     public Guid Id { get; set; } = Guid.NewGuid();
 
+    [BsonRepresentation(BsonType.String)]
     public Guid CertificateId { get; set; }
     public string CertificateHash { get; set; }
 

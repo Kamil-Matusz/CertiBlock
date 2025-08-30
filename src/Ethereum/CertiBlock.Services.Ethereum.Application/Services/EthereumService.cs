@@ -8,6 +8,8 @@ using CertiBlock.Services.Ethereum.Core.Repositories;
 using CertiBlock.Shared.Enums;
 using Microsoft.Extensions.Logging;
 using Nethereum.Hex.HexConvertors.Extensions;
+using Nethereum.Hex.HexTypes;
+using Nethereum.RPC.Eth.DTOs;
 using Nethereum.Web3;
 using Serilog;
 
@@ -21,19 +23,21 @@ public class EthereumService(IEthereumRepository ethereumRepository, ILogger<Eth
         {
             var account = new Nethereum.Web3.Accounts.Account(ethereumOptions.PrivateKey);
             var web3WithAccount = new Web3(account, ethereumOptions.InfuraUrl);
-            var data = "0x" + Encoding.UTF8.GetBytes(dto.CertificateHash).ToHex();
 
-            var txnInput = new Nethereum.RPC.Eth.DTOs.TransactionInput
+            var data = dto.CertificateHash.StartsWith("0x")
+                ? dto.CertificateHash
+                : "0x" + dto.CertificateHash;
+            
+            var txnInput = new TransactionInput
             {
                 From = account.Address,
                 To = account.Address,
-                Value = new Nethereum.Hex.HexTypes.HexBigInteger(0),
-                Data = data
+                Value = new HexBigInteger(0),
+                Gas = new HexBigInteger(100000)
             };
             
-            var txnHash = await web3WithAccount.Eth.Transactions
-                .SendTransaction.SendRequestAsync(txnInput);
-            
+            var txnHash = await web3WithAccount.Eth.TransactionManager.SendTransactionAsync(txnInput);
+
             var blockchainTransaction = new BlockchainTransaction
             {
                 Id = dto.Id != Guid.Empty ? dto.Id : Guid.NewGuid(),
@@ -44,7 +48,7 @@ public class EthereumService(IEthereumRepository ethereumRepository, ILogger<Eth
                 Status = Status.Submitted,
                 CreatedAt = DateTime.UtcNow
             };
-            
+
             await ethereumRepository.SaveBlockchainTransactionAsync(blockchainTransaction);
 
             return blockchainTransaction;

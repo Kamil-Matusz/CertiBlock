@@ -11,11 +11,9 @@ public static class BlockchainTransactionMapper
         CertificateId = transaction.CertificateId,
         CertificateHash = transaction.CertificateHash,
         Blockchain = transaction.Blockchain,
-        TransactionHash = transaction.TransactionHash,
-        Status = transaction.Status,
-        CreatedAt = transaction.CreatedAt,
-        ConfirmedAt = transaction.ConfirmedAt,
-        FailedAt = transaction.FailedAt
+        //TransactionHash = transaction.TransactionHash,
+        //Status = transaction.Status,
+        //CreatedAt = transaction.CreatedAt,
     };
 
     public static IEnumerable<T> MapAll<T>(IEnumerable<BlockchainTransaction> transactions) where T : BlockchainTransactionDto, new()
