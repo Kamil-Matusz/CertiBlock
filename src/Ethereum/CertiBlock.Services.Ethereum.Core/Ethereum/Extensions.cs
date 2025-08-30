@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Nethereum.Web3;
 
-namespace CertiBlock.Services.Ethereum.Infrastructure.Ethereum;
+namespace CertiBlock.Services.Ethereum.Core.Ethereum;
 
 public static class Extensions
 {

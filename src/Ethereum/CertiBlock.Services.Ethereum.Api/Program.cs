@@ -10,7 +10,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
 
 builder.Services
-    .AddCore()
+    .AddCore(builder.Configuration)
     .AddApplication()
     .AddInfrastructure(builder.Configuration);
 
