@@ -10,7 +10,7 @@ public static class BlockchainTransactionMapper
         Id = transaction.Id,
         CertificateId = transaction.CertificateId,
         CertificateHash = transaction.CertificateHash,
-        Blockchain = transaction.Blockchain,
+        Issuer = transaction.Issuer
         //TransactionHash = transaction.TransactionHash,
         //Status = transaction.Status,
         //CreatedAt = transaction.CreatedAt,
@@ -25,4 +25,13 @@ public static class BlockchainTransactionMapper
 
     public static IEnumerable<BlockchainTransactionDto> MapAllToDto(IEnumerable<BlockchainTransaction> transactions) => 
         MapAll<BlockchainTransactionDto>(transactions);
+    
+    public static BlockchainTransactionResultDto MapToResultDto(BlockchainTransaction transaction) => new()
+    {
+        Id = transaction.Id,
+        CertificateId = transaction.CertificateId,
+        TransactionHash = transaction.TransactionHash,
+        Status = transaction.Status,
+        CreatedAt = transaction.CreatedAt
+    };
 }

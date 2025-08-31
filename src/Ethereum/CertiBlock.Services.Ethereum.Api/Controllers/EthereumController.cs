@@ -20,7 +20,7 @@ public class EthereumController(IEthereumService ethereumService) : BaseControll
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<BlockchainTransaction>> RegisterCertificate([FromBody] BlockchainTransactionDto dto)
+    public async Task<ActionResult<BlockchainTransactionResultDto>> RegisterCertificate([FromBody] BlockchainTransactionDto dto)
     {
         var transaction = await ethereumService.RegisterEthereumTransactionAsync(dto);
         return Ok(transaction);

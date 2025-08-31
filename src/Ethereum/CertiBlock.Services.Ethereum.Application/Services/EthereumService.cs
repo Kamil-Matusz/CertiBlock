@@ -17,7 +17,7 @@ namespace CertiBlock.Services.Ethereum.Application.Services;
 
 public class EthereumService(IEthereumRepository ethereumRepository, ILogger<EthereumService> logger, IWeb3 web3, EthereumOptions ethereumOptions) : IEthereumService
 {
-    public async Task<BlockchainTransaction> RegisterEthereumTransactionAsync(BlockchainTransactionDto dto)
+    public async Task<BlockchainTransactionResultDto> RegisterEthereumTransactionAsync(BlockchainTransactionDto dto)
     {
         try
         {
@@ -43,7 +43,8 @@ public class EthereumService(IEthereumRepository ethereumRepository, ILogger<Eth
                 Id = dto.Id != Guid.Empty ? dto.Id : Guid.NewGuid(),
                 CertificateId = dto.CertificateId,
                 CertificateHash = dto.CertificateHash,
-                Blockchain = dto.Blockchain,
+                Issuer = dto.Issuer,
+                Blockchain = Blockchain.Ethereum,
                 TransactionHash = txnHash,
                 Status = Status.Submitted,
                 CreatedAt = DateTime.UtcNow
@@ -51,7 +52,7 @@ public class EthereumService(IEthereumRepository ethereumRepository, ILogger<Eth
 
             await ethereumRepository.SaveBlockchainTransactionAsync(blockchainTransaction);
 
-            return blockchainTransaction;
+            return BlockchainTransactionMapper.MapToResultDto(blockchainTransaction);
         }
         catch (Exception ex)
         {

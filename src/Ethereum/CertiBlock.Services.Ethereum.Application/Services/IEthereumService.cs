@@ -5,7 +5,7 @@ namespace CertiBlock.Services.Ethereum.Application.Services;
 
 public interface IEthereumService
 {
-    Task<BlockchainTransaction> RegisterEthereumTransactionAsync(BlockchainTransactionDto blockchainTransactionDto);
+    Task<BlockchainTransactionResultDto> RegisterEthereumTransactionAsync(BlockchainTransactionDto blockchainTransactionDto);
     Task<IEnumerable<BlockchainTransactionDto>> GetAllEthereumTransactionsAsync();
     Task<BlockchainTransactionDto> GetBlockchainTransactionByIdAsync(Guid id);
     Task<BlockchainTransactionDto> GetBlockchainTransactionByCertificateIdAsync(Guid certificateId);

@@ -16,8 +16,7 @@ public class EthereumRepository : IEthereumRepository
         var db = client.GetDatabase(settings.Value.Database);
         _collection = db.GetCollection<BlockchainTransaction>("ethereum");
     }
-
-
+    
     public async Task<BlockchainTransaction> GetBlockchainTransactionByIdAsync(Guid id)
     {
         var filter = Builders<BlockchainTransaction>.Filter.Eq(x => x.Id, id);
