@@ -70,4 +70,10 @@ public class EthereumRepository : IEthereumRepository
     {
         return await _collection.CountDocumentsAsync(_ => true);
     }
+
+    public async Task<BlockchainTransaction?> GetByTransactionHashAsync(string transactionHash)
+    {
+        var filter = Builders<BlockchainTransaction>.Filter.Eq(x => x.TransactionHash, transactionHash);
+        return await _collection.Find(filter).FirstOrDefaultAsync();
+    }
 }

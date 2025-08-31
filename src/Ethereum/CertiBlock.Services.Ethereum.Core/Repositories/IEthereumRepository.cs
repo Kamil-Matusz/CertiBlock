@@ -13,4 +13,5 @@ public interface IEthereumRepository
     Task<IEnumerable<BlockchainTransaction>> GetTransactionsPagedAsync(int page, int pageSize);
     Task<IEnumerable<BlockchainTransaction>> GetFailedTransactionsAsync();
     Task<long> GetTransactionCountAsync();
+    Task<BlockchainTransaction?> GetByTransactionHashAsync(string transactionHash);
 }

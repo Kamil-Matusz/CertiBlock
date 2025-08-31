@@ -125,12 +125,12 @@ public class EthereumService(IEthereumRepository ethereumRepository, ILogger<Eth
             var receipt = await web3WithAccount.Eth.Transactions
                 .GetTransactionReceipt.SendRequestAsync(transactionHash);
 
-            if (transaction == null)
+            if (transaction is null)
             {
                 return new BlockchainTransactionStatusDto
                 {
                     TransactionHash = transactionHash,
-                    Status = "NotFound",
+                    Status = nameof(Status.Failed),
                     BlockNumber = null,
                     Confirmations = 0,
                     InputData = null
@@ -138,16 +138,33 @@ public class EthereumService(IEthereumRepository ethereumRepository, ILogger<Eth
             }
 
             var confirmations = 0;
-            if (receipt != null && receipt.BlockNumber != null)
+            Status newStatus;
+            
+            if (receipt == null || receipt.BlockNumber == null)
+            {
+                newStatus = Status.Submitted;
+            }
+            else
             {
                 var latestBlock = await web3WithAccount.Eth.Blocks.GetBlockNumber.SendRequestAsync();
                 confirmations = (int)(latestBlock.Value - receipt.BlockNumber.Value);
+
+                newStatus = receipt.Status.Value == 1
+                    ? Status.Confirmed
+                    : Status.Failed;
+            }
+            
+            var dbTransaction = await ethereumRepository.GetByTransactionHashAsync(transactionHash);
+            if (dbTransaction != null)
+            {
+                dbTransaction.Status = newStatus;
+                await ethereumRepository.UpdateBlockchainTransactionAsync(dbTransaction);
             }
 
             return new BlockchainTransactionStatusDto
             {
                 TransactionHash = transactionHash,
-                Status = receipt == null ? "Pending" : "Confirmed",
+                Status = newStatus.ToString(),
                 BlockNumber = receipt?.BlockNumber?.Value,
                 Confirmations = confirmations,
                 InputData = transaction.Input
@@ -158,5 +175,17 @@ public class EthereumService(IEthereumRepository ethereumRepository, ILogger<Eth
             logger.LogError(ex, "Error while checking Ethereum transaction {TransactionHash}", transactionHash);
             throw;
         }
+    }
+
+    public async Task<BlockchainTransactionResultDto> GetTransactionByHashAsync(string txnHash)
+    {
+        var transaction = await ethereumRepository.GetByTransactionHashAsync(txnHash);
+        
+        if (transaction is null)
+        {
+            throw new EthereumTransactionsNotFoundException(txnHash);
+        }
+        
+        return BlockchainTransactionMapper.MapToResultDto(transaction);
     }
 }

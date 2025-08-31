@@ -11,4 +11,5 @@ public interface IEthereumService
     Task DeleteEthereumTransactionAsync(Guid id);
     Task<EthereumBalanceDto> GetEthBalanceAsync(string walletAddress);
     Task<BlockchainTransactionStatusDto> GetEthereumTransactionStatusAsync(string transactionHash);
+    Task<BlockchainTransactionResultDto> GetTransactionByHashAsync(string txnHash);
 }
