@@ -33,7 +33,8 @@ public class EthereumService(IEthereumRepository ethereumRepository, ILogger<Eth
                 From = account.Address,
                 To = account.Address,
                 Value = new HexBigInteger(0),
-                Gas = new HexBigInteger(100000)
+                Gas = new HexBigInteger(100000),
+                Data = data
             };
             
             var txnHash = await web3WithAccount.Eth.TransactionManager.SendTransactionAsync(txnInput);
@@ -108,6 +109,54 @@ public class EthereumService(IEthereumRepository ethereumRepository, ILogger<Eth
         {
             logger.LogError(ex, "Error while fetching ETH balance for {Address}: {ErrorMessage}", walletAddress, ex.Message);
             throw new EthereumBalanceException(walletAddress);
+        }
+    }
+
+    public async Task<BlockchainTransactionStatusDto> GetEthereumTransactionStatusAsync(string transactionHash)
+    {
+        try
+        {
+            var account = new Nethereum.Web3.Accounts.Account(ethereumOptions.PrivateKey);
+            var web3WithAccount = new Web3(account, ethereumOptions.InfuraUrl);
+            
+            var transaction = await web3WithAccount.Eth.Transactions
+                .GetTransactionByHash.SendRequestAsync(transactionHash);
+            
+            var receipt = await web3WithAccount.Eth.Transactions
+                .GetTransactionReceipt.SendRequestAsync(transactionHash);
+
+            if (transaction == null)
+            {
+                return new BlockchainTransactionStatusDto
+                {
+                    TransactionHash = transactionHash,
+                    Status = "NotFound",
+                    BlockNumber = null,
+                    Confirmations = 0,
+                    InputData = null
+                };
+            }
+
+            var confirmations = 0;
+            if (receipt != null && receipt.BlockNumber != null)
+            {
+                var latestBlock = await web3WithAccount.Eth.Blocks.GetBlockNumber.SendRequestAsync();
+                confirmations = (int)(latestBlock.Value - receipt.BlockNumber.Value);
+            }
+
+            return new BlockchainTransactionStatusDto
+            {
+                TransactionHash = transactionHash,
+                Status = receipt == null ? "Pending" : "Confirmed",
+                BlockNumber = receipt?.BlockNumber?.Value,
+                Confirmations = confirmations,
+                InputData = transaction.Input
+            };
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error while checking Ethereum transaction {TransactionHash}", transactionHash);
+            throw;
         }
     }
 }

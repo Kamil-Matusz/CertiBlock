@@ -11,18 +11,21 @@ public class EthereumController(IEthereumService ethereumService) : BaseControll
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<EthereumBalanceDto>> GetEthereumBalanceByWalletAddress(string walletAddress)
-    {
-        var balanceDto = await ethereumService.GetEthBalanceAsync(walletAddress);
-        return Ok(balanceDto);
-    }
+        => Ok(await ethereumService.GetEthBalanceAsync(walletAddress));
 
     [HttpPost("registerCertificate")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<BlockchainTransactionResultDto>> RegisterCertificate([FromBody] BlockchainTransactionDto dto)
-    {
-        var transaction = await ethereumService.RegisterEthereumTransactionAsync(dto);
-        return Ok(transaction);
-    }
+    public async Task<ActionResult<BlockchainTransactionResultDto>> RegisterCertificate(
+        [FromBody] BlockchainTransactionDto dto)
+        => Ok(await ethereumService.RegisterEthereumTransactionAsync(dto));
+
+    [HttpGet("getEthereumTransactionStatus/{transactionHash}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<BlockchainTransactionStatusDto>> GetTransactionStatus(string transactionHash)
+        => Ok(await ethereumService.GetEthereumTransactionStatusAsync(transactionHash));
+
 }
