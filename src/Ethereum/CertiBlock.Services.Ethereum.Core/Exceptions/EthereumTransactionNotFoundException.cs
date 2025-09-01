@@ -6,6 +6,7 @@ public class EthereumTransactionsNotFoundException : CustomException
 {
     public Guid? Id { get; set; }
     public string? StringId { get; set; }
+    public Guid? CertificateId { get; set; }
 
     public EthereumTransactionsNotFoundException(Guid id) 
         : base($"Eth transaction with ID: '{id}' was not found.")

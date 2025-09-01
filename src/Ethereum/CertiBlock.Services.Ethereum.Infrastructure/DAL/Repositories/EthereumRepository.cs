@@ -23,6 +23,12 @@ public class EthereumRepository : IEthereumRepository
         return await _collection.Find(filter).FirstOrDefaultAsync();
     }
 
+    public async Task<BlockchainTransaction> GetBlockchainTransactionByCertificateIdAsync(Guid certificateId)
+    {
+        var filter = Builders<BlockchainTransaction>.Filter.Eq(x => x.CertificateId, certificateId);
+        return await _collection.Find(filter).FirstOrDefaultAsync();
+    }
+
     public async Task<IEnumerable<BlockchainTransaction>> GetAllBlockchainTransactionsAsync()
     {
         return await _collection.Find(_ => true).ToListAsync();
@@ -45,13 +51,6 @@ public class EthereumRepository : IEthereumRepository
         await _collection.ReplaceOneAsync(filter, transaction);
     }
     
-    public async Task<bool> TransactionExistsAsync(string transactionHash)
-    {
-        var filter = Builders<BlockchainTransaction>.Filter.Eq(x => x.TransactionHash, transactionHash);
-        var count = await _collection.CountDocumentsAsync(filter);
-        return count > 0;
-    }
-    
     public async Task<IEnumerable<BlockchainTransaction>> GetTransactionsPagedAsync(int page, int pageSize)
     {
         return await _collection.Find(_ => true)
@@ -59,10 +58,16 @@ public class EthereumRepository : IEthereumRepository
             .Limit(pageSize)
             .ToListAsync();
     }
-    
-    public async Task<IEnumerable<BlockchainTransaction>> GetFailedTransactionsAsync()
+
+    public async Task<IEnumerable<BlockchainTransaction>> GetTransactionsByStatusAsync(Status status)
     {
-        var filter = Builders<BlockchainTransaction>.Filter.Eq(x => x.Status, Status.Failed);
+        var filter = Builders<BlockchainTransaction>.Filter.Eq(t => t.Status, status);
+        return await _collection.Find(filter).ToListAsync();
+    }
+
+    public async Task<IEnumerable<BlockchainTransaction>> GetTransactionsByStatusAsync(params Status[] statuses)
+    {
+        var filter = Builders<BlockchainTransaction>.Filter.In(t => t.Status, statuses);
         return await _collection.Find(filter).ToListAsync();
     }
     

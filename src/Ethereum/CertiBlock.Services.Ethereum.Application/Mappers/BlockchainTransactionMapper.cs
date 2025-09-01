@@ -34,4 +34,7 @@ public static class BlockchainTransactionMapper
         Status = transaction.Status,
         CreatedAt = transaction.CreatedAt
     };
+    
+    public static IEnumerable<BlockchainTransactionResultDto> MapAllToResultDto(IEnumerable<BlockchainTransaction> transactions) =>
+        transactions.Select(MapToResultDto);
 }

@@ -62,13 +62,13 @@ public class EthereumService(IEthereumRepository ethereumRepository, ILogger<Eth
         }
     }
     
-    public async Task<IEnumerable<BlockchainTransactionDto>> GetAllEthereumTransactionsAsync()
+    public async Task<IEnumerable<BlockchainTransactionResultDto>> GetAllEthereumTransactionsAsync()
     {
         var blockchainTransactions = await ethereumRepository.GetAllBlockchainTransactionsAsync();
-        return BlockchainTransactionMapper.MapAll<BlockchainTransactionDto>(blockchainTransactions);
+        return BlockchainTransactionMapper.MapAllToResultDto(blockchainTransactions);
     }
 
-    public async Task<BlockchainTransactionDto> GetBlockchainTransactionByIdAsync(Guid id)
+    public async Task<BlockchainTransactionDto> GetEthereumTransactionByIdAsync(Guid id)
     {
         var ethereumBlockchain = await ethereumRepository.GetBlockchainTransactionByIdAsync(id);
 
@@ -80,9 +80,16 @@ public class EthereumService(IEthereumRepository ethereumRepository, ILogger<Eth
         return BlockchainTransactionMapper.Map<BlockchainTransactionDto>(ethereumBlockchain);
     }
 
-    public Task<BlockchainTransactionDto> GetBlockchainTransactionByCertificateIdAsync(Guid certificateId)
+    public async Task<BlockchainTransactionDto> GetBlockchainTransactionByCertificateIdAsync(Guid certificateId)
     {
-        throw new NotImplementedException();
+        var ethereumBlockchain = await ethereumRepository.GetBlockchainTransactionByCertificateIdAsync(certificateId);
+
+        if (ethereumBlockchain is null)
+        {
+            throw new EthereumTransactionsByCertificateIdNotFoundException(certificateId);
+        }
+
+        return BlockchainTransactionMapper.Map<BlockchainTransactionDto>(ethereumBlockchain);
     }
 
     public async Task DeleteEthereumTransactionAsync(Guid id)
@@ -188,4 +195,24 @@ public class EthereumService(IEthereumRepository ethereumRepository, ILogger<Eth
         
         return BlockchainTransactionMapper.MapToResultDto(transaction);
     }
+
+    public async Task<IEnumerable<BlockchainTransactionDto>> GetEthereumTransactionsByStatusAsync(Status status)
+    {
+        var transactions = await ethereumRepository.GetTransactionsByStatusAsync(status);
+        return BlockchainTransactionMapper.MapAll<BlockchainTransactionDto>(transactions);
+    }
+
+    public async Task<IEnumerable<BlockchainTransactionDto>> GetEthereumTransactionsByStatusAsync(params Status[] statuses)
+    {
+        var transactions = await ethereumRepository.GetTransactionsByStatusAsync(statuses);
+        return BlockchainTransactionMapper.MapAll<BlockchainTransactionDto>(transactions);
+    }
+
+    public async Task<IEnumerable<BlockchainTransactionDto>> GetEthereumTransactionsPagedAsync(int page, int pageSize)
+    {
+        var transactions = await ethereumRepository.GetTransactionsPagedAsync(page, pageSize);
+        return BlockchainTransactionMapper.MapAll<BlockchainTransactionDto>(transactions);
+    }
+
+    public async Task<long> GetEthereumTransactionCountAsync() => await  ethereumRepository.GetTransactionCountAsync();
 }
