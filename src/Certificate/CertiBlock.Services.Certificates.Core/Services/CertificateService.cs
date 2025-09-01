@@ -32,6 +32,7 @@ public class CertificateService(ICertificateRepository certificateRepository, IB
             CertificateHash = certificateHash,
             Blockchain = request.Blockchain,
             IssuerId = userContext.UserId,
+            CreatedAt = DateTime.UtcNow,
         };
         
         await certificateRepository.SaveCertificateAsync(entity);

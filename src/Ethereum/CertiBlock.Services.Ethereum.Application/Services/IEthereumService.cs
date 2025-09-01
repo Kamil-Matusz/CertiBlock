@@ -15,6 +15,6 @@ public interface IEthereumService
     Task<BlockchainTransactionResultDto> GetTransactionByHashAsync(string txnHash);
     Task<IEnumerable<BlockchainTransactionDto>> GetEthereumTransactionsByStatusAsync(Status status);
     Task<IEnumerable<BlockchainTransactionDto>> GetEthereumTransactionsByStatusAsync(params Status[] statuses);
-    Task<IEnumerable<BlockchainTransactionDto>> GetEthereumTransactionsPagedAsync(int page, int pageSize);
+    Task<IEnumerable<BlockchainTransactionResultDto>> GetEthereumTransactionsPagedAsync(int page, int pageSize);
     Task<long> GetEthereumTransactionCountAsync();
 }

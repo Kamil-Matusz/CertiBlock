@@ -49,7 +49,7 @@ public class EthereumController(IEthereumService ethereumService) : BaseControll
     [HttpGet("getEthereumTransactions")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<BlockchainTransactionDto>> GetTransactionsPaged([FromQuery] int pageIndex, [FromQuery] int pageSize)
+    public async Task<ActionResult<BlockchainTransactionResultDto>> GetEthereumTransactionsPaged([FromQuery] int pageIndex, [FromQuery] int pageSize)
         => Ok(await ethereumService.GetEthereumTransactionsPagedAsync(pageIndex, pageSize));
     
     [HttpGet("getEthereumAllTransactions")]

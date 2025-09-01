@@ -48,7 +48,8 @@ public class EthereumService(IEthereumRepository ethereumRepository, ILogger<Eth
                 Blockchain = Blockchain.Ethereum,
                 TransactionHash = txnHash,
                 Status = Status.Submitted,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
             };
 
             await ethereumRepository.SaveBlockchainTransactionAsync(blockchainTransaction);
@@ -165,6 +166,7 @@ public class EthereumService(IEthereumRepository ethereumRepository, ILogger<Eth
             if (dbTransaction != null)
             {
                 dbTransaction.Status = newStatus;
+                dbTransaction.UpdatedAt = DateTime.UtcNow;
                 await ethereumRepository.UpdateBlockchainTransactionAsync(dbTransaction);
             }
 
@@ -208,10 +210,10 @@ public class EthereumService(IEthereumRepository ethereumRepository, ILogger<Eth
         return BlockchainTransactionMapper.MapAll<BlockchainTransactionDto>(transactions);
     }
 
-    public async Task<IEnumerable<BlockchainTransactionDto>> GetEthereumTransactionsPagedAsync(int page, int pageSize)
+    public async Task<IEnumerable<BlockchainTransactionResultDto>> GetEthereumTransactionsPagedAsync(int page, int pageSize)
     {
         var transactions = await ethereumRepository.GetTransactionsPagedAsync(page, pageSize);
-        return BlockchainTransactionMapper.MapAll<BlockchainTransactionDto>(transactions);
+        return BlockchainTransactionMapper.MapAllToResultDto(transactions);
     }
 
     public async Task<long> GetEthereumTransactionCountAsync() => await  ethereumRepository.GetTransactionCountAsync();
