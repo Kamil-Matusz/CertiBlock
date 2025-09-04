@@ -1,4 +1,6 @@
 ﻿
+using CertiBlock.Services.Certificates.Core.Clients.Ethereum;
+using CertiBlock.Services.Certificates.Core.Clients.Polygon;
 using CertiBlock.Services.Certificates.Core.DAL.Repositories;
 using CertiBlock.Services.Certificates.Core.Entities;
 using CertiBlock.Services.Certificates.Core.Exceptions;
@@ -17,10 +19,12 @@ public class CertificateServiceTests
     private readonly Mock<IBus> _bus = new();
     private readonly Mock<ILogger<CertificateService>> _loggerMock = new();
     private readonly CertificateService _service;
+    private readonly Mock<IEthereumClient> _ethereumClientMock;
+    private readonly Mock<IPolygonClient> _polygonClientMock;
 
     public CertificateServiceTests()
     {
-        _service = new CertificateService(_repositoryMock.Object, _bus.Object, _loggerMock.Object);
+        _service = new CertificateService(_repositoryMock.Object, _bus.Object, _loggerMock.Object, _ethereumClientMock.Object, _polygonClientMock.Object);
     }
     
     [Fact]

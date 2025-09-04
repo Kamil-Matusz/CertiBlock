@@ -16,7 +16,7 @@ public class EthereumClient(HttpClient httpClient, ILogger<EthereumClient> logge
             certificate.Issuer
         );
         
-        var response = await httpClient.PostAsJsonAsync("ethereum-service/Ethereum/registerCertificate", request);
+        var response = await httpClient.PostAsJsonAsync("/ethereum-service/Ethereum/registerCertificate", request);
 
         if (!response.IsSuccessStatusCode)
         {
