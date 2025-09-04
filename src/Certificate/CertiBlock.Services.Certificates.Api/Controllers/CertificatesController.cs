@@ -50,6 +50,7 @@ public class CertificatesController : BaseController
     
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetAllCertificates()
     {
         var certificates = await _certificateService.GetAllCertificatesAsync();

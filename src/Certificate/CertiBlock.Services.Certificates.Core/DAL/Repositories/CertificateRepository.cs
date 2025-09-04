@@ -1,5 +1,5 @@
-﻿using CertiBlock.Services.Certificates.Core.DAL.MongoDB;
-using CertiBlock.Services.Certificates.Core.Entities;
+﻿using CertiBlock.Services.Certificates.Core.Entities;
+using CertiBlock.Shared.Mongo;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
@@ -9,7 +9,7 @@ public class CertificateRepository : ICertificateRepository
 {
     private readonly IMongoCollection<Certificate> _collection;
 
-    public CertificateRepository(IOptions<MongoDBOptions> settings, IMongoClient client)
+    public CertificateRepository(IOptions<MongoDbOptions> settings, IMongoClient client)
     {
         var db = client.GetDatabase(settings.Value.Database);
         _collection = db.GetCollection<Certificate>("certificates");

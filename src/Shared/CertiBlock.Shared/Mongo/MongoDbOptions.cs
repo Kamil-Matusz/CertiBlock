@@ -1,6 +1,6 @@
-﻿namespace CertiBlock.Services.Certificates.Core.DAL.MongoDB;
+﻿namespace CertiBlock.Shared.Mongo;
 
-public class MongoDBOptions
+public class MongoDbOptions
 {
     public string ConnectionString { get; set; }
     public string Database { get; set; }

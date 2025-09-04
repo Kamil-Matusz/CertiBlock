@@ -4,7 +4,7 @@
         <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-      <UserSecretsId>bea45384-ed99-48c4-a3b0-8f1d1c719f1e</UserSecretsId>
+      <UserSecretsId>af3e058d-66e9-4a57-a875-20097e1085a9</UserSecretsId>
   </PropertyGroup>
 
     <ItemGroup>
@@ -13,7 +13,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\CertiBlock.Services.Certificates.Core\CertiBlock.Services.Certificates.Core.csproj" />
+      <ProjectReference Include="..\..\Shared\CertiBlock.Shared\CertiBlock.Shared.csproj" />
+      <ProjectReference Include="..\CertiBlock.Services.Ethereum.Application\CertiBlock.Services.Ethereum.Application.csproj" />
+      <ProjectReference Include="..\CertiBlock.Services.Ethereum.Infrastructure\CertiBlock.Services.Ethereum.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>
