@@ -1,4 +1,5 @@
 ﻿using CertiBlock.Services.Certificates.Core.Auth;
+using CertiBlock.Services.Certificates.Core.Clients;
 using CertiBlock.Services.Certificates.Core.DAL;
 using CertiBlock.Services.Certificates.Core.DAL.Repositories;
 using CertiBlock.Services.Certificates.Core.MassTransit;
@@ -20,6 +21,9 @@ public static class Extensions
         
         // MongoDB
         services.AddMongo(configuration);
+        
+        // HttpClients
+        services.AddClients();
         
         // MassTransit
         services.AddMassTransitWithRabbitMq();
