@@ -9,4 +9,5 @@ public interface ICertificateRepository
     Task<IEnumerable<Certificate>> GetAllCertificatesAsync();
     Task<IEnumerable<Certificate>> GetCertificateByIssuerIdAsync(string issuerId);
     Task DeleteCertificateAsync(Guid id);
+    Task<IEnumerable<Certificate>> GetCertificatedPagedAsync(int page, int pageSize);
 }

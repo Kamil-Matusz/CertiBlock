@@ -16,7 +16,6 @@ namespace CertiBlock.Services.Certificates.UnitTests.Services;
 public class CertificateServiceTests
 {
     private readonly Mock<ICertificateRepository> _repositoryMock = new();
-    private readonly Mock<IBus> _busMock = new();
     private readonly Mock<ILogger<CertificateService>> _loggerMock = new();
     private readonly Mock<IEthereumClient> _ethereumClientMock = new();
     private readonly Mock<IPolygonClient> _polygonClientMock = new();
@@ -26,7 +25,6 @@ public class CertificateServiceTests
     {
         _service = new CertificateService(
             _repositoryMock.Object, 
-            _busMock.Object, 
             _loggerMock.Object, 
             _ethereumClientMock.Object, 
             _polygonClientMock.Object);

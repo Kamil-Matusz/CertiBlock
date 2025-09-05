@@ -10,4 +10,5 @@ public interface ICertificateService
     Task<IEnumerable<CertificateDto>> GetAllCertificatesAsync();
     Task<IEnumerable<CertificateDto>> GetCertificatesByUserIdAsync(Guid userId);
     Task<CertificateDto> GetCertificateByIdAsync(Guid certificateId);
+    Task<IEnumerable<CertificateDto>> GetCertificatesPagedAsync(int page, int pageSize);
 }

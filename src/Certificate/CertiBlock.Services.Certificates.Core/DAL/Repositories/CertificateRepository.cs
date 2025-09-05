@@ -42,4 +42,12 @@ public class CertificateRepository : ICertificateRepository
         var filter = Builders<Certificate>.Filter.Eq(c => c.Id, id);
         await _collection.DeleteOneAsync(filter);
     }
+
+    public async Task<IEnumerable<Certificate>> GetCertificatedPagedAsync(int page, int pageSize)
+    {
+        return await _collection.Find(_ => true)
+            .Skip((page - 1) * pageSize)
+            .Limit(pageSize)
+            .ToListAsync();
+    }
 }

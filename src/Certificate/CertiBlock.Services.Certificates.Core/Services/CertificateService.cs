@@ -15,7 +15,8 @@ using Microsoft.Extensions.Logging;
 
 namespace CertiBlock.Services.Certificates.Core.Services;
 
-public class CertificateService(ICertificateRepository certificateRepository, IBus bus,
+public class CertificateService(
+    ICertificateRepository certificateRepository,
     ILogger<CertificateService> logger,
     IEthereumClient ethereumClient,
     IPolygonClient polygonClient) : ICertificateService
@@ -105,7 +106,13 @@ public class CertificateService(ICertificateRepository certificateRepository, IB
 
         return CertificateMapper.Map<CertificateDto>(certificate);
     }
-    
+
+    public async Task<IEnumerable<CertificateDto>> GetCertificatesPagedAsync(int page, int pageSize)
+    {
+        var certificates = await certificateRepository.GetCertificatedPagedAsync(page, pageSize);
+        return CertificateMapper.MapAll<CertificateDto>(certificates);
+    }
+
     private Task RegisterCertificateOnBlockchain(CertificateRegistered certificate)
     {
         return certificate.Blockchain switch

@@ -6,16 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CertiBlock.Services.Certificates.Api.Controllers;
 
-[Authorize]
-public class CertificatesController : BaseController
+//[Authorize]
+public class CertificatesController(ICertificateService certificateService) : BaseController
 {
-    private readonly ICertificateService _certificateService;
-
-    public CertificatesController(ICertificateService certificateService)
-    {
-        _certificateService = certificateService;
-    }
-    
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -23,7 +16,7 @@ public class CertificatesController : BaseController
     public async Task<IActionResult> Register([FromBody] CertificateRequest request)
     {
         var user = UserContextProvider.FromClaimsPrincipal(User);
-        var response = await _certificateService.RegisterCertificateAsync(request, user);
+        var response = await certificateService.RegisterCertificateAsync(request, user);
         return Ok(response);
     }
     
@@ -32,38 +25,39 @@ public class CertificatesController : BaseController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> GetCertificateById(Guid id)
-    {
-        var certificate = await _certificateService.GetCertificateByIdAsync(id);
-        return Ok(certificate);
-    }
+        => Ok(await certificateService.GetCertificateByIdAsync(id));
 
-    [HttpGet("byUserId/{userId:guid}")]
+    [HttpGet("getCertificatesByUserId/{userId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetCertificatesByUser()
     {
         var userId = Guid.Parse(User.Identity?.Name);
-        var certificates = await _certificateService.GetCertificatesByUserIdAsync(userId);
+        var certificates = await certificateService.GetCertificatesByUserIdAsync(userId);
         return Ok(certificates);
     }
     
-    [HttpGet]
+    [HttpGet("getAllCertificates")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetAllCertificates()
-    {
-        var certificates = await _certificateService.GetAllCertificatesAsync();
-        return Ok(certificates);
-    }
+        => Ok(await certificateService.GetAllCertificatesAsync());
     
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteCertificateById(Guid id)
     {
-        await _certificateService.DeleteCertificateAsync(id);
+        await certificateService.DeleteCertificateAsync(id);
         return NoContent();
     }
+    
+    [HttpGet("getCertificates")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<CertificateDto>> GetEthereumTransactionsPaged([FromQuery] int pageIndex, [FromQuery] int pageSize)
+        => Ok(await certificateService.GetCertificatesPagedAsync(pageIndex, pageSize));
 }
