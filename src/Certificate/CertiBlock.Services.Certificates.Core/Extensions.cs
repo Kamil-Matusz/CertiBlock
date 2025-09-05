@@ -1,8 +1,6 @@
 ﻿using CertiBlock.Services.Certificates.Core.Auth;
 using CertiBlock.Services.Certificates.Core.Clients;
-using CertiBlock.Services.Certificates.Core.DAL;
 using CertiBlock.Services.Certificates.Core.DAL.Repositories;
-using CertiBlock.Services.Certificates.Core.MassTransit;
 using CertiBlock.Services.Certificates.Core.Services;
 using CertiBlock.Services.Certificates.Core.Validators;
 using CertiBlock.Shared.Logging;
@@ -24,9 +22,6 @@ public static class Extensions
         
         // HttpClients
         services.AddClients();
-        
-        // MassTransit
-        services.AddMassTransitWithRabbitMq();
 
         // Repositories
         services.AddRepositories();
