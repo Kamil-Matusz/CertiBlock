@@ -1,15 +1,141 @@
 @CertiBlock.Services.Certificates.Api_HostAddress = http://localhost:5052
-@access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzNmJjODg4MS1hNzg2LTQzMmYtYjVkZS1iY2EwM2Y4MTkzYmEiLCJ1bmlxdWVfbmFtZSI6IjM2YmM4ODgxLWE3ODYtNDMyZi1iNWRlLWJjYTAzZjgxOTNiYSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwibmJmIjoxNzU0MDYyNDc2LCJleHAiOjE3NTQwNjYwNzYsImlzcyI6ImNlcnRpQmxvY2staXNzdWVyIiwiYXVkIjoiY2VydGlCbG9jay1hdWRpZW5jZSJ9.oOeGKKyGxN_l1kfdpxOn0558vH1a5ZKrNAdZjlRbQxA
 
+@access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzNmJjODg4MS1hNzg2LTQzMmYtYjVkZS1iY2EwM2Y4MTkzYmEiLCJ1bmlxdWVfbmFtZSI6IjM2YmM4ODgxLWE3ODYtNDMyZi1iNWRlLWJjYTAzZjgxOTNiYSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwibmJmIjoxNzU0MDYyNDc2LCJleHAiOjE3NTQwNjYwNzYsImlzcyI6ImNlcnRpQmxvY2staXNzdWVyIiwiYXVkIjoiY2VydGlCbG9jay1hdWRpZW5jZSJ9.oOeGKKyGxN_l1kfdpxOn0558vH1a5ZKrNAdZjlRbQxA
+@certificateId = 3fa85f64-5717-4562-b3fc-2c963f66afa6
+@userId = 36bc8881-a786-432f-b5de-bca03f8193ba
+@pageIndex = 0
+@pageSize = 10
+
+### 1. Create Certificate - Tworzenie nowego certyfikatu
 POST {{CertiBlock.Services.Certificates.Api_HostAddress}}/certificate-service/Certificates
-Accept: */*
 Content-Type: application/json
+Accept: application/json
 Authorization: Bearer {{access_token}}
 
 {
   "ownerName": "Kamil Matusz",
-  "title": "Uniwersystet",
-  "issuedBy": "Kamil Matusz",
-  "issuedDate": "2025-07-31T18:41:26.394Z",
-  "blockchain": "polygon"
+  "title": "Certyfikat ukończenia kursu Blockchain Developer",
+  "issuedBy": "Uniwersytet Techniczny",
+  "issuedDate": "2025-01-02T10:00:00.000Z",
+  "blockchain": "Polygon"
+}
+
+### 2. Create Certificate - Przykład z Ethereum
+POST {{CertiBlock.Services.Certificates.Api_HostAddress}}/certificate-service/Certificates
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "ownerName": "Anna Kowalska",
+  "title": "Certyfikat AI & Machine Learning",
+  "issuedBy": "Tech Academy",
+  "issuedDate": "2025-01-02T12:30:00.000Z",
+  "blockchain": "Ethereum"
+}
+
+### 3. Create Certificate - Przykład z datą przeszłą
+POST {{CertiBlock.Services.Certificates.Api_HostAddress}}/certificate-service/Certificates
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "ownerName": "Jan Nowak",
+  "title": "Dyplom Magistra Informatyki",
+  "issuedBy": "Politechnika Warszawska",
+  "issuedDate": "2024-06-15T14:00:00.000Z",
+  "blockchain": "Polygon"
+}
+
+### 4. Get Certificate by ID - Pobranie certyfikatu po ID
+GET {{CertiBlock.Services.Certificates.Api_HostAddress}}/certificate-service/Certificates/{{certificateId}}
+Accept: application/json
+Authorization: Bearer {{access_token}}
+
+### 5. Get All Certificates - Wszystkie certyfikaty (bez paginacji)
+GET {{CertiBlock.Services.Certificates.Api_HostAddress}}/certificate-service/Certificates/getAllCertificates
+Accept: application/json
+
+### 6. Get Certificates with Pagination - Certyfikaty z paginacją
+GET {{CertiBlock.Services.Certificates.Api_HostAddress}}/certificate-service/Certificates/getCertificates?pageIndex={{pageIndex}}&pageSize={{pageSize}}
+Accept: application/json
+
+### 7. Get Certificates with Pagination - Druga strona
+GET {{CertiBlock.Services.Certificates.Api_HostAddress}}/certificate-service/Certificates/getCertificates?pageIndex=1&pageSize=5
+Accept: application/json
+
+### 8. Get Certificates with Pagination - Bez parametrów (domyślne)
+GET {{CertiBlock.Services.Certificates.Api_HostAddress}}/certificate-service/Certificates/getCertificates
+Accept: application/json
+
+### 9. Get Certificates by User ID - Certyfikaty konkretnego użytkownika
+GET {{CertiBlock.Services.Certificates.Api_HostAddress}}/certificate-service/Certificates/getCertificatesByUserId/{{userId}}
+Accept: application/json
+Authorization: Bearer {{access_token}}
+
+### 10. Get Certificates by User ID - Przykład z innym userId
+GET {{CertiBlock.Services.Certificates.Api_HostAddress}}/certificate-service/Certificates/getCertificatesByUserId/test-user-123
+Accept: application/json
+Authorization: Bearer {{access_token}}
+
+### 11. Delete Certificate - Usunięcie certyfikatu
+DELETE {{CertiBlock.Services.Certificates.Api_HostAddress}}/certificate-service/Certificates/{{certificateId}}
+Accept: application/json
+Authorization: Bearer {{access_token}}
+
+### 12. Delete Certificate - Usunięcie innego certyfikatu (przykład)
+DELETE {{CertiBlock.Services.Certificates.Api_HostAddress}}/certificate-service/Certificates/123e4567-e89b-12d3-a456-426614174000
+Accept: application/json
+Authorization: Bearer {{access_token}}
+
+### Test 1: Tworzenie certyfikatu bez autoryzacji (powinno zwrócić 401)
+POST {{CertiBlock.Services.Certificates.Api_HostAddress}}/certificate-service/Certificates
+Content-Type: application/json
+Accept: application/json
+
+{
+  "ownerName": "Test User",
+  "title": "Test Certificate",
+  "issuedBy": "Test Issuer",
+  "issuedDate": "2025-01-02T10:00:00.000Z",
+  "blockchain": "Polygon"
+}
+
+### Test 2: Pobieranie nieistniejącego certyfikatu (powinno zwrócić 404)
+GET {{CertiBlock.Services.Certificates.Api_HostAddress}}/certificate-service/Certificates/00000000-0000-0000-0000-000000000000
+Accept: application/json
+Authorization: Bearer {{access_token}}
+
+### Test 3: Pobieranie certyfikatów nieistniejącego użytkownika
+GET {{CertiBlock.Services.Certificates.Api_HostAddress}}/certificate-service/Certificates/getCertificatesByUserId/nonexistent-user
+Accept: application/json
+Authorization: Bearer {{access_token}}
+
+### Test 4: Tworzenie certyfikatu z nieprawidłowym blockchain (powinno zwrócić 400)
+POST {{CertiBlock.Services.Certificates.Api_HostAddress}}/certificate-service/Certificates
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "ownerName": "Test User",
+  "title": "Invalid Blockchain Test",
+  "issuedBy": "Test Issuer",
+  "issuedDate": "2025-01-02T10:00:00.000Z",
+  "blockchain": "Bitcoin"
+}
+
+### Test 5: Tworzenie certyfikatu z nieprawidłową datą
+POST {{CertiBlock.Services.Certificates.Api_HostAddress}}/certificate-service/Certificates
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "ownerName": "Test User",
+  "title": "Invalid Date Test",
+  "issuedBy": "Test Issuer",
+  "issuedDate": "invalid-date",
+  "blockchain": "Polygon"
 }
