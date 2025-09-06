@@ -72,7 +72,6 @@ public class CertificateServiceTests
             IssuedBy = "Org",
             CertificateHash = "hash",
             Blockchain = Blockchain.Ethereum,
-            TransactionHash = "tx",
             CreatedAt = DateTime.UtcNow
         };
 

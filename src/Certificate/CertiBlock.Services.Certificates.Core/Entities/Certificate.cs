@@ -16,7 +16,6 @@ public class Certificate
     public DateTime IssuedDate { get; set; }
 
     public string CertificateHash { get; set; }
-    public string TransactionHash { get; set; }
     public Blockchain Blockchain { get; set; }
 
     public string IssuerId { get; set; }

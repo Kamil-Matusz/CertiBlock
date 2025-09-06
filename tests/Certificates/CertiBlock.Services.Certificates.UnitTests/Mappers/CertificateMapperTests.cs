@@ -19,7 +19,6 @@ public class CertificateMapperTests
             IssuedDate = new DateTime(2023, 10, 15),
             CertificateHash = "abc123hash",
             Blockchain = Blockchain.Ethereum,
-            TransactionHash = "0x123456789",
             IssuerId = "SampleIssuerId",
             CreatedAt = DateTime.UtcNow
         };
@@ -43,7 +42,6 @@ public class CertificateMapperTests
         result.IssuedDate.ShouldBe(certificate.IssuedDate);
         result.CertificateHash.ShouldBe(certificate.CertificateHash);
         result.Blockchain.ShouldBe(certificate.Blockchain);
-        result.TransactionHash.ShouldBe(certificate.TransactionHash);
         result.IssuerId.ShouldBe(certificate.IssuerId);
         result.CreatedAt.ShouldBe(certificate.CreatedAt);
     }

@@ -14,7 +14,6 @@ public static class CertificateMapper
         IssuedDate = certificate.IssuedDate,
         CertificateHash = certificate.CertificateHash,
         Blockchain = certificate.Blockchain,
-        TransactionHash = certificate.TransactionHash,
         IssuerId = certificate.IssuerId,
         CreatedAt = certificate.CreatedAt
     };
