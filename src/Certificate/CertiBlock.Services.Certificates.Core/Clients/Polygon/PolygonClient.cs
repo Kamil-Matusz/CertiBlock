@@ -26,6 +26,6 @@ public class PolygonClient(HttpClient httpClient, ILogger<PolygonClient> logger)
 
         var result = await response.Content.ReadFromJsonAsync<CertificateRegistrationResponse>();
         
-        logger.LogInformation($"[Ethereum] Zarejestrowano certyfikat {result?.CertificateId} w tx {result?.TransactionHash}");
+        logger.LogInformation($"[Ethereum] Zarejestrowano certyfikat {result?.CertificateId}");
     }
 }
