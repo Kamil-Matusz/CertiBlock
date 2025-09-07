@@ -1,3 +1,7 @@
+using CertiBlock.Services.Polygon.Application;
+using CertiBlock.Services.Polygon.Core;
+using CertiBlock.Services.Polygon.Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +10,11 @@ builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+builder.Services
+    .AddCore(builder.Configuration)
+    .AddApplication()
+    .AddInfrastructure(builder.Configuration);
 
 app.UseSwagger();
 app.UseSwaggerUI();
