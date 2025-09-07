@@ -1,6 +1,8 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using CertiBlock.Services.Certificates.Core.Clients.Ethereum;
+using CertiBlock.Services.Certificates.Core.Clients.Polygon;
 using CertiBlock.Services.Certificates.Core.DAL.Repositories;
 using CertiBlock.Services.Certificates.Core.DTO;
 using CertiBlock.Services.Certificates.Core.Entities;
@@ -13,8 +15,11 @@ using Microsoft.Extensions.Logging;
 
 namespace CertiBlock.Services.Certificates.Core.Services;
 
-public class CertificateService(ICertificateRepository certificateRepository, IBus bus,
-    ILogger<CertificateService> logger) : ICertificateService
+public class CertificateService(
+    ICertificateRepository certificateRepository,
+    ILogger<CertificateService> logger,
+    IEthereumClient ethereumClient,
+    IPolygonClient polygonClient) : ICertificateService
 {
     public async Task<CertificateResponse> RegisterCertificateAsync(CertificateRequest request, UserContext userContext)
     {
@@ -37,14 +42,15 @@ public class CertificateService(ICertificateRepository certificateRepository, IB
         
         await certificateRepository.SaveCertificateAsync(entity);
         
+        var certificateRegistered = new CertificateRegistered(
+            entity.Id,
+            certificateHash,
+            request.IssuedBy,
+            request.Blockchain);
+        
         try
         {
-            await bus.Send(new CertificateRegistered(
-                entity.Id,
-                certificateHash,
-                request.IssuedBy,
-                request.Blockchain
-            ));
+            await RegisterCertificateOnBlockchain(certificateRegistered);
         }
         catch (Exception ex)
         {
@@ -99,5 +105,21 @@ public class CertificateService(ICertificateRepository certificateRepository, IB
         }
 
         return CertificateMapper.Map<CertificateDto>(certificate);
+    }
+
+    public async Task<IEnumerable<CertificateDto>> GetCertificatesPagedAsync(int page, int pageSize)
+    {
+        var certificates = await certificateRepository.GetCertificatedPagedAsync(page, pageSize);
+        return CertificateMapper.MapAll<CertificateDto>(certificates);
+    }
+
+    private Task RegisterCertificateOnBlockchain(CertificateRegistered certificate)
+    {
+        return certificate.Blockchain switch
+        {
+            Shared.Enums.Blockchain.Ethereum => ethereumClient.RegisterCertificateAsync(certificate),
+            Shared.Enums.Blockchain.Polygon => polygonClient.RegisterCertificateAsync(certificate),
+            _ => throw new UnsupportedBlockchainException(certificate.Blockchain)
+        };
     }
 }

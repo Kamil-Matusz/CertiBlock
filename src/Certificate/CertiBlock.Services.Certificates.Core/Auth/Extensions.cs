@@ -1,6 +1,4 @@
 ﻿using System.Text;
-using CertiBlock.Services.Certificates.Core.DAL;
-using CertiBlock.Services.Certificates.Core.MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
