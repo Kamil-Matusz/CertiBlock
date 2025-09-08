@@ -6,11 +6,11 @@ namespace CertiBlock.Services.Polygon.Core.Polygon;
 
 public static class Extensions
 {
-    private const string EthereumSectionName = "Polygon";
+    private const string PolygonSectionName = "Polygon";
 
     public static IServiceCollection AddPolygon(this IServiceCollection services, IConfiguration configuration)
     {
-        var section = configuration.GetSection(EthereumSectionName);
+        var section = configuration.GetSection(PolygonSectionName);
         
         var options = section.Get<PolygonOptions>() ?? throw new ArgumentException("Polygon configuration is missing");
 
