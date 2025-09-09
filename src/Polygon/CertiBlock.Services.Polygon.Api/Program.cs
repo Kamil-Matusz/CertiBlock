@@ -14,12 +14,12 @@ if (builder.Environment.IsDevelopment())
 builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
 
-var app = builder.Build();
-
 builder.Services
     .AddCore(builder.Configuration)
     .AddApplication()
     .AddInfrastructure(builder.Configuration);
+
+var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();

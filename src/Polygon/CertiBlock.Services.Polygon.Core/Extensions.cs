@@ -12,7 +12,7 @@ public static class Extensions
         // FluentValidator
         services.AddFluentValidator();
         
-        // Ethereum
+        // Polygon
         services.AddPolygon(configuration);
         
         return services;

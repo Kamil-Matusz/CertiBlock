@@ -26,6 +26,6 @@ public class PolygonClient(HttpClient httpClient, ILogger<PolygonClient> logger)
 
         var result = await response.Content.ReadFromJsonAsync<CertificateRegistrationResponse>();
         
-        logger.LogInformation($"[Polygon] Zarejestrowano certyfikat {result?.CertificateId}");
+        logger.LogInformation($"[Polygon] Register certificate with ID: {result?.CertificateId}");
     }
 }

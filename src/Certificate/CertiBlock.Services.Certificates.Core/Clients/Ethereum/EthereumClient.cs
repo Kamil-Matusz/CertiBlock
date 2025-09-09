@@ -26,6 +26,6 @@ public class EthereumClient(HttpClient httpClient, ILogger<EthereumClient> logge
 
         var result = await response.Content.ReadFromJsonAsync<CertificateRegistrationResponse>();
         
-        logger.LogInformation($"[Ethereum] Zarejestrowano certyfikat {result?.CertificateId}");
+        logger.LogInformation($"[Ethereum] Register certificate with ID: {result?.CertificateId}");
     }
 }
