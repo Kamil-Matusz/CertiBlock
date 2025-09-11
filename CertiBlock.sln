@@ -54,6 +54,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CertiBlock.Services.Polygon
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CertiBlock.Services.Polygon.Infrastructure", "src\Polygon\CertiBlock.Services.Polygon.Infrastructure\CertiBlock.Services.Polygon.Infrastructure.csproj", "{A9DE53F9-CDF6-4A62-8621-4AD27CC8C5A8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CertiBlock.Services.Polygon.UnitTests", "tests\Polygon\CertiBlock.Services.Polygon.UnitTests\CertiBlock.Services.Polygon.UnitTests.csproj", "{4ECF57AD-32B6-4121-B821-4397A7D84399}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,7 @@ Global
 		{7C8870DD-A72D-4896-8CCA-090ACBB18FC2} = {6FF319B9-FBF3-4DE6-9304-D720699F0221}
 		{F0DABFE9-5E05-46F4-B30D-23E42FA3A0A6} = {6FF319B9-FBF3-4DE6-9304-D720699F0221}
 		{A9DE53F9-CDF6-4A62-8621-4AD27CC8C5A8} = {6FF319B9-FBF3-4DE6-9304-D720699F0221}
+		{4ECF57AD-32B6-4121-B821-4397A7D84399} = {6FF319B9-FBF3-4DE6-9304-D720699F0221}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{A2B8A0BA-19F2-46C9-8DC9-E4D81576880D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -167,5 +170,9 @@ Global
 		{A9DE53F9-CDF6-4A62-8621-4AD27CC8C5A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9DE53F9-CDF6-4A62-8621-4AD27CC8C5A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9DE53F9-CDF6-4A62-8621-4AD27CC8C5A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4ECF57AD-32B6-4121-B821-4397A7D84399}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4ECF57AD-32B6-4121-B821-4397A7D84399}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4ECF57AD-32B6-4121-B821-4397A7D84399}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4ECF57AD-32B6-4121-B821-4397A7D84399}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
