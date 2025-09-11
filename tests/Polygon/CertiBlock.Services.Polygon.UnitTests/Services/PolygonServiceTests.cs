@@ -38,7 +38,7 @@ public class PolygonServiceTests
         );
     }
     
-    #region GetEthereumTransactionByIdAsync Tests
+    #region GetPolygonTransactionByIdAsync Tests
     
     [Fact]
     public async Task GetEthereumTransactionByIdAsync_WithExistingId_ShouldReturnTransaction()
@@ -122,10 +122,10 @@ public class PolygonServiceTests
 
     #endregion
     
-    #region DeleteEthereumTransactionAsync Tests
+    #region DeletePolygonTransactionAsync Tests
 
     [Fact]
-    public async Task DeleteEthereumTransactionAsync_WithExistingTransaction_ShouldDeleteTransaction()
+    public async Task DeletePolygonTransactionAsync_WithExistingTransaction_ShouldDeleteTransaction()
     {
         // Arrange
         var id = Guid.NewGuid();
@@ -164,10 +164,10 @@ public class PolygonServiceTests
 
     #endregion
     
-    #region GetEthereumTransactionsByStatusAsync Tests
+    #region GetPolygonTransactionsByStatusAsync Tests
 
     [Fact]
-    public async Task GetEthereumTransactionsByStatusAsync_WithSingleStatus_ShouldReturnFilteredTransactions()
+    public async Task GetPolygonTransactionsByStatusAsync_WithSingleStatus_ShouldReturnFilteredTransactions()
     {
         // Arrange
         var status = Status.Confirmed;
@@ -216,10 +216,10 @@ public class PolygonServiceTests
 
     #endregion
     
-    #region GetEthereumTransactionsPagedAsync Tests
+    #region GetPolygonTransactionsPagedAsync Tests
 
     [Fact]
-    public async Task GetEthereumTransactionsPagedAsync_ShouldReturnPagedResults()
+    public async Task GetPolygonTransactionsPagedAsync_ShouldReturnPagedResults()
     {
         // Arrange
         var page = 1;
@@ -245,10 +245,10 @@ public class PolygonServiceTests
 
     #endregion
     
-    #region GetEthereumTransactionCountAsync Tests
+    #region GetPolygonTransactionCountAsync Tests
 
     [Fact]
-    public async Task GetEthereumTransactionCountAsync_ShouldReturnCount()
+    public async Task GetPolygonTransactionCountAsync_ShouldReturnCount()
     {
         // Arrange
         var expectedCount = 100L;
@@ -264,5 +264,4 @@ public class PolygonServiceTests
     }
 
     #endregion
-    
 }

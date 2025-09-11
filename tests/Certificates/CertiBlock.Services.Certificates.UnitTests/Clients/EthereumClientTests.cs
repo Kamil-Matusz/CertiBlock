@@ -65,10 +65,12 @@ public class EthereumClientTests
             x => x.Log(
                 LogLevel.Information,
                 It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString()!.StartsWith("[Ethereum] Zarejestrowano certyfikat")),
+                It.Is<It.IsAnyType>((v, t) =>
+                    v.ToString()!.StartsWith("[Ethereum] Register certificate")
+                ),
                 It.IsAny<Exception>(),
-                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
-            Times.Once);
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()
+            ), Times.Once);
     }
     
     [Fact]
