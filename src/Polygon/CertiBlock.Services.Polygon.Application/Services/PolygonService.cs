@@ -42,7 +42,7 @@ public class PolygonService(IPolygonRepository polygonRepository, ILogger<Polygo
                 CertificateId = dto.CertificateId,
                 CertificateHash = dto.CertificateHash,
                 Issuer = dto.Issuer,
-                Blockchain = Blockchain.Ethereum,
+                Blockchain = Blockchain.Polygon,
                 TransactionHash = txnHash,
                 Status = Status.Submitted,
                 CreatedAt = DateTime.UtcNow,

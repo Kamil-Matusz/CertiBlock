@@ -14,7 +14,7 @@ public class PolygonRepository : IPolygonRepository
     public PolygonRepository(IOptions<MongoDbOptions> settings, IMongoClient client)
     {
         var db = client.GetDatabase(settings.Value.Database);
-        _collection = db.GetCollection<BlockchainTransaction>("ethereum");
+        _collection = db.GetCollection<BlockchainTransaction>("polygon");
     }
     
     public async Task<BlockchainTransaction> GetBlockchainTransactionByIdAsync(Guid id)

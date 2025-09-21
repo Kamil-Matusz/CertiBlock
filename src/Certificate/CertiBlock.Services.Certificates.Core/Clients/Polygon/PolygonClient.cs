@@ -16,7 +16,7 @@ public class PolygonClient(HttpClient httpClient, ILogger<PolygonClient> logger)
             certificate.Issuer
         );
         
-        var response = await httpClient.PostAsJsonAsync("/certificates/register", request);
+        var response = await httpClient.PostAsJsonAsync("/polygon-service/Polygon/registerCertificate", request);
 
         if (!response.IsSuccessStatusCode)
         {

@@ -22,8 +22,6 @@ public static class CertificateMapper
     {
         return certificates.Select(certificate => Map<T>(certificate));
     }
-    
-    public static CertificateDto MapToDto(Certificate certificate) => Map<CertificateDto>(certificate);
 
     public static IEnumerable<CertificateDto> MapAllToDto(IEnumerable<Certificate> certificates) => 
         MapAll<CertificateDto>(certificates);

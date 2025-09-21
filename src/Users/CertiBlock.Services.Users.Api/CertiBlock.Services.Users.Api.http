@@ -40,7 +40,7 @@ Accept: application/json
 
 {
   "email": "admin@admin.com",
-  "password": "AdminPassword123!"
+  "password": "password"
 }
 
 ### 4. Sign In - Test user
