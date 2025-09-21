@@ -77,8 +77,9 @@ public class CertificateMapperTests
         var result = CertificateMapper.MapAll<CertificateDto>(certificates);
 
         // Assert
-        result.ShouldNotBeNull();
-        result.Count().ShouldBe(0);
+        var certificateDtos = result.ToList();
+        certificateDtos.ShouldNotBeNull();
+        certificateDtos.Count().ShouldBe(0);
     }
     
     [Fact]
@@ -102,5 +103,4 @@ public class CertificateMapperTests
         result[1].Title.ShouldBe("Second certificate");
         result[2].Title.ShouldBe("Third certificate");
     }
-
 }
