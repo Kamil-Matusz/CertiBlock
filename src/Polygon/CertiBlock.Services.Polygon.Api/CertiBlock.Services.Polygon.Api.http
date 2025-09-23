@@ -1,0 +1,6 @@
+@CertiBlock.Services.Polygon.Api_HostAddress = http://localhost:5056
+
+GET {{CertiBlock.Services.Polygon.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

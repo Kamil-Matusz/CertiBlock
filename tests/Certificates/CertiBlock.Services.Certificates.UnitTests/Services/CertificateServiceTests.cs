@@ -30,6 +30,8 @@ public class CertificateServiceTests
             _polygonClientMock.Object);
     }
     
+    #region DeleteCertificateAsync Tests
+    
     [Fact]
     public async Task DeleteCertificateAsync_ShouldCallDelete_WhenCertificateExists()
     {
@@ -58,6 +60,10 @@ public class CertificateServiceTests
         // Act & Assert
         await Should.ThrowAsync<CertificateNotFoundException>(() => _service.DeleteCertificateAsync(certId));
     }
+    
+    #endregion
+
+    #region GetCertificateByIdAsync
     
     [Fact]
     public async Task GetCertificateByIdAsync_ShouldReturnCertificate()
@@ -138,4 +144,6 @@ public class CertificateServiceTests
         await Should.ThrowAsync<CetrtificateForUserNotFoundException>(() =>
             _service.GetCertificatesByUserIdAsync(userId));
     }
+    
+    #endregion
 }

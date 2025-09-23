@@ -1,6 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using CertiBlock.Services.Certificates.Core.DAL.Repositories;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace CertiBlock.Services.Certificates.Core.DAL.Repositories;
+namespace CertiBlock.Services.Certificates.Core.DAL;
 
 public static class Extensions
 {

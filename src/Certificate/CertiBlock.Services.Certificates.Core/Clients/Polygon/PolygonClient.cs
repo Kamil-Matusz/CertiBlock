@@ -16,7 +16,7 @@ public class PolygonClient(HttpClient httpClient, ILogger<PolygonClient> logger)
             certificate.Issuer
         );
         
-        var response = await httpClient.PostAsJsonAsync("/certificates/register", request);
+        var response = await httpClient.PostAsJsonAsync("/polygon-service/Polygon/registerCertificate", request);
 
         if (!response.IsSuccessStatusCode)
         {
@@ -26,6 +26,6 @@ public class PolygonClient(HttpClient httpClient, ILogger<PolygonClient> logger)
 
         var result = await response.Content.ReadFromJsonAsync<CertificateRegistrationResponse>();
         
-        logger.LogInformation($"[Ethereum] Zarejestrowano certyfikat {result?.CertificateId}");
+        logger.LogInformation($"[Polygon] Register certificate with ID: {result?.CertificateId}");
     }
 }
