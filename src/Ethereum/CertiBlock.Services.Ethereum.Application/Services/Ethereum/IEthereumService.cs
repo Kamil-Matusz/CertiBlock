@@ -1,7 +1,7 @@
 ﻿using CertiBlock.Services.Ethereum.Core.DTO;
 using CertiBlock.Shared.Enums;
 
-namespace CertiBlock.Services.Ethereum.Application.Services;
+namespace CertiBlock.Services.Ethereum.Application.Services.Ethereum;
 
 public interface IEthereumService
 {

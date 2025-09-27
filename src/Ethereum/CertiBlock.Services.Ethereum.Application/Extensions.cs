@@ -1,4 +1,5 @@
-﻿using CertiBlock.Services.Ethereum.Application.Services;
+﻿using CertiBlock.Services.Ethereum.Application.Services.CoinGecko;
+using CertiBlock.Services.Ethereum.Application.Services.Ethereum;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CertiBlock.Services.Ethereum.Application;
@@ -9,6 +10,7 @@ public static class Extensions
     {
         // Services
         services.AddScoped<IEthereumService, EthereumService>();
+        services.AddScoped<ICoinGeckoService, CoinGeckoService>();
         
         return services;
     }

@@ -1,5 +1,6 @@
 ﻿using CertiBlock.Services.Ethereum.Core.Ethereum;
 using CertiBlock.Services.Ethereum.Infrastructure.DAL;
+using CertiBlock.Shared.CoinGecko;
 using CertiBlock.Shared.Logging;
 using CertiBlock.Shared.Mongo;
 using Microsoft.AspNetCore.Builder;
@@ -20,6 +21,9 @@ public static class Extensions
 
         // MongoDB
         services.AddMongo(configuration);
+        
+        // CoinGecko
+        services.AddCoinGecko(configuration);
 
         // Repositories
         services.AddRepositories();

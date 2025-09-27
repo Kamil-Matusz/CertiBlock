@@ -1,4 +1,5 @@
 ﻿using CertiBlock.Services.Ethereum.Application.Services;
+using CertiBlock.Services.Ethereum.Application.Services.Ethereum;
 using CertiBlock.Services.Ethereum.Core.DTO;
 using CertiBlock.Services.Ethereum.Core.Entities;
 using CertiBlock.Services.Ethereum.Core.Ethereum;
