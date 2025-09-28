@@ -9,6 +9,7 @@ public static class Extensions
     public static IServiceCollection AddRepositories(this IServiceCollection services)
     {
         services.AddScoped<IEthereumRepository, EthereumRepository>();
+        services.AddScoped<IEthereumMetricRepository, EthereumMetricsRepository>();
         
         return services;
     }
