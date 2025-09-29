@@ -2,13 +2,8 @@
 
 namespace CertiBlock.Services.Ethereum.Core.Exceptions;
 
-public class EthereumTransactionsByCertificateIdNotFoundException : CustomException
+public class EthereumTransactionsByCertificateIdNotFoundException(Guid certificateId)
+    : CustomException($"Eth transaction with ID: '{certificateId}' was not found.")
 {
-    public Guid? CertificateId { get; set; }
-
-    public EthereumTransactionsByCertificateIdNotFoundException(Guid certificateId) 
-        : base($"Eth transaction with ID: '{certificateId}' was not found.")
-    {
-        CertificateId = certificateId;
-    }
+    public Guid? CertificateId { get; set; } = certificateId;
 }

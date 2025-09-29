@@ -60,7 +60,7 @@ public class EthereumController(IEthereumService ethereumService) : BaseControll
         => Ok(await ethereumService.GetAllEthereumTransactionsAsync());
 
     [HttpDelete("deleteTransactionById/{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<long>> DeleteTransactionById(Guid id)

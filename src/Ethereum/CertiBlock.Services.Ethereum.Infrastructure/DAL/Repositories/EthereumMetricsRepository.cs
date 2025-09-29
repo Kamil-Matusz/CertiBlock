@@ -20,4 +20,16 @@ public class EthereumMetricsRepository : IEthereumMetricRepository
     {
         await _collection.InsertOneAsync(ethereumMetrics);
     }
+
+    public async Task<EthereumMetrics> GetTransactionMetricsByCertificateAsync(Guid certificateId)
+    {
+        var filter = Builders<EthereumMetrics>.Filter.Eq(x => x.CertificateId, certificateId);
+        return await _collection.Find(filter).FirstOrDefaultAsync();
+    }
+
+    public async Task DeleteTransactionMetricsByCertificateIdAsync(Guid certificateId)
+    {
+        var filter = Builders<EthereumMetrics>.Filter.Eq(c => c.CertificateId, certificateId);
+        await _collection.DeleteOneAsync(filter);
+    }
 }
