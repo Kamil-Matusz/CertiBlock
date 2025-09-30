@@ -1,5 +1,6 @@
 ﻿using CertiBlock.Services.Ethereum.Application.Services.EthereumMetrics;
 using CertiBlock.Services.Ethereum.Core.DTO;
+using CertiBlock.Shared.DTO;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CertiBlock.Services.Ethereum.Api.Controllers;
@@ -10,7 +11,7 @@ public class EthereumMetricsController(IEthereumMetricService ethereumMetricServ
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async  Task<IActionResult> CollectMetrics([FromBody] EthereumMetricDto dto)
+    public async  Task<IActionResult> CollectMetrics([FromBody] MetricDto dto)
         => Ok(await ethereumMetricService.CollectMetricsAsync(dto.CertificateId, dto.TransactionHash));
     
     [HttpDelete("deleteTransactionMetricById/{certificateId}")]
