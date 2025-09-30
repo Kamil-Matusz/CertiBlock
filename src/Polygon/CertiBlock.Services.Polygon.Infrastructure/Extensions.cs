@@ -1,10 +1,13 @@
-﻿using CertiBlock.Services.Polygon.Infrastructure.DAL;
+﻿using CertiBlock.Services.Polygon.Core.Entities;
+using CertiBlock.Services.Polygon.Infrastructure.Configurations;
+using CertiBlock.Services.Polygon.Infrastructure.DAL;
 using CertiBlock.Shared.CoinGecko;
 using CertiBlock.Shared.Logging;
 using CertiBlock.Shared.Mongo;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Bson.Serialization;
 
 namespace CertiBlock.Services.Polygon.Infrastructure;
 
@@ -20,6 +23,7 @@ public static class Extensions
 
         // MongoDB
         services.AddMongo(configuration);
+        ConfigureMongoDbMappings();
         
         // CoinGecko
         services.AddCoinGecko(configuration);
@@ -45,5 +49,18 @@ public static class Extensions
         section.Bind(options);
 
         return options;
+    }
+    
+    private static void ConfigureMongoDbMappings()
+    {
+        if (!BsonClassMap.IsClassMapRegistered(typeof(PolygonMetrics)))
+        {
+            PolygonMetricsConfiguration.Configure();
+        }
+        
+        if (!BsonClassMap.IsClassMapRegistered(typeof(BlockchainTransaction)))
+        {
+            BlockchainTransactionConfiguration.Configure();
+        }
     }
 }

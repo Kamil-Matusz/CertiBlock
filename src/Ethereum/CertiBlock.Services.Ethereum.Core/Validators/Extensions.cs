@@ -9,6 +9,7 @@ public static class Extensions
     {
         services.AddFluentValidation(fv => fv
             .RegisterValidatorsFromAssemblyContaining<EthereumAddressDtoValidator>()
+            .RegisterValidatorsFromAssemblyContaining<MetricDtoValidator>()
             .RegisterValidatorsFromAssemblyContaining<BlockchainTransactionDtoValidator>());
 
         return services;
