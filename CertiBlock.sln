@@ -56,6 +56,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CertiBlock.Services.Polygon
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CertiBlock.Services.Polygon.UnitTests", "tests\Polygon\CertiBlock.Services.Polygon.UnitTests\CertiBlock.Services.Polygon.UnitTests.csproj", "{4ECF57AD-32B6-4121-B821-4397A7D84399}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateway", "Gateway", "{7F3DE27F-069D-412A-8220-759F60765D02}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CertiBlock.Gateway", "src\Gateway\CertiBlock.Gateway\CertiBlock.Gateway.csproj", "{AABFF6E8-E735-40E9-9FAF-28FC1BEAE08F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -84,6 +88,7 @@ Global
 		{F0DABFE9-5E05-46F4-B30D-23E42FA3A0A6} = {6FF319B9-FBF3-4DE6-9304-D720699F0221}
 		{A9DE53F9-CDF6-4A62-8621-4AD27CC8C5A8} = {6FF319B9-FBF3-4DE6-9304-D720699F0221}
 		{4ECF57AD-32B6-4121-B821-4397A7D84399} = {6FF319B9-FBF3-4DE6-9304-D720699F0221}
+		{AABFF6E8-E735-40E9-9FAF-28FC1BEAE08F} = {7F3DE27F-069D-412A-8220-759F60765D02}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{A2B8A0BA-19F2-46C9-8DC9-E4D81576880D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -174,5 +179,9 @@ Global
 		{4ECF57AD-32B6-4121-B821-4397A7D84399}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4ECF57AD-32B6-4121-B821-4397A7D84399}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4ECF57AD-32B6-4121-B821-4397A7D84399}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AABFF6E8-E735-40E9-9FAF-28FC1BEAE08F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AABFF6E8-E735-40E9-9FAF-28FC1BEAE08F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AABFF6E8-E735-40E9-9FAF-28FC1BEAE08F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AABFF6E8-E735-40E9-9FAF-28FC1BEAE08F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -1,0 +1,6 @@
+@CertiBlock.Gateway_HostAddress = http://localhost:5126
+
+GET {{CertiBlock.Gateway_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
