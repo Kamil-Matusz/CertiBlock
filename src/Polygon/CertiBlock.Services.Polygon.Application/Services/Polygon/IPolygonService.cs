@@ -1,7 +1,7 @@
 ﻿using CertiBlock.Services.Polygon.Core.DTO;
 using CertiBlock.Shared.Enums;
 
-namespace CertiBlock.Services.Polygon.Application.Services;
+namespace CertiBlock.Services.Polygon.Application.Services.Polygon;
 
 public interface IPolygonService
 {

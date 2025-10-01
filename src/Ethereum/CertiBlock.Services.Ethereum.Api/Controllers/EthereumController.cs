@@ -1,4 +1,5 @@
 ﻿using CertiBlock.Services.Ethereum.Application.Services;
+using CertiBlock.Services.Ethereum.Application.Services.Ethereum;
 using CertiBlock.Services.Ethereum.Core.DTO;
 using CertiBlock.Shared.Enums;
 using Microsoft.AspNetCore.Mvc;
@@ -59,7 +60,7 @@ public class EthereumController(IEthereumService ethereumService) : BaseControll
         => Ok(await ethereumService.GetAllEthereumTransactionsAsync());
 
     [HttpDelete("deleteTransactionById/{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<long>> DeleteTransactionById(Guid id)

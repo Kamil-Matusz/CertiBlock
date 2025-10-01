@@ -1,4 +1,5 @@
 ﻿using CertiBlock.Services.Polygon.Application.Services;
+using CertiBlock.Services.Polygon.Application.Services.Polygon;
 using CertiBlock.Services.Polygon.Core.Entities;
 using CertiBlock.Services.Polygon.Core.Exceptions;
 using CertiBlock.Services.Polygon.Core.Polygon;

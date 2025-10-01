@@ -1,28 +1,25 @@
-﻿using System.Text;
-using CertiBlock.Services.Ethereum.Application.Mappers;
-using CertiBlock.Services.Ethereum.Core.DTO;
-using CertiBlock.Services.Ethereum.Core.Entities;
-using CertiBlock.Services.Ethereum.Core.Ethereum;
-using CertiBlock.Services.Ethereum.Core.Exceptions;
-using CertiBlock.Services.Ethereum.Core.Repositories;
+﻿using CertiBlock.Services.Polygon.Application.Mappers;
+using CertiBlock.Services.Polygon.Core.DTO;
+using CertiBlock.Services.Polygon.Core.Entities;
+using CertiBlock.Services.Polygon.Core.Exceptions;
+using CertiBlock.Services.Polygon.Core.Polygon;
+using CertiBlock.Services.Polygon.Core.Repositories;
 using CertiBlock.Shared.Enums;
 using Microsoft.Extensions.Logging;
-using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Hex.HexTypes;
 using Nethereum.RPC.Eth.DTOs;
 using Nethereum.Web3;
-using Serilog;
 
-namespace CertiBlock.Services.Ethereum.Application.Services;
+namespace CertiBlock.Services.Polygon.Application.Services.Polygon;
 
-public class EthereumService(IEthereumRepository ethereumRepository, ILogger<EthereumService> logger, IWeb3 web3, EthereumOptions ethereumOptions) : IEthereumService
+public class PolygonService(IPolygonRepository polygonRepository, ILogger<PolygonService> logger, IWeb3 web3, PolygonOptions polygonOptions) : IPolygonService
 {
-    public async Task<BlockchainTransactionResultDto> RegisterEthereumTransactionAsync(BlockchainTransactionDto dto)
+    public async Task<BlockchainTransactionResultDto> RegisterPolygonTransactionAsync(BlockchainTransactionDto dto)
     {
         try
         {
-            var account = new Nethereum.Web3.Accounts.Account(ethereumOptions.PrivateKey);
-            var web3WithAccount = new Web3(account, ethereumOptions.InfuraUrl);
+            var account = new Nethereum.Web3.Accounts.Account(polygonOptions.PrivateKey);
+            var web3WithAccount = new Web3(account, polygonOptions.InfuraUrl);
 
             var data = dto.CertificateHash.StartsWith("0x")
                 ? dto.CertificateHash
@@ -45,14 +42,14 @@ public class EthereumService(IEthereumRepository ethereumRepository, ILogger<Eth
                 CertificateId = dto.CertificateId,
                 CertificateHash = dto.CertificateHash,
                 Issuer = dto.Issuer,
-                Blockchain = Blockchain.Ethereum,
+                Blockchain = Blockchain.Polygon,
                 TransactionHash = txnHash,
                 Status = Status.Submitted,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };
 
-            await ethereumRepository.SaveBlockchainTransactionAsync(blockchainTransaction);
+            await polygonRepository.SaveBlockchainTransactionAsync(blockchainTransaction);
 
             return BlockchainTransactionMapper.MapToResultDto(blockchainTransaction);
         }
@@ -63,19 +60,19 @@ public class EthereumService(IEthereumRepository ethereumRepository, ILogger<Eth
         }
     }
     
-    public async Task<IEnumerable<BlockchainTransactionResultDto>> GetAllEthereumTransactionsAsync()
+    public async Task<IEnumerable<BlockchainTransactionResultDto>> GetAllPolygonTransactionsAsync()
     {
-        var blockchainTransactions = await ethereumRepository.GetAllBlockchainTransactionsAsync();
+        var blockchainTransactions = await polygonRepository.GetAllBlockchainTransactionsAsync();
         return BlockchainTransactionMapper.MapAllToResultDto(blockchainTransactions);
     }
 
-    public async Task<BlockchainTransactionDto> GetEthereumTransactionByIdAsync(Guid id)
+    public async Task<BlockchainTransactionDto> GetPolygonTransactionByIdAsync(Guid id)
     {
-        var ethereumBlockchain = await ethereumRepository.GetBlockchainTransactionByIdAsync(id);
+        var ethereumBlockchain = await polygonRepository.GetBlockchainTransactionByIdAsync(id);
 
         if (ethereumBlockchain is null)
         {
-            throw new EthereumTransactionsNotFoundException(id);
+            throw new PolygonTransactionsNotFoundException(id);
         }
 
         return BlockchainTransactionMapper.Map<BlockchainTransactionDto>(ethereumBlockchain);
@@ -83,49 +80,49 @@ public class EthereumService(IEthereumRepository ethereumRepository, ILogger<Eth
 
     public async Task<BlockchainTransactionDto> GetBlockchainTransactionByCertificateIdAsync(Guid certificateId)
     {
-        var ethereumBlockchain = await ethereumRepository.GetBlockchainTransactionByCertificateIdAsync(certificateId);
+        var ethereumBlockchain = await polygonRepository.GetBlockchainTransactionByCertificateIdAsync(certificateId);
 
         if (ethereumBlockchain is null)
         {
-            throw new EthereumTransactionsByCertificateIdNotFoundException(certificateId);
+            throw new PolygonTransactionsByCertificateIdNotFoundException(certificateId);
         }
 
         return BlockchainTransactionMapper.Map<BlockchainTransactionDto>(ethereumBlockchain);
     }
 
-    public async Task DeleteEthereumTransactionAsync(Guid id)
+    public async Task DeletePolygonTransactionAsync(Guid id)
     {
-        var ethereumTransaction = await ethereumRepository.GetBlockchainTransactionByIdAsync(id);
+        var ethereumTransaction = await polygonRepository.GetBlockchainTransactionByIdAsync(id);
         if (ethereumTransaction is null)
         {
-            throw new EthereumTransactionsNotFoundException(id);
+            throw new PolygonTransactionsNotFoundException(id);
         }
 
-        await ethereumRepository.DeleteBlockchainTransactionAsync(id);
+        await polygonRepository.DeleteBlockchainTransactionAsync(id);
     }
 
-    public async Task<EthereumBalanceDto> GetEthBalanceAsync(string walletAddress)
+    public async Task<PolygonBalanceDto> GetPolygonBalanceAsync(string walletAddress)
     {
         try
         {
             var balanceWei = await web3.Eth.GetBalance.SendRequestAsync(walletAddress);
             var balanceEth = Web3.Convert.FromWei(balanceWei);
         
-            return EthBalanceMapper.MapToDto(walletAddress, balanceEth);
+            return PolygonBalanceMapper.MapToDto(walletAddress, balanceEth);
         }
         catch (Exception ex)
         {
             logger.LogError(ex, "Error while fetching ETH balance for {Address}: {ErrorMessage}", walletAddress, ex.Message);
-            throw new EthereumBalanceException(walletAddress);
+            throw new PolygonBalanceException(walletAddress);
         }
     }
 
-    public async Task<BlockchainTransactionStatusDto> GetEthereumTransactionStatusAsync(string transactionHash)
+    public async Task<BlockchainTransactionStatusDto> GetPolygonTransactionStatusAsync(string transactionHash)
     {
         try
         {
-            var account = new Nethereum.Web3.Accounts.Account(ethereumOptions.PrivateKey);
-            var web3WithAccount = new Web3(account, ethereumOptions.InfuraUrl);
+            var account = new Nethereum.Web3.Accounts.Account(polygonOptions.PrivateKey);
+            var web3WithAccount = new Web3(account, polygonOptions.InfuraUrl);
             
             var transaction = await web3WithAccount.Eth.Transactions
                 .GetTransactionByHash.SendRequestAsync(transactionHash);
@@ -162,12 +159,12 @@ public class EthereumService(IEthereumRepository ethereumRepository, ILogger<Eth
                     : Status.Failed;
             }
             
-            var dbTransaction = await ethereumRepository.GetByTransactionHashAsync(transactionHash);
+            var dbTransaction = await polygonRepository.GetByTransactionHashAsync(transactionHash);
             if (dbTransaction != null)
             {
                 dbTransaction.Status = newStatus;
                 dbTransaction.UpdatedAt = DateTime.UtcNow;
-                await ethereumRepository.UpdateBlockchainTransactionAsync(dbTransaction);
+                await polygonRepository.UpdateBlockchainTransactionAsync(dbTransaction);
             }
 
             return new BlockchainTransactionStatusDto
@@ -188,33 +185,33 @@ public class EthereumService(IEthereumRepository ethereumRepository, ILogger<Eth
 
     public async Task<BlockchainTransactionResultDto> GetTransactionByHashAsync(string txnHash)
     {
-        var transaction = await ethereumRepository.GetByTransactionHashAsync(txnHash);
+        var transaction = await polygonRepository.GetByTransactionHashAsync(txnHash);
         
         if (transaction is null)
         {
-            throw new EthereumTransactionsNotFoundException(txnHash);
+            throw new PolygonTransactionsNotFoundException(txnHash);
         }
         
         return BlockchainTransactionMapper.MapToResultDto(transaction);
     }
 
-    public async Task<IEnumerable<BlockchainTransactionDto>> GetEthereumTransactionsByStatusAsync(Status status)
+    public async Task<IEnumerable<BlockchainTransactionDto>> GetPolygonTransactionsByStatusAsync(Status status)
     {
-        var transactions = await ethereumRepository.GetTransactionsByStatusAsync(status);
+        var transactions = await polygonRepository.GetTransactionsByStatusAsync(status);
         return BlockchainTransactionMapper.MapAll<BlockchainTransactionDto>(transactions);
     }
 
-    public async Task<IEnumerable<BlockchainTransactionDto>> GetEthereumTransactionsByStatusAsync(params Status[] statuses)
+    public async Task<IEnumerable<BlockchainTransactionDto>> GetPolygonTransactionsByStatusAsync(params Status[] statuses)
     {
-        var transactions = await ethereumRepository.GetTransactionsByStatusAsync(statuses);
+        var transactions = await polygonRepository.GetTransactionsByStatusAsync(statuses);
         return BlockchainTransactionMapper.MapAll<BlockchainTransactionDto>(transactions);
     }
 
-    public async Task<IEnumerable<BlockchainTransactionResultDto>> GetEthereumTransactionsPagedAsync(int page, int pageSize)
+    public async Task<IEnumerable<BlockchainTransactionResultDto>> GetPolygonTransactionsPagedAsync(int page, int pageSize)
     {
-        var transactions = await ethereumRepository.GetTransactionsPagedAsync(page, pageSize);
+        var transactions = await polygonRepository.GetTransactionsPagedAsync(page, pageSize);
         return BlockchainTransactionMapper.MapAllToResultDto(transactions);
     }
 
-    public async Task<long> GetEthereumTransactionCountAsync() => await  ethereumRepository.GetTransactionCountAsync();
+    public async Task<long> GetPolygonTransactionCountAsync() => await  polygonRepository.GetTransactionCountAsync();
 }

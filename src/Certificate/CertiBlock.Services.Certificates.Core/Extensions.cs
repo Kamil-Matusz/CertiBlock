@@ -1,7 +1,9 @@
 ﻿using CertiBlock.Services.Certificates.Core.Auth;
 using CertiBlock.Services.Certificates.Core.Clients;
+using CertiBlock.Services.Certificates.Core.Configurations;
 using CertiBlock.Services.Certificates.Core.DAL;
 using CertiBlock.Services.Certificates.Core.DAL.Repositories;
+using CertiBlock.Services.Certificates.Core.Entities;
 using CertiBlock.Services.Certificates.Core.Services;
 using CertiBlock.Services.Certificates.Core.Validators;
 using CertiBlock.Shared.Logging;
@@ -9,6 +11,7 @@ using CertiBlock.Shared.Mongo;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Bson.Serialization;
 
 namespace CertiBlock.Services.Certificates.Core;
 
@@ -20,6 +23,7 @@ public static class Extensions
         
         // MongoDB
         services.AddMongo(configuration);
+        ConfigureMongoDbMappings();
         
         // HttpClients
         services.AddClients();
@@ -52,5 +56,13 @@ public static class Extensions
         app.UseAuthorization();
         
         return app;
+    }
+    
+    private static void ConfigureMongoDbMappings()
+    {
+        if (!BsonClassMap.IsClassMapRegistered(typeof(Certificate)))
+        {
+            CertificateConfiguration.Configure();
+        }
     }
 }

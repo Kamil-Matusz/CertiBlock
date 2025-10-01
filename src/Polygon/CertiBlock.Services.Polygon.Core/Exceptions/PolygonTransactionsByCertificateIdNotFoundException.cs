@@ -2,13 +2,8 @@
 
 namespace CertiBlock.Services.Polygon.Core.Exceptions;
 
-public class PolygonTransactionsByCertificateIdNotFoundException : CustomException
+public class PolygonTransactionsByCertificateIdNotFoundException(Guid certificateId)
+    : CustomException($"Polygon transaction with ID: '{certificateId}' was not found.")
 {
-    public Guid? CertificateId { get; set; }
-
-    public PolygonTransactionsByCertificateIdNotFoundException(Guid certificateId) 
-        : base($"Polygon transaction with ID: '{certificateId}' was not found.")
-    {
-        CertificateId = certificateId;
-    }
+    public Guid? CertificateId { get; set; } = certificateId;
 }
