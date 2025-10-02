@@ -1,4 +1,5 @@
-﻿using CertiBlock.Shared.Logging;
+﻿using CertiBlock.Gateway.Configuration;
+using CertiBlock.Shared.Logging;
 
 namespace CertiBlock.Gateway;
 
@@ -11,6 +12,9 @@ public static class Extensions
         
         // Seq
         services.AddSeqLogging(configuration);
+        
+        // Gateway
+        services.AddGateway(configuration);
         
         return services;
     }
