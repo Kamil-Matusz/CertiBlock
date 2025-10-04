@@ -10,7 +10,6 @@ public static class Extensions
             options.AddPolicy("AllowAnonymous", policy => policy.RequireAssertion(_ => true));
         });
 
-        
         services.AddReverseProxy()
             .LoadFromConfig(configuration.GetSection("ReverseProxy"));
 
