@@ -32,6 +32,10 @@ public static class Extensions
         services.AddRepositories();
         
         services.AddControllers();
+        
+        // HealthCheck
+        services.AddHealthChecks();
+        
         return services;
     }
 

@@ -24,6 +24,7 @@ public static class Extensions
         services.AddPostgres(configuration);
         
         services.AddErrorHandling();
+        
         services.AddControllers();
 
         // Logging
@@ -35,6 +36,9 @@ public static class Extensions
         // JWT Token
         services.AddAuth(configuration);
         services.AddHttpContextAccessor();
+
+        // HealthCheck
+        services.AddHealthChecks();
         
         return services;
     }

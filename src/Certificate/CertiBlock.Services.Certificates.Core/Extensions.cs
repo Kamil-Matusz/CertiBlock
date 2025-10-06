@@ -35,6 +35,9 @@ public static class Extensions
         services.AddScoped<ICertificateService, CertificateService>();
         
         services.AddControllers();
+
+        // HealthCheck
+        services.AddHealthChecks();
         
         // JWT Token
         services.AddAuth(configuration);

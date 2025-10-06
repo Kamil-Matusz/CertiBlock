@@ -34,4 +34,6 @@ app.UseInfrastructure();
 
 app.MapControllers();
 
+app.MapHealthChecks("/health");
+
 app.Run();
