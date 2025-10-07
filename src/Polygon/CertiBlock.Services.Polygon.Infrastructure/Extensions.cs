@@ -1,6 +1,7 @@
 ﻿using CertiBlock.Services.Polygon.Core.Entities;
 using CertiBlock.Services.Polygon.Infrastructure.Configurations;
 using CertiBlock.Services.Polygon.Infrastructure.DAL;
+using CertiBlock.Services.Polygon.Infrastructure.RabbitMQ;
 using CertiBlock.Shared.CoinGecko;
 using CertiBlock.Shared.Logging;
 using CertiBlock.Shared.Mongo;
@@ -39,6 +40,7 @@ public static class Extensions
         
         // RabbitMQ
         services.AddRabbitMqConnection(configuration);
+        services.AddRabbitMqProducer<SecondProducer>("queue-polygon");
         
         return services;
     }

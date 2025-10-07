@@ -2,6 +2,7 @@
 using CertiBlock.Services.Ethereum.Core.Ethereum;
 using CertiBlock.Services.Ethereum.Infrastructure.Configurations;
 using CertiBlock.Services.Ethereum.Infrastructure.DAL;
+using CertiBlock.Services.Ethereum.Infrastructure.RabbitMQ;
 using CertiBlock.Shared.CoinGecko;
 using CertiBlock.Shared.Logging;
 using CertiBlock.Shared.Mongo;
@@ -40,6 +41,7 @@ public static class Extensions
         
         // RabbitMQ
         services.AddRabbitMqConnection(configuration);
+        services.AddRabbitMqProducer<FirstProducer>("queue-ethereum");
         
         return services;
     }
