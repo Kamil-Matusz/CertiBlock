@@ -1,9 +1,10 @@
 ﻿using CertiBlock.Shared.RabbitMQ;
+using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 
 namespace CertiBlock.Services.Metrics.Core.RabbitMQ;
 
-public class MessageConsumer(IConnectionFactory connectionFactory) : RabbitMqConsumerBase(connectionFactory)
+public class MessageConsumer(IConnectionFactory connectionFactory, ILogger<MessageConsumer> logger) : RabbitMqConsumerBase(connectionFactory, logger)
 {
     protected override string[] QueueNames => ["queue-ethereum", "queue-polygon"];
 

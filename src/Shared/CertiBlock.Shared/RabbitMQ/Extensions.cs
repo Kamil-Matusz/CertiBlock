@@ -40,29 +40,23 @@ public static class Extensions
         return options;
     }
     
-    public static IServiceCollection AddRabbitMqProducer<TProducer>(
-        this IServiceCollection services, 
-        string queueName,
-        bool declareQueue = true) 
-        where TProducer : class, IRabbitMqProducer
+    public static IServiceCollection AddRabbitMqProducer<TProducer>(this IServiceCollection services, string queueName,
+        bool declareQueue = true) where TProducer : class, IRabbitMqProducer
     {
         services.AddSingleton<TProducer>(sp =>
         {
             var factory = sp.GetRequiredService<IConnectionFactory>();
             var connection = factory.CreateConnection($"{typeof(TProducer).Name}-Connection");
             var channel = connection.CreateModel();
-            
+    
             if (declareQueue)
             {
-                channel.QueueDeclare(
-                    queue: queueName,
-                    durable: true,
-                    exclusive: false,
-                    autoDelete: false,
-                    arguments: null);
+                channel.QueueDeclare(queueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
             }
 
-            return (TProducer)Activator.CreateInstance(typeof(TProducer), connection, channel, queueName)!;
+            var producer = (TProducer)Activator.CreateInstance(typeof(TProducer), connection, channel, queueName)!;
+            
+            return producer;
         });
 
         return services;
