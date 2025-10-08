@@ -1,6 +1,4 @@
-﻿using CertiBlock.Services.Metrics.Core.RabbitMQ;
-using CertiBlock.Shared.Logging;
-using CertiBlock.Shared.RabbitMQ;
+﻿using CertiBlock.Shared.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,8 +21,6 @@ public static class Extensions
         services.AddHealthChecks();
         
         // RabbitMQ
-        services.AddRabbitMqConnection(configuration);
-        services.AddRabbitMqConsumer<MessageConsumer>();
         
         return services;
     }
