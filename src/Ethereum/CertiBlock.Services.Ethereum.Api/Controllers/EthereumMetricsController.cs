@@ -1,11 +1,16 @@
-﻿using CertiBlock.Services.Ethereum.Application.Services.EthereumMetrics;
+﻿using System.Text;
+using System.Text.Json;
+using CertiBlock.Services.Ethereum.Application.Services.EthereumMetrics;
 using CertiBlock.Services.Ethereum.Core.DTO;
 using CertiBlock.Shared.DTO;
+using CertiBlock.Shared.Enums;
+using CertiBlock.Shared.Messaging;
 using Microsoft.AspNetCore.Mvc;
+using RabbitMQ.Client;
 
 namespace CertiBlock.Services.Ethereum.Api.Controllers;
 
-public class EthereumMetricsController(IEthereumMetricService ethereumMetricService) : BaseController
+public class EthereumMetricsController(IEthereumMetricService ethereumMetricService, IModel channel) : BaseController
 {
     [HttpPost("collectMetricsForEthereum")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -30,4 +35,31 @@ public class EthereumMetricsController(IEthereumMetricService ethereumMetricServ
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<EthereumMetricDetailsDto>> GetEthereumTransactionsById(Guid certificateId)
         => Ok(await ethereumMetricService.GetTransactionMetricsByCertificateIdAsync(certificateId));
+    
+    [HttpPost("test")]
+    public IActionResult PublishTestMetric()
+    {
+        var metricEvent = new MetricCollectedEvent(
+            Guid.NewGuid(),
+            Blockchain.Ethereum,
+            Operation.Register,
+            21000,
+            1.25,
+            0.00042,
+            DateTime.UtcNow
+        );
+
+        
+        var messageBody = JsonSerializer.Serialize(metricEvent);
+        var body = Encoding.UTF8.GetBytes(messageBody);
+        
+        channel.BasicPublish(
+            exchange: "",
+            routingKey: "certiblock.metrics.ethereum",
+            basicProperties: null,
+            body: body
+        );
+
+        return Ok(new { status = "sent", metricEvent });
+    }
 }
