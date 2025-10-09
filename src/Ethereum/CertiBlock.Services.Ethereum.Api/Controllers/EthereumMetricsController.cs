@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Text.Json;
+using CertiBlock.Services.Ethereum.Application.RabbitMQ;
 using CertiBlock.Services.Ethereum.Application.Services.EthereumMetrics;
 using CertiBlock.Services.Ethereum.Core.DTO;
 using CertiBlock.Shared.DTO;
@@ -10,7 +11,7 @@ using RabbitMQ.Client;
 
 namespace CertiBlock.Services.Ethereum.Api.Controllers;
 
-public class EthereumMetricsController(IEthereumMetricService ethereumMetricService, IModel channel) : BaseController
+public class EthereumMetricsController(IEthereumMetricService ethereumMetricService, MetricPublisher metricPublisher) : BaseController
 {
     [HttpPost("collectMetricsForEthereum")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -49,16 +50,7 @@ public class EthereumMetricsController(IEthereumMetricService ethereumMetricServ
             DateTime.UtcNow
         );
 
-        
-        var messageBody = JsonSerializer.Serialize(metricEvent);
-        var body = Encoding.UTF8.GetBytes(messageBody);
-        
-        channel.BasicPublish(
-            exchange: "",
-            routingKey: "certiblock.metrics.ethereum",
-            basicProperties: null,
-            body: body
-        );
+        metricPublisher.Publish(metricEvent);
 
         return Ok(new { status = "sent", metricEvent });
     }

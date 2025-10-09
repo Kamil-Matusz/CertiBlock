@@ -14,46 +14,22 @@ public static class Extensions
         services.Configure<RabbitMqOptions>(section);
 
         var options = configuration.GetOptions<RabbitMqOptions>(RabbitSectionName);
-
-        var factory = new ConnectionFactory
-        {
-            HostName = options.HostName,
-            Port = options.Port,
-            UserName = options.Username,
-            Password = options.Password,
-            VirtualHost = options.VirtualHost,
-            DispatchConsumersAsync = true
-        };
-
-        var connection = factory.CreateConnection();
-        services.AddSingleton<IConnection>(connection);
         
-        services.AddSingleton(sp =>
+        services.AddSingleton<IConnection>(sp =>
         {
-            var conn = sp.GetRequiredService<IConnection>();
-            var channel = conn.CreateModel();
-
-            if (options.CreateTopology)
+            var factory = new ConnectionFactory
             {
-                string[] queues =
-                {
-                    "certiblock.metrics.ethereum",
-                    "certiblock.metrics.polygon"
-                };
+                HostName = options.HostName,
+                Port = options.Port,
+                UserName = options.Username,
+                Password = options.Password,
+                VirtualHost = options.VirtualHost,
+                DispatchConsumersAsync = true,
+                AutomaticRecoveryEnabled = true,
+                NetworkRecoveryInterval = TimeSpan.FromSeconds(10)
+            };
 
-                foreach (var queue in queues)
-                {
-                    channel.QueueDeclare(
-                        queue: queue,
-                        durable: true,
-                        exclusive: false,
-                        autoDelete: false,
-                        arguments: null
-                    );
-                }
-            }
-
-            return channel;
+            return factory.CreateConnection();
         });
 
         return services;
