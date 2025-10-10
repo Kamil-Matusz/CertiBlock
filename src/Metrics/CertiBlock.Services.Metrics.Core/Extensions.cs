@@ -1,4 +1,5 @@
-﻿using CertiBlock.Shared.Logging;
+﻿using CertiBlock.Shared.InfluxDB;
+using CertiBlock.Shared.Logging;
 using CertiBlock.Shared.RabbitMQ;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -24,6 +25,9 @@ public static class Extensions
         // RabbitMQ
         services.AddRabbitMq(configuration);
         services.AddHostedService<MetricConsumerService>();
+        
+        // InfluxDB
+        services.AddInfluxDb(configuration);
         
         return services;
     }
