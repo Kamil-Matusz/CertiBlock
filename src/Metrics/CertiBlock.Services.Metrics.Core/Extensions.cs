@@ -1,4 +1,5 @@
-﻿using CertiBlock.Shared.InfluxDB;
+﻿using CertiBlock.Services.Metrics.Core.RabbitMQ;
+using CertiBlock.Shared.InfluxDB;
 using CertiBlock.Shared.Logging;
 using CertiBlock.Shared.RabbitMQ;
 using Microsoft.AspNetCore.Builder;

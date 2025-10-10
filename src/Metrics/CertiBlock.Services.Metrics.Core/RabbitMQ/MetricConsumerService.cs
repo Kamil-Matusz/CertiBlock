@@ -8,7 +8,7 @@ using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
-namespace CertiBlock.Services.Metrics.Core;
+namespace CertiBlock.Services.Metrics.Core.RabbitMQ;
 
 public class MetricConsumerService(IConnection connection, IOptions<RabbitMqOptions> options, ILogger<MetricConsumerService> logger)
     : BackgroundService
@@ -96,7 +96,7 @@ public class MetricConsumerService(IConnection connection, IOptions<RabbitMqOpti
     {
         while (!connection.IsOpen && !ct.IsCancellationRequested)
         {
-            logger.LogWarning("⏳ Waiting for RabbitMQ connection...");
+            logger.LogWarning("Waiting for RabbitMQ connection...");
             await Task.Delay(TimeSpan.FromSeconds(5), ct);
         }
     }
