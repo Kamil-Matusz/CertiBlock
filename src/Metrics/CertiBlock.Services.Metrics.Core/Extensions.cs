@@ -1,4 +1,5 @@
 ﻿using CertiBlock.Services.Metrics.Core.RabbitMQ;
+using CertiBlock.Services.Metrics.Core.Services;
 using CertiBlock.Shared.InfluxDB;
 using CertiBlock.Shared.Logging;
 using CertiBlock.Shared.RabbitMQ;
@@ -22,6 +23,9 @@ public static class Extensions
         
         // HealthCheck
         services.AddHealthChecks();
+        
+        // Services
+        services.AddScoped<IMetricsService, MetricsService>();
         
         // RabbitMQ
         services.AddRabbitMq(configuration);
