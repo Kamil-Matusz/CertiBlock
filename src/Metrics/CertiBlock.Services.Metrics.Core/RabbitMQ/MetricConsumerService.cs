@@ -1,7 +1,9 @@
 ﻿using System.Text;
 using System.Text.Json;
+using CertiBlock.Services.Metrics.Core.Services;
 using CertiBlock.Shared.Messaging;
 using CertiBlock.Shared.RabbitMQ;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -10,8 +12,8 @@ using RabbitMQ.Client.Events;
 
 namespace CertiBlock.Services.Metrics.Core.RabbitMQ;
 
-public class MetricConsumerService(IConnection connection, IOptions<RabbitMqOptions> options, ILogger<MetricConsumerService> logger)
-    : BackgroundService
+public class MetricConsumerService(IConnection connection, IOptions<RabbitMqOptions> options, ILogger<MetricConsumerService> logger,
+    IServiceProvider serviceProvider) : BackgroundService
 {
     private readonly RabbitMqOptions _options = options.Value;
     private IModel? _channel;
@@ -43,8 +45,8 @@ public class MetricConsumerService(IConnection connection, IOptions<RabbitMqOpti
                     {
                         await ProcessMetricAsync(evt, stoppingToken);
                         
-                        logger.LogInformation("Processed metric: {Blockchain} - {Operation} - {Fee}",
-                            evt.Blockchain, evt.Operation, evt.TransactionFee);
+                        logger.LogInformation("Processed metric: {Blockchain} - {Operation} - Gas: {Gas}, Fee: {Fee}",
+                            evt.Blockchain, evt.Operation, evt.GasUsed, evt.TransactionFee);
                     }
                     else
                     {
@@ -89,7 +91,9 @@ public class MetricConsumerService(IConnection connection, IOptions<RabbitMqOpti
 
     private async Task ProcessMetricAsync(MetricCollectedEvent evt, CancellationToken ct)
     {
-        await Task.CompletedTask;
+        using var scope = serviceProvider.CreateScope();
+        var metricsService = scope.ServiceProvider.GetRequiredService<IMetricsService>();
+        await metricsService.WriteBlockchainMetricAsync(evt);
     }
 
     private async Task WaitForConnectionAsync(CancellationToken ct)

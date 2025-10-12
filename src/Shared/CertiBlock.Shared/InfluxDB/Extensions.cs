@@ -13,7 +13,8 @@ public static class Extensions
         var section = configuration.GetSection(InfluxDbSectionName);
         services.Configure<InfluxDbOptions>(section);
         var options = configuration.GetOptions<InfluxDbOptions>(InfluxDbSectionName);
-
+        
+        services.AddSingleton(options);
         services.AddSingleton<IInfluxDBClient>(sp => InfluxDBClientFactory.Create(options.Url, options.Token));
 
         return services;
