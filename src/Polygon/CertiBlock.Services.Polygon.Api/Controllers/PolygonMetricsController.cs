@@ -1,11 +1,14 @@
-﻿using CertiBlock.Services.Polygon.Application.Services.PolygonMetrics;
+﻿using CertiBlock.Services.Polygon.Application.RabbitMQ;
+using CertiBlock.Services.Polygon.Application.Services.PolygonMetrics;
 using CertiBlock.Services.Polygon.Core.DTO;
 using CertiBlock.Shared.DTO;
+using CertiBlock.Shared.Enums;
+using CertiBlock.Shared.Messaging;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CertiBlock.Services.Polygon.Api.Controllers;
 
-public class PolygonMetricsController(IPolygonMetricService polygonMetricService) : BaseController
+public class PolygonMetricsController(IPolygonMetricService polygonMetricService, MetricPublisher metricPublisher) : BaseController
 {
     [HttpPost("collectMetricsForPolygon")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -30,4 +33,22 @@ public class PolygonMetricsController(IPolygonMetricService polygonMetricService
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<PolygonMetricDetailsDto>> GetPolygonTransactionsById(Guid certificateId)
         => Ok(await polygonMetricService.GetTransactionMetricsByCertificateIdAsync(certificateId));
+    
+    [HttpPost("test")]
+    public IActionResult PublishTestMetric()
+    {
+        var metricEvent = new MetricCollectedEvent(
+            Guid.NewGuid(),
+            Blockchain.Polygon,
+            Operation.Register,
+            21000,
+            1.25,
+            0.00042,
+            DateTime.UtcNow
+        );
+
+        metricPublisher.Publish(metricEvent);
+
+        return Ok(new { status = "sent", metricEvent });
+    }
 }

@@ -1,4 +1,4 @@
-﻿using CertiBlock.Services.Polygon.Application.Services;
+﻿using CertiBlock.Services.Polygon.Application.RabbitMQ;
 using CertiBlock.Services.Polygon.Application.Services.CoinGecko;
 using CertiBlock.Services.Polygon.Application.Services.Polygon;
 using CertiBlock.Services.Polygon.Application.Services.PolygonMetrics;
@@ -14,6 +14,8 @@ public static class Extensions
         services.AddScoped<IPolygonService, PolygonService>();
         services.AddHttpClient<ICoinGeckoService, CoinGeckoService>();
         services.AddScoped<IPolygonMetricService, PolygonMetricService>();
+        services.AddScoped<MetricPublisher>();
+        
         return services;
     }
 }

@@ -66,6 +66,21 @@
     volumes:
       - influxdb:/var/lib/influxdb2
 
+  grafana:
+    image: grafana/grafana:latest
+    container_name: certiBlock_grafana
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_INSTALL_PLUGINS=
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana:/var/lib/grafana
+    depends_on:
+      - influxdb
+
 volumes:
   postgres:
     driver: local
@@ -76,4 +91,6 @@ volumes:
   seq:
     driver: local
   influxdb:
+    driver: local
+  grafana:
     driver: local
