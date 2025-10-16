@@ -4,6 +4,7 @@ using CertiBlock.Services.Polygon.Infrastructure.DAL;
 using CertiBlock.Shared.CoinGecko;
 using CertiBlock.Shared.Logging;
 using CertiBlock.Shared.Mongo;
+using CertiBlock.Shared.RabbitMQ;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,6 +36,9 @@ public static class Extensions
         
         // HealthCheck
         services.AddHealthChecks();
+        
+        // RabbitMQ
+        services.AddRabbitMq(configuration);
         
         return services;
     }

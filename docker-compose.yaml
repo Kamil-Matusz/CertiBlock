@@ -50,6 +50,37 @@
     volumes:
       - seq:/data
 
+  influxdb:
+    image: influxdb:2
+    container_name: certiBlock_influxdb
+    restart: unless-stopped
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=secretpassword
+      - DOCKER_INFLUXDB_INIT_ORG=certiblock
+      - DOCKER_INFLUXDB_INIT_BUCKET=metrics
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=my-super-secret-auth-token
+    ports:
+      - 8086:8086
+    volumes:
+      - influxdb:/var/lib/influxdb2
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: certiBlock_grafana
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_INSTALL_PLUGINS=
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana:/var/lib/grafana
+    depends_on:
+      - influxdb
+
 volumes:
   postgres:
     driver: local
@@ -58,4 +89,8 @@ volumes:
   rabbitmq:
     driver: local
   seq:
+    driver: local
+  influxdb:
+    driver: local
+  grafana:
     driver: local
