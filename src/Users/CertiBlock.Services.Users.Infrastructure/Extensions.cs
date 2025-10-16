@@ -1,12 +1,16 @@
 ﻿using CertiBlock.Services.Users.Application.Abstractions;
+using CertiBlock.Services.Users.Core.Entities;
 using CertiBlock.Services.Users.Infrastructure.Auth;
 using CertiBlock.Services.Users.Infrastructure.DAL;
+using CertiBlock.Services.Users.Infrastructure.DAL.Mongo;
 using CertiBlock.Services.Users.Infrastructure.Errors;
 using CertiBlock.Services.Users.Infrastructure.Security;
 using CertiBlock.Shared.Logging;
+using CertiBlock.Shared.Mongo;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Bson.Serialization;
 
 namespace CertiBlock.Services.Users.Infrastructure;
 
@@ -22,6 +26,10 @@ public static class Extensions
         
         // PostgreSQL
         services.AddPostgres(configuration);
+        
+        // MongoDB
+        services.AddMongo(configuration);
+        ConfigureMongoDbMappings();
         
         services.AddErrorHandling();
         
@@ -61,5 +69,13 @@ public static class Extensions
         section.Bind(options);
 
         return options;
+    }
+    
+    private static void ConfigureMongoDbMappings()
+    {
+        if (!BsonClassMap.IsClassMapRegistered(typeof(User)))
+        {
+            UserConfiguration.Configure();
+        }
     }
 }
