@@ -5,21 +5,13 @@ using CertiBlock.Services.Users.Core.Repositories;
 
 namespace CertiBlock.Services.Users.Application.Handlers;
 
-public sealed class ChangeUserPasswordHandler : ICommandHandler<ChangeUserPassword>
+public sealed class ChangeUserPasswordHandler(IPasswordManager passwordManager, IUserMongoRepository userRepository)
+    : ICommandHandler<ChangeUserPassword>
 {
-    private readonly IPasswordManager _passwordManager;
-    private readonly IUserRepository _userRepository;
-
-    public ChangeUserPasswordHandler(IPasswordManager passwordManager, IUserRepository userRepository)
-    {
-        _passwordManager = passwordManager;
-        _userRepository = userRepository;
-    }
-
     public async Task HandlerAsync(ChangeUserPassword command)
     {
-        var securedPassword = _passwordManager.Secure(command.Password);
+        var securedPassword = passwordManager.Secure(command.Password);
 
-        await _userRepository.ChangeUserPassword(command.UserId, securedPassword);
+        await userRepository.ChangeUserPassword(command.UserId, securedPassword);
     }
 }

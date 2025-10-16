@@ -21,7 +21,7 @@ public static class Extensions
         
         // Repositories
         services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<IUserRepository, UserMongoRepository>();
+        services.AddScoped<IUserMongoRepository, UserMongoRepository>();
 
         services.AddHostedService<DatabaseInitializer>();
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);

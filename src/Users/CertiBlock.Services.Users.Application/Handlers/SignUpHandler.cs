@@ -9,31 +9,21 @@ using CertiBlock.Services.Users.Core.ValueObjects;
 
 namespace CertiBlock.Services.Users.Application.Handlers;
 
-public sealed class SignUpHandler : ICommandHandler<SignUp>
+public sealed class SignUpHandler(IClock clock, IPasswordManager passwordManager, IUserMongoRepository userRepository)
+    : ICommandHandler<SignUp>
 {
-    private readonly IClock _clock;
-    private readonly IPasswordManager _passwordManager;
-    private IUserRepository _userRepository;
-
-    public SignUpHandler(IClock clock, IPasswordManager passwordManager, IUserRepository userRepository)
-    {
-        _clock = clock;
-        _passwordManager = passwordManager;
-        _userRepository = userRepository;
-    }
-    
     public async Task HandlerAsync(SignUp command)
     {
         var role = string.IsNullOrWhiteSpace(command.Role) ? Role.User() : new Role(command.Role);
         
-        if (await _userRepository.GetUserByEmailAsync(command.Email) is not null)
+        if (await userRepository.GetUserByEmailAsync(command.Email) is not null)
         {
             throw new EmailAlreadyInUseException(command.Email);
         }
         
-        var securedPassword = _passwordManager.Secure(command.Password);
-        var user = new User(command.UserId, command.Email, securedPassword, command.Role, command.IsActive, _clock.CurrentDate());
+        var securedPassword = passwordManager.Secure(command.Password);
+        var user = new User(command.UserId, command.Email, securedPassword, command.Role, command.IsActive, clock.CurrentDate());
 
-        await _userRepository.AddUserAsync(user);
+        await userRepository.AddUserAsync(user);
     }
 }

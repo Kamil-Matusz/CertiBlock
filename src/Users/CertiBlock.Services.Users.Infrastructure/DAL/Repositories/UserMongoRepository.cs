@@ -7,7 +7,7 @@ using MongoDB.Driver;
 
 namespace CertiBlock.Services.Users.Infrastructure.DAL.Repositories;
 
-internal sealed class UserMongoRepository : IUserRepository
+internal sealed class UserMongoRepository : IUserMongoRepository
 {
     private readonly IMongoCollection<User> _collection;
 
