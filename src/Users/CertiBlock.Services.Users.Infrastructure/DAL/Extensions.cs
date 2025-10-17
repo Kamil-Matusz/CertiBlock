@@ -1,6 +1,4 @@
-﻿using CertiBlock.Services.Users.Core.Repositories;
-using CertiBlock.Services.Users.Infrastructure.DAL.PostgreSQL;
-using CertiBlock.Services.Users.Infrastructure.DAL.Repositories;
+﻿using CertiBlock.Services.Users.Infrastructure.DAL.PostgreSQL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,9 +16,6 @@ public static class Extensions
         var options = configuration.GetOptions<PostgresOptions>(SectionName);
         
         services.AddDbContext<UsersDbContext>(x => x.UseNpgsql(options.ConnectionString));
-        
-        // Repositories
-        services.AddScoped<IUserRepository, UserRepository>();
 
         services.AddHostedService<DatabaseInitializer>();
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);

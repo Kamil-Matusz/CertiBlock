@@ -6,18 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CertiBlock.Services.Users.Infrastructure.Handlers;
 
-public sealed class GetAllUsersHandler : IQueryHandler<GetAllUsers, IEnumerable<UserDto>>
+public sealed class GetAllUsersHandler(UsersDbContext dbContext) : IQueryHandler<GetAllUsers, IEnumerable<UserDto>>
 {
-    private readonly UsersDbContext _dbContext;
-
-    public GetAllUsersHandler(UsersDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
-
     public async Task<IEnumerable<UserDto>> HandlerAsync(GetAllUsers query)
     {
-        var users = await _dbContext.Users
+        var users = await dbContext.Users
             .AsNoTracking()
             .OrderBy(x => x.Email)
             .Skip((query.PageIndex - 1) * query.PageSize)

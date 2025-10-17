@@ -1,6 +1,7 @@
 ﻿using CertiBlock.Services.Users.Application.Abstractions;
 using CertiBlock.Services.Users.Infrastructure.Auth;
 using CertiBlock.Services.Users.Infrastructure.DAL;
+using CertiBlock.Services.Users.Infrastructure.DAL.Repositories;
 using CertiBlock.Services.Users.Infrastructure.Errors;
 using CertiBlock.Services.Users.Infrastructure.Security;
 using CertiBlock.Shared.Logging;
@@ -22,6 +23,9 @@ public static class Extensions
         
         // PostgreSQL
         services.AddPostgres(configuration);
+        
+        // Repositories
+        services.AddRepositories();
         
         services.AddErrorHandling();
         

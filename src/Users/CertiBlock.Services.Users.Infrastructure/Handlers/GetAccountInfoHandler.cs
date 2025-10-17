@@ -6,19 +6,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CertiBlock.Services.Users.Infrastructure.Handlers;
 
-public sealed class GetAccountInfoHandler : IQueryHandler<GetAccountInfo, AccountDto>
+public sealed class GetAccountInfoHandler(UsersDbContext dbContext) : IQueryHandler<GetAccountInfo, AccountDto>
 {
-    private readonly UsersDbContext _dbContext;
-
-    public GetAccountInfoHandler(UsersDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
-
     public async Task<AccountDto> HandlerAsync(GetAccountInfo query)
     {
         var userId = query.UserId;
-        var user = await _dbContext.Users
+        var user = await dbContext.Users
             .AsNoTracking()
             .SingleOrDefaultAsync(x => x.UserId == userId);
 

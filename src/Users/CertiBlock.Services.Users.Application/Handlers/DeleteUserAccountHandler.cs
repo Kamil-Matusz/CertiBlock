@@ -5,23 +5,16 @@ using CertiBlock.Services.Users.Core.Repositories;
 
 namespace CertiBlock.Services.Users.Application.Handlers;
 
-public sealed class DeleteUserAccountHandler : ICommandHandler<DeleteUserAccount>
+public sealed class DeleteUserAccountHandler(IUserRepository userRepository) : ICommandHandler<DeleteUserAccount>
 {
-    private readonly IUserRepository _userRepository;
-
-    public DeleteUserAccountHandler(IUserRepository userRepository)
-    {
-        _userRepository = userRepository;
-    }
-
     public async Task HandlerAsync(DeleteUserAccount command)
     {
-        var user = await _userRepository.GetUserByIdAsync(command.UserId);
+        var user = await userRepository.GetUserByIdAsync(command.UserId);
         if (user is null)
         {
             throw new UserNotFoundException(command.UserId);
         }
 
-        await _userRepository.DeleteUserAsync(user);
+        await userRepository.DeleteUserAsync(user);
     }
 }

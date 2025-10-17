@@ -8,38 +8,28 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CertiBlock.Services.Users.Api.Controllers;
 
-public class UsersController : BaseController
+public class UsersController(
+    ICommandHandler<SignUp> signUpHandler,
+    ICommandHandler<SignIn> signInHandler,
+    ICommandHandler<DeleteUserAccount> deleteAccountHandler,
+    ICommandHandler<ChangeUserRole> changeUserRoleHandler,
+    IQueryHandler<GetAccountInfo, AccountDto> getAccountInfo,
+    IQueryHandler<GetAllUsers, IEnumerable<UserDto>> getAllUsersHandler,
+    ICommandHandler<ChangeUserPassword> changeUserPasswordHandler,
+    ITokenStorage tokenStorage)
+    : BaseController
 {
-    private readonly ICommandHandler<SignUp> _signUpHandler;
-    private readonly ICommandHandler<SignIn> _signInHandler;
-    private readonly ICommandHandler<DeleteUserAccount> _deleteAccountHandler;
-    private readonly ICommandHandler<ChangeUserRole> _changeUserRoleHandler;
-    private readonly IQueryHandler<GetAccountInfo, AccountDto> _getAccountInfo;
-    private readonly IQueryHandler<GetAllUsers, IEnumerable<UserDto>> _getAllUsersHandler;
-    private readonly ICommandHandler<ChangeUserPassword> _changeUserPasswordHandler;
-    private readonly ITokenStorage _tokenStorage;
+    private readonly ICommandHandler<ChangeUserPassword> _changeUserPasswordHandler = changeUserPasswordHandler;
 
-    public UsersController(ICommandHandler<SignUp> signUpHandler, ICommandHandler<SignIn> signInHandler, ICommandHandler<DeleteUserAccount> deleteAccountHandler, ICommandHandler<ChangeUserRole> changeUserRoleHandler, IQueryHandler<GetAccountInfo, AccountDto> getAccountInfo, IQueryHandler<GetAllUsers, IEnumerable<UserDto>> getAllUsersHandler, ICommandHandler<ChangeUserPassword> changeUserPasswordHandler, ITokenStorage tokenStorage)
-    {
-        _signUpHandler = signUpHandler;
-        _signInHandler = signInHandler;
-        _deleteAccountHandler = deleteAccountHandler;
-        _changeUserRoleHandler = changeUserRoleHandler;
-        _getAccountInfo = getAccountInfo;
-        _getAllUsersHandler = getAllUsersHandler;
-        _changeUserPasswordHandler = changeUserPasswordHandler;
-        _tokenStorage = tokenStorage;
-    }
-    
     [HttpPost("signUp")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> SignUp(SignUp command)
     {
         command = command with {UserId = Guid.NewGuid()};
-        await _signUpHandler.HandlerAsync(command);
+        await signUpHandler.HandlerAsync(command);
         
-        var user = await _getAccountInfo.HandlerAsync(new GetAccountInfo() {UserId = command.UserId});
+        var user = await getAccountInfo.HandlerAsync(new GetAccountInfo() {UserId = command.UserId});
         return Ok(user);
     }
     
@@ -48,8 +38,8 @@ public class UsersController : BaseController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<JwtDto>> SignIn(SignIn command)
     {
-        await _signInHandler.HandlerAsync(command);
-        var jwt = _tokenStorage.GetToken();
+        await signInHandler.HandlerAsync(command);
+        var jwt = tokenStorage.GetToken();
         return Ok(jwt);
     }
     
@@ -61,7 +51,7 @@ public class UsersController : BaseController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<AccountDto>> GetUser(Guid userId)
     {
-        var user = await _getAccountInfo.HandlerAsync(new GetAccountInfo() {UserId = userId});
+        var user = await getAccountInfo.HandlerAsync(new GetAccountInfo() {UserId = userId});
         if (user is null)
         {
             return NotFound();
@@ -84,7 +74,7 @@ public class UsersController : BaseController
         
         var userId = Guid.Parse(User.Identity?.Name);
         
-        var user = await _getAccountInfo.HandlerAsync(new GetAccountInfo() {UserId = userId});
+        var user = await getAccountInfo.HandlerAsync(new GetAccountInfo() {UserId = userId});
         if (user is null)
         {
             return NotFound();
@@ -102,7 +92,7 @@ public class UsersController : BaseController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> DeleteUserAccount(Guid userId)
     {
-        await _deleteAccountHandler.HandlerAsync(new DeleteUserAccount(userId));
+        await deleteAccountHandler.HandlerAsync(new DeleteUserAccount(userId));
         return NoContent();
     }
     
@@ -115,7 +105,7 @@ public class UsersController : BaseController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> ChangeUserRole(Guid userId, ChangeUserRole command)
     {
-        await _changeUserRoleHandler.HandlerAsync(command with { UserId = userId, Role  = command.Role });
+        await changeUserRoleHandler.HandlerAsync(command with { UserId = userId, Role  = command.Role });
         return Ok();
     }
     
@@ -125,6 +115,5 @@ public class UsersController : BaseController
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<IEnumerable<UserDto>>> GetAllUsers([FromQuery] GetAllUsers query)
-        => Ok(await _getAllUsersHandler.HandlerAsync(query));
-
+        => Ok(await getAllUsersHandler.HandlerAsync(query));
 }
