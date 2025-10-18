@@ -32,7 +32,7 @@ public static class Extensions
         services.AddRepositories();
 
         // Services
-        services.AddScoped<ICertificateService, CertificateService>();
+       services.AddServices();
         
         services.AddControllers();
 

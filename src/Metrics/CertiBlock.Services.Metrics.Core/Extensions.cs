@@ -24,15 +24,15 @@ public static class Extensions
         // HealthCheck
         services.AddHealthChecks();
         
+        // Services
+        services.AddServices();
+        
         // RabbitMQ
         services.AddRabbitMq(configuration);
         services.AddHostedService<MetricConsumerService>();
         
         // InfluxDB
         services.AddInfluxDb(configuration);
-        
-        // Services
-        services.AddScoped<IMetricsService, MetricsService>();
         
         return services;
     }

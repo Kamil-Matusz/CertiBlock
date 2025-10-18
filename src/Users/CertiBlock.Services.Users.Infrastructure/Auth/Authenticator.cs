@@ -9,27 +9,17 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace CertiBlock.Services.Users.Infrastructure.Auth;
 
-internal sealed class Authenticator : IAuthenticator
+internal sealed class Authenticator(IOptions<AuthOptions> options, IClock clock) : IAuthenticator
 {
-    private readonly IClock _clock;
-    private readonly string _issuer;
-    private readonly string _audience;
-    private readonly TimeSpan _expiry;
-    private readonly SigningCredentials _signingCredentials;
+    private readonly string _issuer = options.Value.Issuer;
+    private readonly string _audience = options.Value.Audience;
+    private readonly TimeSpan _expiry = options.Value.Expiry ?? TimeSpan.FromHours(1);
+    private readonly SigningCredentials _signingCredentials = new(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(options.Value.SigningKey)),SecurityAlgorithms.HmacSha256);
     private readonly JwtSecurityTokenHandler _jwtSecurityTokenHandler = new();
 
-    public Authenticator(IOptions<AuthOptions> options, IClock clock)
-    {
-        _clock = clock;
-        _issuer = options.Value.Issuer;
-        _audience = options.Value.Audience;
-        _expiry = options.Value.Expiry ?? TimeSpan.FromHours(1);
-        _signingCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(options.Value.SigningKey)),SecurityAlgorithms.HmacSha256);
-    }
-    
     public JwtDto CreateToken(Guid userId, string role)
     {
-        var now = _clock.CurrentDate();
+        var now = clock.CurrentDate();
         var expires = now.Add(_expiry);
         var claims = new List<Claim>
         {
