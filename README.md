@@ -18,3 +18,20 @@ The project consists of several services and components connected via Docker.
 - Docker
 - RabbitMQ
 - Seq
+
+## 📈 Grafana Dashboards
+Metrics from **InfluxDB** are visualized in Grafana to compare Ethereum and Polygon in real-time:
+- Average transaction time  
+- Average gas used  
+- Cost per operation  
+- Success rate trends  
+
+### 🗂️ Dashboard Files
+Predefined Grafana dashboards are available in the **`/Grafana`** folder of this repository.  
+You can import them directly into your Grafana instance by following these steps:
+
+1. Open Grafana (`http://localhost:3000`)
+2. Go to **Dashboards → Import**
+3. Upload a `.json` file from the `/Grafana` folder
+4. Assign the **InfluxDB** data source when prompted
+5. Save and open the dashboard to start visualizing blockchain metrics
