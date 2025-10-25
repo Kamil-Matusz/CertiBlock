@@ -1,16 +1,18 @@
 ﻿using CertiBlock.Services.Ethereum.Application.Mappers;
+using CertiBlock.Services.Ethereum.Application.RabbitMQ;
 using CertiBlock.Services.Ethereum.Application.Services.CoinGecko;
 using CertiBlock.Services.Ethereum.Core.DTO;
 using CertiBlock.Services.Ethereum.Core.Exceptions;
 using CertiBlock.Services.Ethereum.Core.Repositories;
 using CertiBlock.Shared.Enums;
+using CertiBlock.Shared.Messaging;
 using Microsoft.Extensions.Logging;
 using Nethereum.Web3;
 
 namespace CertiBlock.Services.Ethereum.Application.Services.EthereumMetrics;
 
 public class EthereumMetricService(IEthereumMetricRepository metricsRepository, ILogger<EthereumMetricService> logger, 
-    IWeb3 web3, ICoinGeckoService coinGeckoService) : IEthereumMetricService
+    IWeb3 web3, ICoinGeckoService coinGeckoService, MetricPublisher metricPublisher) : IEthereumMetricService
 {
     public async Task<Core.Entities.EthereumMetrics> CollectMetricsAsync(Guid certificateId, string transactionHash)
     {
@@ -52,6 +54,17 @@ public class EthereumMetricService(IEthereumMetricRepository metricsRepository, 
             };
 
             await metricsRepository.SaveEthereumMetricsAsync(metrics);
+            
+            var metricEvent = new MetricCollectedEvent(
+                metrics.CertificateId,
+                Blockchain.Ethereum,
+                Operation.Register,
+                metrics.GasUsed,
+                1.25,
+                (double)metrics.TransactionCostNative,
+                DateTime.UtcNow);
+            
+            metricPublisher.Publish(metricEvent);
 
             return metrics;
         }

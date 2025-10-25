@@ -1,16 +1,18 @@
 ﻿using CertiBlock.Services.Polygon.Application.Mappers;
+using CertiBlock.Services.Polygon.Application.RabbitMQ;
 using CertiBlock.Services.Polygon.Application.Services.CoinGecko;
 using CertiBlock.Services.Polygon.Core.DTO;
 using CertiBlock.Services.Polygon.Core.Exceptions;
 using CertiBlock.Services.Polygon.Core.Repositories;
 using CertiBlock.Shared.Enums;
+using CertiBlock.Shared.Messaging;
 using Microsoft.Extensions.Logging;
 using Nethereum.Web3;
 
 namespace CertiBlock.Services.Polygon.Application.Services.PolygonMetrics;
 
 public class PolygonMetricService(IPolygonMetricRepository polygonMetricRepository, ILogger<PolygonMetricService> logger,
-    IWeb3 web3, ICoinGeckoService coinGeckoService) : IPolygonMetricService
+    IWeb3 web3, ICoinGeckoService coinGeckoService, MetricPublisher metricPublisher) : IPolygonMetricService
 {
     public async Task<Core.Entities.PolygonMetrics> CollectMetricsAsync(Guid certificateId, string transactionHash)
     {
@@ -52,6 +54,17 @@ public class PolygonMetricService(IPolygonMetricRepository polygonMetricReposito
             };
 
             await polygonMetricRepository.SavePolygonMetricsAsync(metrics);
+            
+            var metricEvent = new MetricCollectedEvent(
+                metrics.CertificateId,
+                Blockchain.Ethereum,
+                Operation.Register,
+                metrics.GasUsed,
+                1.25,
+                (double)metrics.TransactionCostNative,
+                DateTime.UtcNow);
+            
+            metricPublisher.Publish(metricEvent);
 
             return metrics;
         }
