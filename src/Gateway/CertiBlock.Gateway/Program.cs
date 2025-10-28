@@ -15,6 +15,8 @@ app.UseSwagger();
 app.UseSwaggerUI();
 app.MapOpenApi();
 
+app.UseCors("AllowAll");
+
 app.UseHttpsRedirection();
 
 app.MapReverseProxy();

@@ -4,6 +4,7 @@ using CertiBlock.Services.Users.Infrastructure.DAL;
 using CertiBlock.Services.Users.Infrastructure.DAL.Repositories;
 using CertiBlock.Services.Users.Infrastructure.Errors;
 using CertiBlock.Services.Users.Infrastructure.Security;
+using CertiBlock.Shared.CORS;
 using CertiBlock.Shared.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -44,11 +45,16 @@ public static class Extensions
         // HealthCheck
         services.AddHealthChecks();
         
+        // CORS
+        services.AddCorsPolicy();
+        
         return services;
     }
 
     public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder app)
     {
+        app.UseCorsPolicy();
+        
         app.UseErrorHandling();
         app.UseRouting();
         

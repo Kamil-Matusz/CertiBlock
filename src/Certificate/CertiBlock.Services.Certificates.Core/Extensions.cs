@@ -6,6 +6,7 @@ using CertiBlock.Services.Certificates.Core.DAL.Repositories;
 using CertiBlock.Services.Certificates.Core.Entities;
 using CertiBlock.Services.Certificates.Core.Services;
 using CertiBlock.Services.Certificates.Core.Validators;
+using CertiBlock.Shared.CORS;
 using CertiBlock.Shared.Logging;
 using CertiBlock.Shared.Mongo;
 using Microsoft.AspNetCore.Builder;
@@ -48,11 +49,16 @@ public static class Extensions
         // Seq
         services.AddSeqLogging(configuration);
         
+        // CORS
+        services.AddCorsPolicy();
+        
         return services;
     }
     
     public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder app)
     {
+        app.UseCorsPolicy();
+        
         app.UseRouting();
         
         app.UseAuthentication();

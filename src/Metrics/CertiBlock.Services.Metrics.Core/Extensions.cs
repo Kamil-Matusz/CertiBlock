@@ -1,5 +1,6 @@
 ﻿using CertiBlock.Services.Metrics.Core.RabbitMQ;
 using CertiBlock.Services.Metrics.Core.Services;
+using CertiBlock.Shared.CORS;
 using CertiBlock.Shared.InfluxDB;
 using CertiBlock.Shared.Logging;
 using CertiBlock.Shared.RabbitMQ;
@@ -13,6 +14,9 @@ public static class Extensions
 {
     public static IServiceCollection AddCore(this IServiceCollection services, IConfiguration configuration)
     {
+        // CORS
+        services.AddCorsPolicy();
+        
         // Logger
         services.AddLogging();
 
@@ -39,6 +43,8 @@ public static class Extensions
 
     public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder app)
     {
+        app.UseCorsPolicy();
+        
         app.UseRouting();
 
         return app;
