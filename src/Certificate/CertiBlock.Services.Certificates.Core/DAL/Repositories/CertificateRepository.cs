@@ -50,4 +50,9 @@ public class CertificateRepository : ICertificateRepository
             .Limit(pageSize)
             .ToListAsync();
     }
+
+    public async Task<long> GetCertificateCountAsync()
+    {
+        return await _collection.CountDocumentsAsync(_ => true);
+    }
 }

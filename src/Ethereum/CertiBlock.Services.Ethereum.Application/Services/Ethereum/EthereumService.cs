@@ -12,7 +12,8 @@ using Nethereum.Web3;
 
 namespace CertiBlock.Services.Ethereum.Application.Services.Ethereum;
 
-public class EthereumService(IEthereumRepository ethereumRepository, ILogger<EthereumService> logger, IWeb3 web3, EthereumOptions ethereumOptions) : IEthereumService
+public class EthereumService(IEthereumRepository ethereumRepository, ILogger<EthereumService> logger, IWeb3 web3, 
+    EthereumOptions ethereumOptions) : IEthereumService
 {
     public async Task<BlockchainTransactionResultDto> RegisterEthereumTransactionAsync(BlockchainTransactionDto dto)
     {
@@ -213,5 +214,5 @@ public class EthereumService(IEthereumRepository ethereumRepository, ILogger<Eth
         return BlockchainTransactionMapper.MapAllToResultDto(transactions);
     }
 
-    public async Task<long> GetEthereumTransactionCountAsync() => await  ethereumRepository.GetTransactionCountAsync();
+    public async Task<long> GetEthereumTransactionCountAsync() => await ethereumRepository.GetTransactionCountAsync();
 }

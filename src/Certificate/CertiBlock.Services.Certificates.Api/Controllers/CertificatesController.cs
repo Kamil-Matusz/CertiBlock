@@ -60,4 +60,10 @@ public class CertificatesController(ICertificateService certificateService) : Ba
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<CertificateDto>> GetEthereumTransactionsPaged([FromQuery] int pageIndex, [FromQuery] int pageSize)
         => Ok(await certificateService.GetCertificatesPagedAsync(pageIndex, pageSize));
+    
+    [HttpGet("countCertificates")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CountCertificates()
+        => Ok(await certificateService.GetCertificateCountAsync());
 }

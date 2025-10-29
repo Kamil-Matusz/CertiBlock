@@ -113,6 +113,8 @@ public class CertificateService(
         return CertificateMapper.MapAll<CertificateDto>(certificates);
     }
 
+    public Task<long> GetCertificateCountAsync() => certificateRepository.GetCertificateCountAsync();
+
     private Task RegisterCertificateOnBlockchain(CertificateRegistered certificate)
     {
         return certificate.Blockchain switch
