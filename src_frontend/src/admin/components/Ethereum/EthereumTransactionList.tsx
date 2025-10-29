@@ -3,22 +3,23 @@
     Datagrid,
     TextField,
     DateField,
-    ChipField,
+    FunctionField,
 } from 'react-admin';
+import { Chip } from '@mui/material';
 
-const StatusField = ({ record }: any) => {
-    const colors: Record<string, string> = {
-        'Confirmed': 'success',
-        'Pending': 'warning',
-        'Failed': 'error',
-    };
-
-    return (
-        <ChipField
-            source="status"
-            color={colors[record?.status] || 'default'}
-        />
-    );
+const getStatusColor = (status?: string): 'success' | 'warning' | 'error' | 'default' => {
+    switch (status) {
+        case 'Confirmed':
+            return 'success';
+        case 'Pending':
+            return 'warning';
+        case 'Failed':
+            return 'error';
+        case 'Submitted':
+            return 'warning';
+        default:
+            return 'default';
+    }
 };
 
 export const EthereumTransactionList = () => (
@@ -36,7 +37,16 @@ export const EthereumTransactionList = () => (
                     fontFamily: 'monospace'
                 }}
             />
-            <StatusField label="Status" />
+            <FunctionField
+                label="Transaction Status"
+                render={(record: { status?: string }) => (
+                    <Chip
+                        label={record?.status || 'Unknown'}
+                        color={getStatusColor(record?.status)}
+                        size="small"
+                    />
+                )}
+            />
             <DateField source="createdAt" label="Created At" showTime />
         </Datagrid>
     </List>
