@@ -3,7 +3,6 @@ import { dataProvider } from './dataProvider';
 import { CertificateList } from './components/Certificates/CertificateList.tsx';
 import { CertificateShow } from './components/Certificates/CertificateShow.tsx';
 import { EthereumTransactionList } from './components/Ethereum/EthereumTransactionList';
-import { EthereumTransactionShow } from './components//Ethereum/EthereumTransactionShow.tsx';
 import { PolygonTransactionList } from './components/Polygon/PolygonTransactionList';
 import { WalletBalanceChecker } from './components/Wallets/WalletBalanceChecker';
 import { WalletDashboard } from './components/Wallets/WalletDashboard';
@@ -25,14 +24,12 @@ export default function AdminApp() {
             <Resource
                 name="ethereum-transactions"
                 list={EthereumTransactionList}
-                show={EthereumTransactionShow}
                 icon={AccountBalanceIcon}
                 options={{ label: 'Ethereum Transactions' }}
             />
             <Resource
                 name="polygon-transactions"
                 list={PolygonTransactionList}
-                show={EthereumTransactionShow}
                 icon={AccountBalanceIcon}
                 options={{ label: 'Polygon Transactions' }}
             />

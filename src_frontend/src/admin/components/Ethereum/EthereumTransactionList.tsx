@@ -25,7 +25,7 @@ const getStatusColor = (status?: string): 'success' | 'warning' | 'error' | 'def
 
 export const EthereumTransactionList = () => (
     <List>
-        <Datagrid rowClick="show" bulkActionButtons={false}>
+        <Datagrid bulkActionButtons={false}>
             <TextField source="certificateId" label="Certificate ID" />
             <TextField
                 source="transactionHash"
