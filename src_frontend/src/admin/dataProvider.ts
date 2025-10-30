@@ -67,7 +67,14 @@ export const dataProvider: DataProvider = {
     },
 
     getOne: async (resource, params) => {
-        const url = `${apiUrl}/${resource}/${params.id}`;
+        let url: string;
+
+        if (resource === 'certificates') {
+            url = `${apiUrl}/certificate-service/Certificates/${params.id}`;
+        } else {
+            url = `${apiUrl}/${resource}/${params.id}`;
+        }
+
         const response = await fetch(url);
         const data = await response.json();
 
@@ -148,7 +155,18 @@ export const dataProvider: DataProvider = {
     },
 
     delete: async (resource, params) => {
-        const url = `${apiUrl}/${resource}/${params.id}`;
+        let url: string;
+
+        if (resource === 'certificates') {
+            url = `${apiUrl}/certificate-service/Certificates/${params.id}`;
+        } else if (resource === 'ethereum-transactions') {
+            url = `${apiUrl}/ethereum-service/Ethereum/${params.id}`;
+        } else if (resource === 'polygon-transactions') {
+            url = `${apiUrl}/polygon-service/Polygon/${params.id}`;
+        } else {
+            url = `${apiUrl}/${resource}/${params.id}`;
+        }
+
         const response = await fetch(url, {
             method: 'DELETE',
         });

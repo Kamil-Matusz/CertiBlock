@@ -4,6 +4,7 @@
     TextField,
     DateField,
     FunctionField,
+    DeleteButton
 } from 'react-admin';
 import { Chip } from '@mui/material';
 
@@ -48,6 +49,7 @@ export const PolygonTransactionList = () => (
                 )}
             />
             <DateField source="createdAt" label="Created At" showTime />
+            <DeleteButton />
         </Datagrid>
     </List>
 );

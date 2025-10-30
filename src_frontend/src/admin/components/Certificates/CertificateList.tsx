@@ -4,6 +4,7 @@
     TextField,
     DateField,
     ChipField,
+    DeleteButton
 } from 'react-admin';
 
 export const CertificateList = () => (
@@ -25,6 +26,7 @@ export const CertificateList = () => (
                 }}
             />
             <DateField source="createdAt" label="Created At" showTime />
+            <DeleteButton />
         </Datagrid>
     </List>
 );
