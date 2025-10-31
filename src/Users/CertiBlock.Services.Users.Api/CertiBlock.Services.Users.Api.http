@@ -14,7 +14,7 @@ Accept: application/json
 
 {
   "userId": "{{userId}}",
-  "email": "test@example.com",
+  "email": "test2@example.com",
   "password": "SecurePassword123!",
   "role": "User",
   "isActive": true

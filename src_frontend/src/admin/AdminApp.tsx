@@ -1,5 +1,6 @@
 ﻿import { Admin, Resource } from 'react-admin';
 import { dataProvider } from './dataProvider';
+import { authProvider } from './authProvider';
 import { CertificateList } from './components/Certificates/CertificateList.tsx';
 import { CertificateShow } from './components/Certificates/CertificateShow.tsx';
 import { EthereumTransactionList } from './components/Ethereum/EthereumTransactionList';
@@ -13,7 +14,10 @@ import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 
 export default function AdminApp() {
     return (
-        <Admin basename="/admin" dataProvider={dataProvider}>
+        <Admin basename="/admin"
+               dataProvider={dataProvider}
+               authProvider={authProvider}
+        >
             <Resource
                 name="certificates"
                 list={CertificateList}

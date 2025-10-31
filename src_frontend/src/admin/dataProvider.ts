@@ -2,6 +2,15 @@
 
 const apiUrl = 'http://localhost:5126';
 
+// Funkcja pomocnicza do dodawania headera Authorization
+const getHeaders = () => {
+    const token = localStorage.getItem('token');
+    return {
+        'Content-Type': 'application/json',
+        ...(token && { 'Authorization': `Bearer ${token}` })
+    };
+};
+
 export const dataProvider: DataProvider = {
     getList: async (resource, params) => {
         const { page, perPage } = params.pagination;
@@ -11,8 +20,8 @@ export const dataProvider: DataProvider = {
             const countUrl = `${apiUrl}/certificate-service/Certificates/countCertificates`;
 
             const [dataResponse, countResponse] = await Promise.all([
-                fetch(url),
-                fetch(countUrl)
+                fetch(url, { headers: getHeaders() }),
+                fetch(countUrl, { headers: getHeaders() })
             ]);
 
             const data = await dataResponse.json();
@@ -29,8 +38,8 @@ export const dataProvider: DataProvider = {
             const countUrl = `${apiUrl}/ethereum-service/Ethereum/countEthereumTransactions`;
 
             const [dataResponse, countResponse] = await Promise.all([
-                fetch(url),
-                fetch(countUrl)
+                fetch(url, { headers: getHeaders() }),
+                fetch(countUrl, { headers: getHeaders() })
             ]);
 
             const data = await dataResponse.json();
@@ -47,8 +56,8 @@ export const dataProvider: DataProvider = {
             const countUrl = `${apiUrl}/polygon-service/Polygon/countPolygonTransactions`;
 
             const [dataResponse, countResponse] = await Promise.all([
-                fetch(url),
-                fetch(countUrl)
+                fetch(url, { headers: getHeaders() }),
+                fetch(countUrl, { headers: getHeaders() })
             ]);
 
             const data = await dataResponse.json();
@@ -75,7 +84,7 @@ export const dataProvider: DataProvider = {
             url = `${apiUrl}/${resource}/${params.id}`;
         }
 
-        const response = await fetch(url);
+        const response = await fetch(url, { headers: getHeaders() });
         const data = await response.json();
 
         return {
@@ -85,7 +94,7 @@ export const dataProvider: DataProvider = {
 
     getMany: async (resource, params) => {
         const url = `${apiUrl}/${resource}?ids=${params.ids.join(',')}`;
-        const response = await fetch(url);
+        const response = await fetch(url, { headers: getHeaders() });
         const data = await response.json();
 
         return {
@@ -97,7 +106,7 @@ export const dataProvider: DataProvider = {
         const { page, perPage } = params.pagination;
         const url = `${apiUrl}/${resource}?${params.target}=${params.id}&page=${page}&perPage=${perPage}`;
 
-        const response = await fetch(url);
+        const response = await fetch(url, { headers: getHeaders() });
         const data = await response.json();
 
         return {
@@ -111,9 +120,7 @@ export const dataProvider: DataProvider = {
         const response = await fetch(url, {
             method: 'POST',
             body: JSON.stringify(params.data),
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: getHeaders(),
         });
         const data = await response.json();
 
@@ -127,9 +134,7 @@ export const dataProvider: DataProvider = {
         const response = await fetch(url, {
             method: 'PUT',
             body: JSON.stringify(params.data),
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: getHeaders(),
         });
         const data = await response.json();
 
@@ -144,9 +149,7 @@ export const dataProvider: DataProvider = {
                 fetch(`${apiUrl}/${resource}/${id}`, {
                     method: 'PUT',
                     body: JSON.stringify(params.data),
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: getHeaders(),
                 })
             )
         ).then(() => ({
@@ -169,6 +172,7 @@ export const dataProvider: DataProvider = {
 
         const response = await fetch(url, {
             method: 'DELETE',
+            headers: getHeaders(),
         });
         const data = await response.json();
 
@@ -182,6 +186,7 @@ export const dataProvider: DataProvider = {
             params.ids.map(id =>
                 fetch(`${apiUrl}/${resource}/${id}`, {
                     method: 'DELETE',
+                    headers: getHeaders(),
                 })
             )
         ).then(() => ({

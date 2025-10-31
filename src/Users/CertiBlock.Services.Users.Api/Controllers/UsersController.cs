@@ -19,8 +19,6 @@ public class UsersController(
     ITokenStorage tokenStorage)
     : BaseController
 {
-    private readonly ICommandHandler<ChangeUserPassword> _changeUserPasswordHandler = changeUserPasswordHandler;
-
     [HttpPost("signUp")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
