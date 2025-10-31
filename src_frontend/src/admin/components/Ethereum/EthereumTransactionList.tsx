@@ -25,6 +25,41 @@ import {
 
 const apiUrl = 'http://localhost:5126';
 
+interface EthereumMetrics {
+    id: string;
+    certificateId: string;
+    blockchain: string;
+    operation: string;
+    transactionHash: string;
+    dataSizeBytes: number;
+    confirmations: number;
+    transactionCostUsd: number;
+    transactionCostNative: number;
+    gasUsed: number;
+    gasUtilizationRatio: number;
+}
+
+interface EthereumTransaction {
+    id: string;
+    certificateId?: string;
+    transactionHash?: string;
+    status?: string;
+    createdAt?: string;
+}
+
+interface MetricsModalProps {
+    open: boolean;
+    onClose: () => void;
+    certificateId: string | null;
+}
+
+interface MetricCardProps {
+    label: string;
+    value: string | number;
+    suffix?: string;
+    gradient: string;
+}
+
 const getStatusColor = (status?: string): 'success' | 'warning' | 'error' | 'default' => {
     switch (status) {
         case 'Confirmed':
@@ -39,10 +74,10 @@ const getStatusColor = (status?: string): 'success' | 'warning' | 'error' | 'def
     }
 };
 
-const MetricsModal = ({ open, onClose, certificateId }) => {
-    const [metrics, setMetrics] = useState(null);
+const MetricsModal = ({ open, onClose, certificateId }: MetricsModalProps) => {
+    const [metrics, setMetrics] = useState<EthereumMetrics | null>(null);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchMetrics = async () => {
@@ -61,7 +96,7 @@ const MetricsModal = ({ open, onClose, certificateId }) => {
                 const data = await response.json();
                 setMetrics(data);
             } catch (err) {
-                setError(err.message);
+                setError(err instanceof Error ? err.message : 'An error occurred');
             } finally {
                 setLoading(false);
             }
@@ -70,7 +105,7 @@ const MetricsModal = ({ open, onClose, certificateId }) => {
         fetchMetrics();
     }, [open, certificateId]);
 
-    const MetricCard = ({ label, value, suffix = '', gradient }) => (
+    const MetricCard = ({ label, value, suffix = '', gradient }: MetricCardProps) => (
         <Box
             sx={{
                 background: gradient,
@@ -249,9 +284,9 @@ const MetricsModal = ({ open, onClose, certificateId }) => {
 
 export const EthereumTransactionList = () => {
     const [modalOpen, setModalOpen] = useState(false);
-    const [selectedCertificateId, setSelectedCertificateId] = useState(null);
+    const [selectedCertificateId, setSelectedCertificateId] = useState<string | null>(null);
 
-    const handleOpenMetrics = (certificateId) => {
+    const handleOpenMetrics = (certificateId: string) => {
         setSelectedCertificateId(certificateId);
         setModalOpen(true);
     };
@@ -279,7 +314,7 @@ export const EthereumTransactionList = () => {
                     />
                     <FunctionField
                         label="Transaction Status"
-                        render={(record: { status?: string }) => (
+                        render={(record: EthereumTransaction) => (
                             <Chip
                                 label={record?.status || 'Unknown'}
                                 color={getStatusColor(record?.status)}
@@ -290,13 +325,14 @@ export const EthereumTransactionList = () => {
                     <DateField source="createdAt" label="Created At" showTime />
                     <FunctionField
                         label="Actions"
-                        render={(record: { certificateId?: string }) => (
+                        render={(record: EthereumTransaction) => (
                             <div style={{ display: 'flex', gap: '8px' }}>
                                 <Button
                                     variant="contained"
                                     size="small"
                                     startIcon={<TrendingUpIcon />}
-                                    onClick={() => handleOpenMetrics(record?.certificateId)}
+                                    onClick={() => record.certificateId && handleOpenMetrics(record.certificateId)}
+                                    disabled={!record.certificateId}
                                     sx={{
                                         background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)',
                                         '&:hover': {

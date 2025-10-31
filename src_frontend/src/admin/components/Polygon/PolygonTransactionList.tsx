@@ -1,4 +1,5 @@
-﻿import {
+﻿import { useState, useEffect } from 'react';
+import {
     List,
     Datagrid,
     TextField,
@@ -6,50 +7,353 @@
     FunctionField,
     DeleteButton
 } from 'react-admin';
-import { Chip } from '@mui/material';
+import {
+    Chip,
+    Button,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    IconButton,
+    CircularProgress,
+    Box,
+    Typography
+} from '@mui/material';
+import {
+    Close as CloseIcon,
+    TrendingUp as TrendingUpIcon
+} from '@mui/icons-material';
+
+const apiUrl = 'http://localhost:5126';
+
+interface PolygonMetrics {
+    id: string;
+    certificateId: string;
+    blockchain: string;
+    operation: string;
+    transactionHash: string;
+    dataSizeBytes: number;
+    confirmations: number;
+    transactionCostUsd: number;
+    transactionCostNative: number;
+    gasUsed: number;
+    gasUtilizationRatio: number;
+}
+
+interface PolygonTransaction {
+    id: string;
+    certificateId?: string;
+    transactionHash?: string;
+    status?: string;
+    createdAt?: string;
+}
+
+interface MetricsModalProps {
+    open: boolean;
+    onClose: () => void;
+    certificateId: string | null;
+}
+
+interface MetricCardProps {
+    label: string;
+    value: string | number;
+    suffix?: string;
+    gradient: string;
+}
 
 const getStatusColor = (status?: string): 'success' | 'warning' | 'error' | 'default' => {
     switch (status) {
         case 'Confirmed':
             return 'success';
         case 'Pending':
+        case 'Submitted':
             return 'warning';
         case 'Failed':
             return 'error';
-        case 'Submitted':
-            return 'warning';
         default:
             return 'default';
     }
 };
 
-export const PolygonTransactionList = () => (
-    <List>
-        <Datagrid bulkActionButtons={false}>
-            <TextField source="certificateId" label="Certificate ID" />
-            <TextField
-                source="transactionHash"
-                label="Transaction Hash"
-                sx={{
-                    maxWidth: '200px',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                    fontFamily: 'monospace'
-                }}
-            />
-            <FunctionField
-                label="Transaction Status"
-                render={(record: { status?: string }) => (
-                    <Chip
-                        label={record?.status || 'Unknown'}
-                        color={getStatusColor(record?.status)}
-                        size="small"
-                    />
+const MetricsModal = ({ open, onClose, certificateId }: MetricsModalProps) => {
+    const [metrics, setMetrics] = useState<PolygonMetrics | null>(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchMetrics = async () => {
+            if (!open || !certificateId) return;
+
+            setLoading(true);
+            setError(null);
+            setMetrics(null);
+
+            try {
+                const response = await fetch(
+                    `${apiUrl}/polygon-service/PolygonMetrics/getPolygonTransactionMetricsByCertificateId/${certificateId}`
+                );
+
+                if (!response.ok) throw new Error('Failed to fetch metrics');
+                const data = await response.json();
+                setMetrics(data);
+            } catch (err) {
+                setError(err instanceof Error ? err.message : 'An error occurred');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchMetrics();
+    }, [open, certificateId]);
+
+    const MetricCard = ({ label, value, suffix = '', gradient }: MetricCardProps) => (
+        <Box
+            sx={{
+                background: gradient,
+                borderRadius: '12px',
+                padding: '20px',
+                color: '#1a1a1a',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+                transition: 'transform 0.2s, box-shadow 0.2s',
+                '&:hover': {
+                    transform: 'translateY(-4px)',
+                    boxShadow: '0 6px 18px rgba(0,0,0,0.12)'
+                }
+            }}
+        >
+            <Typography variant="caption" sx={{ opacity: 0.8, display: 'block', mb: 1, fontWeight: 500 }}>
+                {label}
+            </Typography>
+            <Typography variant="h5" sx={{ fontWeight: 700, display: 'flex', alignItems: 'baseline', gap: 0.5 }}>
+                {value}
+                {suffix && (
+                    <Typography component="span" variant="body2" sx={{ opacity: 0.8 }}>
+                        {suffix}
+                    </Typography>
                 )}
+            </Typography>
+        </Box>
+    );
+
+    return (
+        <Dialog
+            open={open}
+            onClose={onClose}
+            maxWidth="md"
+            fullWidth
+            PaperProps={{
+                sx: {
+                    borderRadius: '16px',
+                    maxHeight: '90vh'
+                }
+            }}
+        >
+            <DialogTitle
+                sx={{
+                    background: 'linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%)',
+                    color: 'white',
+                    py: 2.5
+                }}
+            >
+                <Box display="flex" justifyContent="space-between" alignItems="center">
+                    <Typography variant="h6" component="span" fontWeight={600}>
+                        Polygon Transaction Metrics
+                    </Typography>
+                    <IconButton
+                        onClick={onClose}
+                        size="small"
+                        sx={{
+                            color: 'white',
+                            '&:hover': { backgroundColor: 'rgba(255,255,255,0.1)' }
+                        }}
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                </Box>
+            </DialogTitle>
+
+            <DialogContent sx={{ p: 3, backgroundColor: '#f9fafb' }}>
+                {loading && (
+                    <Box display="flex" justifyContent="center" alignItems="center" py={8}>
+                        <CircularProgress size={48} />
+                    </Box>
+                )}
+
+                {error && (
+                    <Box
+                        sx={{
+                            p: 3,
+                            backgroundColor: '#fee2e2',
+                            border: '1px solid #fecaca',
+                            borderRadius: '12px',
+                            color: '#991b1b'
+                        }}
+                    >
+                        <Typography variant="body1">{error}</Typography>
+                    </Box>
+                )}
+
+                {metrics && !loading && (
+                    <Box display="flex" flexDirection="column" gap={3}>
+                        {/* Transaction Info */}
+                        <Box
+                            sx={{
+                                backgroundColor: 'white',
+                                borderRadius: '12px',
+                                padding: 3,
+                                boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
+                            }}
+                        >
+                            <Typography variant="h6" fontWeight={600} mb={2} color="primary">
+                                Transaction Information
+                            </Typography>
+                            <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" gap={2}>
+                                <Box>
+                                    <Typography variant="caption" color="text.secondary" display="block" mb={0.5}>
+                                        Blockchain
+                                    </Typography>
+                                    <Chip label={metrics.blockchain} color="primary" size="small" sx={{ fontWeight: 600 }} />
+                                </Box>
+                                <Box>
+                                    <Typography variant="caption" color="text.secondary" display="block" mb={0.5}>
+                                        Operation
+                                    </Typography>
+                                    <Chip label={metrics.operation} color="secondary" size="small" sx={{ fontWeight: 600 }} />
+                                </Box>
+                                <Box gridColumn="1 / -1">
+                                    <Typography variant="caption" color="text.secondary" display="block" mb={0.5}>
+                                        Transaction Hash
+                                    </Typography>
+                                    <Box
+                                        sx={{
+                                            fontFamily: 'monospace',
+                                            backgroundColor: '#f3f4f6',
+                                            padding: 1.5,
+                                            borderRadius: '8px',
+                                            wordBreak: 'break-all',
+                                            fontSize: '0.85rem',
+                                            border: '1px solid #e5e7eb'
+                                        }}
+                                    >
+                                        {metrics.transactionHash}
+                                    </Box>
+                                </Box>
+                            </Box>
+                        </Box>
+
+                        {/* Metrics Grid */}
+                        <Box display="grid" gridTemplateColumns="repeat(auto-fit, minmax(180px, 1fr))" gap={2}>
+                            <MetricCard
+                                label="Confirmations"
+                                value={metrics.confirmations.toLocaleString()}
+                                gradient="linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%)"
+                            />
+                            <MetricCard
+                                label="Data Size"
+                                value={metrics.dataSizeBytes}
+                                suffix="bytes"
+                                gradient="linear-gradient(135deg, #fde2e4 0%, #fad2e1 100%)"
+                            />
+                            <MetricCard
+                                label="Gas Used"
+                                value={metrics.gasUsed.toLocaleString()}
+                                gradient="linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%)"
+                            />
+                            <MetricCard
+                                label="Gas Utilization"
+                                value={metrics.gasUtilizationRatio.toFixed(2)}
+                                suffix="%"
+                                gradient="linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)"
+                            />
+                            <MetricCard
+                                label="Cost (USD)"
+                                value={`$${metrics.transactionCostUsd.toFixed(6)}`}
+                                gradient="linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%)"
+                            />
+                            <MetricCard
+                                label="Cost (MATIC)"
+                                value={metrics.transactionCostNative.toFixed(10)}
+                                gradient="linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%)"
+                            />
+                        </Box>
+                    </Box>
+                )}
+            </DialogContent>
+        </Dialog>
+    );
+};
+
+export const PolygonTransactionList = () => {
+    const [modalOpen, setModalOpen] = useState(false);
+    const [selectedCertificateId, setSelectedCertificateId] = useState<string | null>(null);
+
+    const handleOpenMetrics = (certificateId: string) => {
+        setSelectedCertificateId(certificateId);
+        setModalOpen(true);
+    };
+
+    const handleCloseMetrics = () => {
+        setModalOpen(false);
+        setSelectedCertificateId(null);
+    };
+
+    return (
+        <>
+            <List>
+                <Datagrid bulkActionButtons={false}>
+                    <TextField source="certificateId" label="Certificate ID" />
+                    <TextField
+                        source="transactionHash"
+                        label="Transaction Hash"
+                        sx={{
+                            maxWidth: '200px',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            fontFamily: 'monospace'
+                        }}
+                    />
+                    <FunctionField
+                        label="Transaction Status"
+                        render={(record: PolygonTransaction) => (
+                            <Chip
+                                label={record?.status || 'Unknown'}
+                                color={getStatusColor(record?.status)}
+                                size="small"
+                            />
+                        )}
+                    />
+                    <DateField source="createdAt" label="Created At" showTime />
+                    <FunctionField
+                        label="Actions"
+                        render={(record: PolygonTransaction) => (
+                            <div style={{ display: 'flex', gap: '8px' }}>
+                                <Button
+                                    variant="contained"
+                                    size="small"
+                                    startIcon={<TrendingUpIcon />}
+                                    onClick={() => record.certificateId && handleOpenMetrics(record.certificateId)}
+                                    disabled={!record.certificateId}
+                                    sx={{
+                                        background: 'linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%)',
+                                        '&:hover': {
+                                            background: 'linear-gradient(135deg, #7c3aed 0%, #db2777 100%)'
+                                        }
+                                    }}
+                                >
+                                    Metrics
+                                </Button>
+                                <DeleteButton record={record} />
+                            </div>
+                        )}
+                    />
+                </Datagrid>
+            </List>
+
+            <MetricsModal
+                open={modalOpen}
+                onClose={handleCloseMetrics}
+                certificateId={selectedCertificateId}
             />
-            <DateField source="createdAt" label="Created At" showTime />
-            <DeleteButton />
-        </Datagrid>
-    </List>
-);
+        </>
+    );
+};
