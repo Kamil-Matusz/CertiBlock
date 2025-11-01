@@ -6,6 +6,7 @@ import { CertificateShow } from './components/Certificates/CertificateShow.tsx';
 import { EthereumTransactionList } from './components/Ethereum/EthereumTransactionList';
 import { PolygonTransactionList } from './components/Polygon/PolygonTransactionList';
 import { WalletBalanceChecker } from './components/Wallets/WalletBalanceChecker';
+import { CustomLoginPage } from './components/Auth/CustomLoginPage';
 import { WalletDashboard } from './components/Wallets/WalletDashboard';
 import CardMembershipIcon from '@mui/icons-material/CardMembership';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
@@ -17,6 +18,7 @@ export default function AdminApp() {
         <Admin basename="/admin"
                dataProvider={dataProvider}
                authProvider={authProvider}
+               loginPage={CustomLoginPage}
         >
             <Resource
                 name="certificates"
