@@ -27,20 +27,72 @@ export const CertificateCreateForm = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [showToast, setShowToast] = useState(false);
+    const [fieldErrors, setFieldErrors] = useState({
+        ownerName: '',
+        title: '',
+        issuedBy: '',
+        issuedDate: ''
+    });
+
+    const validateField = (field: string, value: string): string => {
+        switch (field) {
+            case 'ownerName':
+                if (!value.trim()) return 'Owner name is required.';
+                if (value.length > 100) return 'Owner name must not exceed 100 characters.';
+                break;
+            case 'title':
+                if (!value.trim()) return 'Certificate title is required.';
+                if (value.length > 100) return 'Title must not exceed 100 characters.';
+                break;
+            case 'issuedBy':
+                if (!value.trim()) return 'Issuing institution is required.';
+                if (value.length > 100) return 'Institution name must not exceed 100 characters.';
+                break;
+            case 'issuedDate':
+                if (!value) return 'Issue date is required.';
+                const selectedDate = new Date(value);
+                const today = new Date();
+                today.setHours(23, 59, 59, 999);
+                if (selectedDate > today) return 'Issue date cannot be in the future.';
+                break;
+        }
+        return '';
+    };
 
     const handleChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value;
         setFormData({
             ...formData,
-            [field]: event.target.value
+            [field]: value
         });
+
+        // Validate on change
+        const errorMsg = validateField(field, value);
+        setFieldErrors({
+            ...fieldErrors,
+            [field]: errorMsg
+        });
+
         setError('');
     };
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
 
-        if (!formData.ownerName || !formData.title || !formData.issuedBy) {
-            setError('Please fill in all required fields');
+        // Validate all fields
+        const errors = {
+            ownerName: validateField('ownerName', formData.ownerName),
+            title: validateField('title', formData.title),
+            issuedBy: validateField('issuedBy', formData.issuedBy),
+            issuedDate: validateField('issuedDate', formData.issuedDate)
+        };
+
+        setFieldErrors(errors);
+
+        // Check if there are any errors
+        const hasErrors = Object.values(errors).some(error => error !== '');
+        if (hasErrors) {
+            setError('Please fix the errors in the form');
             return;
         }
 
@@ -85,6 +137,12 @@ export const CertificateCreateForm = () => {
                 issuedBy: '',
                 issuedDate: new Date().toISOString().split('T')[0],
                 blockchain: 'Ethereum'
+            });
+            setFieldErrors({
+                ownerName: '',
+                title: '',
+                issuedBy: '',
+                issuedDate: ''
             });
 
         } catch (err) {
@@ -146,6 +204,8 @@ export const CertificateCreateForm = () => {
                                     onChange={handleChange('ownerName')}
                                     disabled={loading}
                                     placeholder="e.g., John Doe"
+                                    error={!!fieldErrors.ownerName}
+                                    helperText={fieldErrors.ownerName || `${formData.ownerName.length}/100 characters`}
                                 />
 
                                 {/* Title */}
@@ -157,6 +217,8 @@ export const CertificateCreateForm = () => {
                                     onChange={handleChange('title')}
                                     disabled={loading}
                                     placeholder="e.g., University Degree"
+                                    error={!!fieldErrors.title}
+                                    helperText={fieldErrors.title || `${formData.title.length}/100 characters`}
                                 />
 
                                 {/* Issued By */}
@@ -168,6 +230,8 @@ export const CertificateCreateForm = () => {
                                     onChange={handleChange('issuedBy')}
                                     disabled={loading}
                                     placeholder="e.g., Harvard University"
+                                    error={!!fieldErrors.issuedBy}
+                                    helperText={fieldErrors.issuedBy || `${formData.issuedBy.length}/100 characters`}
                                 />
 
                                 {/* Issued Date */}
@@ -180,6 +244,9 @@ export const CertificateCreateForm = () => {
                                     onChange={handleChange('issuedDate')}
                                     disabled={loading}
                                     InputLabelProps={{ shrink: true }}
+                                    error={!!fieldErrors.issuedDate}
+                                    helperText={fieldErrors.issuedDate || 'Date cannot be in the future'}
+                                    inputProps={{ max: new Date().toISOString().split('T')[0] }}
                                 />
 
                                 {/* Blockchain */}

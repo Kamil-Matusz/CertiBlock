@@ -48,7 +48,6 @@ export const RegisterPage = () => {
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
 
-        // Walidacja
         if (!formData.email || !formData.password) {
             setError('Email and password are required');
             return;
@@ -64,6 +63,11 @@ export const RegisterPage = () => {
             return;
         }
 
+        if (formData.password.length > 200) {
+            setError('Password cannot be longer than 200 characters');
+            return;
+        }
+
         setLoading(true);
         setError('');
 
@@ -74,7 +78,7 @@ export const RegisterPage = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    userId: '00000000-0000-0000-0000-000000000000', // Backend powinien generować nowy GUID
+                    userId: '00000000-0000-0000-0000-000000000000',
                     email: formData.email,
                     password: formData.password,
                     role: formData.role,
