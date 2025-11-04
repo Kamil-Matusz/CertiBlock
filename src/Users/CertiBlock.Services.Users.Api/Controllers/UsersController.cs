@@ -16,8 +16,7 @@ public class UsersController(
     IQueryHandler<GetAccountInfo, AccountDto> getAccountInfo,
     IQueryHandler<GetAllUsers, IEnumerable<UserDto>> getAllUsersHandler,
     ICommandHandler<ChangeUserPassword> changeUserPasswordHandler,
-    ITokenStorage tokenStorage)
-    : BaseController
+    ITokenStorage tokenStorage) : BaseController
 {
     [HttpPost("signUp")]
     [ProducesResponseType(StatusCodes.Status201Created)]
@@ -114,4 +113,17 @@ public class UsersController(
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<IEnumerable<UserDto>>> GetAllUsers([FromQuery] GetAllUsers query)
         => Ok(await getAllUsersHandler.HandlerAsync(query));
+    
+    [Authorize]
+    [HttpPut("changePassword")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> ChangePassword(ChangeUserPassword command)
+    {
+        var userId = Guid.Parse(User.Identity?.Name);
+        await changeUserPasswordHandler.HandlerAsync(command with { UserId = userId, Password  = command.Password });
+        return NoContent();
+    }
 }
