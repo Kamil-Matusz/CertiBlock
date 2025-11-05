@@ -18,6 +18,8 @@ The project consists of several services and components connected via Docker.
 - Docker
 - RabbitMQ
 - Seq
+- TypeScript
+- React
 
 ## 📈 Grafana Dashboards
 Metrics from **InfluxDB** are visualized in Grafana to compare Ethereum and Polygon in real-time:
