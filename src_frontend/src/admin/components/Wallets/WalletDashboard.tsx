@@ -12,6 +12,7 @@ import {
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { IconButton } from '@mui/material';
+import { API_URL } from '../../../config.ts';
 
 interface WalletBalance {
     address: string;
@@ -53,7 +54,7 @@ const WalletCard = ({ wallet }: { wallet: WalletConfig }) => {
                 : 'polygon-service/Polygon/getMaticBalanceByWalletAddress';
 
             const response = await fetch(
-                `http://localhost:5126/${service}/${wallet.address}`
+                `${API_URL}/${service}/${wallet.address}`
             );
 
             if (!response.ok) {

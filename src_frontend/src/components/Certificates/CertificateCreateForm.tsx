@@ -12,8 +12,9 @@ import {
     Snackbar
 } from '@mui/material';
 import { SaveOutlined, ArrowBack } from '@mui/icons-material';
+import { API_URL } from '../../config.ts';
 
-const apiUrl = 'http://localhost:5126';
+const apiUrl = API_URL;
 
 export const CertificateCreateForm = () => {
     const navigate = useNavigate();

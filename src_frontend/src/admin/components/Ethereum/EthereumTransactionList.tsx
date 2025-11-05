@@ -1,4 +1,5 @@
 ﻿import { useState, useEffect } from 'react';
+import { API_URL } from '../../../config.ts';
 import {
     List,
     Datagrid,
@@ -26,7 +27,7 @@ import {
     Delete as DeleteIcon
 } from '@mui/icons-material';
 
-const apiUrl = 'http://localhost:5126';
+const apiUrl = API_URL;
 
 interface EthereumMetrics {
     id: string;

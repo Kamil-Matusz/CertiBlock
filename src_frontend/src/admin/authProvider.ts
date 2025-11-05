@@ -1,6 +1,7 @@
 ﻿import type { AuthProvider } from 'react-admin';
+import { API_URL } from '../config.ts';
 
-const apiUrl = 'http://localhost:5126';
+const apiUrl = API_URL;
 
 const decodeJWT = (token: string) => {
     try {

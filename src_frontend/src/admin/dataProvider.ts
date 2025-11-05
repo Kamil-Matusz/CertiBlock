@@ -1,8 +1,8 @@
 ﻿import type {DataProvider} from 'react-admin';
+import { API_URL } from '../config.ts';
 
 const apiUrl = 'http://localhost:5126';
 
-// Funkcja pomocnicza do dodawania headera Authorization
 const getHeaders = () => {
     const token = localStorage.getItem('token');
     return {
@@ -16,8 +16,8 @@ export const dataProvider: DataProvider = {
         const { page, perPage } = params.pagination;
 
         if (resource === 'certificates') {
-            const url = `${apiUrl}/certificate-service/Certificates/getCertificates?pageIndex=${page}&pageSize=${perPage}`;
-            const countUrl = `${apiUrl}/certificate-service/Certificates/countCertificates`;
+            const url = `${API_URL}/certificate-service/Certificates/getCertificates?pageIndex=${page}&pageSize=${perPage}`;
+            const countUrl = `${API_URL}/certificate-service/Certificates/countCertificates`;
 
             const [dataResponse, countResponse] = await Promise.all([
                 fetch(url, { headers: getHeaders() }),
@@ -34,8 +34,8 @@ export const dataProvider: DataProvider = {
         }
 
         if (resource === 'ethereum-transactions') {
-            const url = `${apiUrl}/ethereum-service/Ethereum/getEthereumTransactions?pageIndex=${page}&pageSize=${perPage}`;
-            const countUrl = `${apiUrl}/ethereum-service/Ethereum/countEthereumTransactions`;
+            const url = `${API_URL}/ethereum-service/Ethereum/getEthereumTransactions?pageIndex=${page}&pageSize=${perPage}`;
+            const countUrl = `${API_URL}/ethereum-service/Ethereum/countEthereumTransactions`;
 
             const [dataResponse, countResponse] = await Promise.all([
                 fetch(url, { headers: getHeaders() }),
@@ -52,8 +52,8 @@ export const dataProvider: DataProvider = {
         }
 
         if (resource === 'polygon-transactions') {
-            const url = `${apiUrl}/polygon-service/Polygon/getPolygonTransactions?pageIndex=${page}&pageSize=${perPage}`;
-            const countUrl = `${apiUrl}/polygon-service/Polygon/countPolygonTransactions`;
+            const url = `${API_URL}/polygon-service/Polygon/getPolygonTransactions?pageIndex=${page}&pageSize=${perPage}`;
+            const countUrl = `${API_URL}/polygon-service/Polygon/countPolygonTransactions`;
 
             const [dataResponse, countResponse] = await Promise.all([
                 fetch(url, { headers: getHeaders() }),
