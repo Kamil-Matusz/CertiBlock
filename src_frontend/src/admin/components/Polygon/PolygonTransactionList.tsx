@@ -5,7 +5,8 @@ import {
     TextField,
     DateField,
     FunctionField,
-    DeleteButton
+    useNotify,
+    useRefresh
 } from 'react-admin';
 import {
     Chip,
@@ -13,6 +14,7 @@ import {
     Dialog,
     DialogTitle,
     DialogContent,
+    DialogActions,
     IconButton,
     CircularProgress,
     Box,
@@ -20,7 +22,8 @@ import {
 } from '@mui/material';
 import {
     Close as CloseIcon,
-    TrendingUp as TrendingUpIcon
+    TrendingUp as TrendingUpIcon,
+    Delete as DeleteIcon
 } from '@mui/icons-material';
 
 const apiUrl = 'http://localhost:5126';
@@ -58,6 +61,10 @@ interface MetricCardProps {
     value: string | number;
     suffix?: string;
     gradient: string;
+}
+
+interface CustomDeleteButtonProps {
+    record: PolygonTransaction;
 }
 
 const getStatusColor = (status?: string): 'success' | 'warning' | 'error' | 'default' => {
@@ -282,6 +289,105 @@ const MetricsModal = ({ open, onClose, certificateId }: MetricsModalProps) => {
     );
 };
 
+const CustomDeleteButton = ({ record }: CustomDeleteButtonProps) => {
+    const [confirmOpen, setConfirmOpen] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const notify = useNotify();
+    const refresh = useRefresh();
+
+    const handleDeleteClick = () => {
+        setConfirmOpen(true);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (!record.certificateId) {
+            notify('Certificate ID not found', { type: 'error' });
+            setConfirmOpen(false);
+            return;
+        }
+
+        setIsDeleting(true);
+
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch(
+                `${apiUrl}/polygon-service/Polygon/deleteTransactionByCertificateId/${record.certificateId}`,
+                {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(token && { 'Authorization': `Bearer ${token}` })
+                    }
+                }
+            );
+
+            if (response.ok) {
+                notify('Transaction deleted successfully', { type: 'success' });
+                refresh();
+            } else {
+                const errorData = await response.json().catch(() => ({}));
+                notify(errorData.message || 'Error deleting transaction', { type: 'error' });
+            }
+        } catch {
+            notify('Network error while deleting transaction', { type: 'error' });
+        } finally {
+            setIsDeleting(false);
+            setConfirmOpen(false);
+        }
+    };
+
+    const handleCancelDelete = () => {
+        setConfirmOpen(false);
+    };
+
+    return (
+        <>
+            <Button
+                variant="outlined"
+                color="error"
+                size="small"
+                startIcon={<DeleteIcon />}
+                onClick={handleDeleteClick}
+                disabled={!record.certificateId || isDeleting}
+            >
+                Delete
+            </Button>
+
+            <Dialog
+                open={confirmOpen}
+                onClose={handleCancelDelete}
+                maxWidth="xs"
+                fullWidth
+            >
+                <DialogTitle>Confirm Delete</DialogTitle>
+                <DialogContent>
+                    <Typography>
+                        Are you sure you want to delete the transaction for certificate{' '}
+                        <strong>{record.certificateId}</strong>?
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                        This action cannot be undone.
+                    </Typography>
+                </DialogContent>
+                <DialogActions sx={{ px: 3, pb: 2 }}>
+                    <Button onClick={handleCancelDelete} disabled={isDeleting}>
+                        Cancel
+                    </Button>
+                    <Button
+                        onClick={handleConfirmDelete}
+                        color="error"
+                        variant="contained"
+                        disabled={isDeleting}
+                        startIcon={isDeleting ? <CircularProgress size={16} /> : null}
+                    >
+                        {isDeleting ? 'Deleting...' : 'Delete'}
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </>
+    );
+};
+
 export const PolygonTransactionList = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedCertificateId, setSelectedCertificateId] = useState<string | null>(null);
@@ -342,7 +448,7 @@ export const PolygonTransactionList = () => {
                                 >
                                     Metrics
                                 </Button>
-                                <DeleteButton record={record} />
+                                <CustomDeleteButton record={record} />
                             </div>
                         )}
                     />

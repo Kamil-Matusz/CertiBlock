@@ -17,4 +17,5 @@ public interface IEthereumService
     Task<IEnumerable<BlockchainTransactionDto>> GetEthereumTransactionsByStatusAsync(params Status[] statuses);
     Task<IEnumerable<BlockchainTransactionResultDto>> GetEthereumTransactionsPagedAsync(int page, int pageSize);
     Task<long> GetEthereumTransactionCountAsync();
+    Task DeleteEthereumTransactionByCertificateIdAsync(Guid certificateId);
 }

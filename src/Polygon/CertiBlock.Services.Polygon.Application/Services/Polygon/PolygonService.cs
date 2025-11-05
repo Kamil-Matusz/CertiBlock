@@ -12,7 +12,8 @@ using Nethereum.Web3;
 
 namespace CertiBlock.Services.Polygon.Application.Services.Polygon;
 
-public class PolygonService(IPolygonRepository polygonRepository, ILogger<PolygonService> logger, IWeb3 web3, PolygonOptions polygonOptions) : IPolygonService
+public class PolygonService(IPolygonRepository polygonRepository, ILogger<PolygonService> logger, IWeb3 web3, 
+    PolygonOptions polygonOptions) : IPolygonService
 {
     public async Task<BlockchainTransactionResultDto> RegisterPolygonTransactionAsync(BlockchainTransactionDto dto)
     {
@@ -92,8 +93,8 @@ public class PolygonService(IPolygonRepository polygonRepository, ILogger<Polygo
 
     public async Task DeletePolygonTransactionAsync(Guid id)
     {
-        var ethereumTransaction = await polygonRepository.GetBlockchainTransactionByIdAsync(id);
-        if (ethereumTransaction is null)
+        var polygonTransaction = await polygonRepository.GetBlockchainTransactionByIdAsync(id);
+        if (polygonTransaction is null)
         {
             throw new PolygonTransactionsNotFoundException(id);
         }
@@ -214,4 +215,14 @@ public class PolygonService(IPolygonRepository polygonRepository, ILogger<Polygo
     }
 
     public async Task<long> GetPolygonTransactionCountAsync() => await  polygonRepository.GetTransactionCountAsync();
+    public async Task DeletePolygonTransactionByCertificateIdAsync(Guid certificateId)
+    {
+        var polygonTransaction = await polygonRepository.GetBlockchainTransactionByIdAsync(certificateId);
+        if (polygonTransaction is null)
+        {
+            throw new PolygonTransactionsNotFoundException(certificateId);
+        }
+
+        await polygonRepository.DeleteBlockchainTransactionAsync(certificateId);
+    }
 }

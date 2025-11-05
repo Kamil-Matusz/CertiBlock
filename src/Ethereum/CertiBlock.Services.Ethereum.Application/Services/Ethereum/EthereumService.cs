@@ -215,4 +215,14 @@ public class EthereumService(IEthereumRepository ethereumRepository, ILogger<Eth
     }
 
     public async Task<long> GetEthereumTransactionCountAsync() => await ethereumRepository.GetTransactionCountAsync();
+    public async Task DeleteEthereumTransactionByCertificateIdAsync(Guid certificateId)
+    {
+        var ethereumTransaction = await ethereumRepository.GetBlockchainTransactionByCertificateIdAsync(certificateId);
+        if (ethereumTransaction is null)
+        {
+            throw new EthereumTransactionsNotFoundException(certificateId);
+        }
+
+        await ethereumRepository.DeleteBlockchainTransactionByCertificateIdAsync(certificateId);
+    }
 }

@@ -17,4 +17,5 @@ public interface IPolygonService
     Task<IEnumerable<BlockchainTransactionDto>> GetPolygonTransactionsByStatusAsync(params Status[] statuses);
     Task<IEnumerable<BlockchainTransactionResultDto>> GetPolygonTransactionsPagedAsync(int page, int pageSize);
     Task<long> GetPolygonTransactionCountAsync();
+    Task DeletePolygonTransactionByCertificateIdAsync(Guid certificateId);
 }

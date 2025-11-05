@@ -81,4 +81,10 @@ public class PolygonRepository : IPolygonRepository
         var filter = Builders<BlockchainTransaction>.Filter.Eq(x => x.TransactionHash, transactionHash);
         return await _collection.Find(filter).FirstOrDefaultAsync();
     }
+
+    public async Task DeleteBlockchainTransactionByCertificateIdAsync(Guid certificateId)
+    {
+        var filter = Builders<BlockchainTransaction>.Filter.Eq(c => c.CertificateId, certificateId);
+        await _collection.DeleteOneAsync(filter);
+    }
 }
