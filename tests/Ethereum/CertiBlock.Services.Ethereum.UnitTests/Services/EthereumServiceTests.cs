@@ -268,4 +268,49 @@ public class EthereumServiceTests
 
     #endregion
     
+    #region DeleteEthereumTransactionByCertificateIdAsync Tests
+
+    [Fact]
+    public async Task DeleteEthereumTransactionByCertificateIdAsync_WithExistingTransaction_ShouldDeleteTransaction()
+    {
+        // Arrange
+        var certificateId = Guid.NewGuid();
+        var transaction = new BlockchainTransaction 
+        { 
+            Id = Guid.NewGuid(),
+            CertificateId = certificateId 
+        };
+
+        _ethereumRepositoryMock
+            .Setup(x => x.GetBlockchainTransactionByCertificateIdAsync(certificateId))
+            .ReturnsAsync(transaction);
+
+        _ethereumRepositoryMock
+            .Setup(x => x.DeleteBlockchainTransactionByCertificateIdAsync(certificateId))
+            .Returns(Task.CompletedTask);
+
+        // Act
+        await _ethereumService.DeleteEthereumTransactionByCertificateIdAsync(certificateId);
+
+        // Assert
+        _ethereumRepositoryMock.Verify(x => x.DeleteBlockchainTransactionByCertificateIdAsync(certificateId), Times.Once);
+    }
+
+    [Fact]
+    public async Task DeleteEthereumTransactionByCertificateIdAsync_WithNonExistingTransaction_ShouldThrowNotFoundException()
+    {
+        // Arrange
+        var certificateId = Guid.NewGuid();
+        _ethereumRepositoryMock
+            .Setup(x => x.GetBlockchainTransactionByCertificateIdAsync(certificateId))!
+            .ReturnsAsync((BlockchainTransaction)null!);
+
+        // Act & Assert
+        await Should.ThrowAsync<EthereumTransactionsNotFoundException>(
+            () => _ethereumService.DeleteEthereumTransactionByCertificateIdAsync(certificateId));
+
+        _ethereumRepositoryMock.Verify(x => x.DeleteBlockchainTransactionByCertificateIdAsync(It.IsAny<Guid>()), Times.Never);
+    }
+
+    #endregion
 }
