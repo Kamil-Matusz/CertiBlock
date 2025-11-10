@@ -3,6 +3,7 @@ using CertiBlock.Services.Polygon.Infrastructure.Configurations;
 using CertiBlock.Services.Polygon.Infrastructure.DAL;
 using CertiBlock.Shared.CoinGecko;
 using CertiBlock.Shared.CORS;
+using CertiBlock.Shared.Hangfire;
 using CertiBlock.Shared.Logging;
 using CertiBlock.Shared.Mongo;
 using CertiBlock.Shared.RabbitMQ;
@@ -29,6 +30,9 @@ public static class Extensions
         // MongoDB
         services.AddMongo(configuration);
         ConfigureMongoDbMappings();
+        
+        // Hangfire
+        services.AddHangfire(configuration);
         
         // CoinGecko
         services.AddCoinGecko(configuration);

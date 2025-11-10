@@ -1,8 +1,10 @@
-﻿using CertiBlock.Services.Ethereum.Core.Entities;
+﻿using CertiBlock.Services.Ethereum.Application.Hangfire;
+using CertiBlock.Services.Ethereum.Core.Entities;
 using CertiBlock.Services.Ethereum.Infrastructure.Configurations;
 using CertiBlock.Services.Ethereum.Infrastructure.DAL;
 using CertiBlock.Shared.CoinGecko;
 using CertiBlock.Shared.CORS;
+using CertiBlock.Shared.Hangfire;
 using CertiBlock.Shared.Logging;
 using CertiBlock.Shared.Mongo;
 using CertiBlock.Shared.RabbitMQ;
@@ -29,6 +31,9 @@ public static class Extensions
         // MongoDB
         services.AddMongo(configuration);
         ConfigureMongoDbMappings();
+        
+        // Hangfire
+        services.AddHangfire(configuration);
 
         // CoinGecko
         services.AddCoinGecko(configuration);
@@ -52,6 +57,8 @@ public static class Extensions
         app.UseCorsPolicy();
         
         app.UseRouting();
+        
+        app.UseHangfireJobs();
 
         return app;
     }

@@ -22,7 +22,8 @@ public static class Extensions
                 MigrationOptions = new MongoMigrationOptions
                 {
                     MigrationStrategy = new MigrateMongoMigrationStrategy()
-                }
+                },
+                CheckQueuedJobsStrategy = CheckQueuedJobsStrategy.TailNotificationsCollection
             })
         );
 

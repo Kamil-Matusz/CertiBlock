@@ -1,4 +1,5 @@
 ﻿using CertiBlock.Services.Ethereum.Application.Facade;
+using CertiBlock.Services.Ethereum.Application.Hangfire;
 using CertiBlock.Services.Ethereum.Application.RabbitMQ;
 using CertiBlock.Services.Ethereum.Application.Services;
 using CertiBlock.Services.Ethereum.Application.Services.CoinGecko;
@@ -14,6 +15,10 @@ public static class Extensions
     {
         // Services
         services.AddServices();
+        
+        // Hangfire
+        services.AddHangfireJobs();
+        
         
         // Facade
         services.AddFacade();
