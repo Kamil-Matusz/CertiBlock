@@ -1,4 +1,5 @@
-﻿using CertiBlock.Services.Polygon.Core.Entities;
+﻿using CertiBlock.Services.Polygon.Application.Hangfire;
+using CertiBlock.Services.Polygon.Core.Entities;
 using CertiBlock.Services.Polygon.Infrastructure.Configurations;
 using CertiBlock.Services.Polygon.Infrastructure.DAL;
 using CertiBlock.Shared.CoinGecko;
@@ -56,6 +57,8 @@ public static class Extensions
         app.UseCorsPolicy();
         
         app.UseRouting();
+        
+        app.UseHangfireJobs();
         
         return app;
     }

@@ -19,7 +19,6 @@ public static class Extensions
         // Hangfire
         services.AddHangfireJobs();
         
-        
         // Facade
         services.AddFacade();
         
