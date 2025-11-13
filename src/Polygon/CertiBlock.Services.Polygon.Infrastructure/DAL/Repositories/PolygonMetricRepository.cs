@@ -32,4 +32,18 @@ public class PolygonMetricRepository : IPolygonMetricRepository
         var filter = Builders<PolygonMetrics>.Filter.Eq(c => c.CertificateId, certificateId);
         await _collection.DeleteOneAsync(filter);
     }
+
+    public async Task<IEnumerable<Guid>> GetAllCertificateIdsWithMetricsAsync()
+    {
+        var projection = Builders<PolygonMetrics>.Projection
+            .Include(x => x.CertificateId)
+            .Exclude(x => x.Id);
+    
+        var certificateIds = await _collection
+            .Find(_ => true)
+            .Project(x => x.CertificateId)
+            .ToListAsync();
+    
+        return certificateIds.Distinct();
+    }
 }

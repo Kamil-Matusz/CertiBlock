@@ -7,4 +7,5 @@ public interface IPolygonMetricRepository
     Task SavePolygonMetricsAsync(PolygonMetrics polygonMetrics);
     Task<PolygonMetrics> GetTransactionMetricsByCertificateAsync(Guid certificateId);
     Task DeleteTransactionMetricsByCertificateIdAsync(Guid certificateId);
+    Task<IEnumerable<Guid>> GetAllCertificateIdsWithMetricsAsync();
 }

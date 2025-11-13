@@ -87,4 +87,18 @@ public class PolygonRepository : IPolygonRepository
         var filter = Builders<BlockchainTransaction>.Filter.Eq(c => c.CertificateId, certificateId);
         await _collection.DeleteOneAsync(filter);
     }
+
+    public async Task<IEnumerable<Guid>> GetAllCertificateIdsAsync()
+    {
+        var projection = Builders<BlockchainTransaction>.Projection
+            .Include(x => x.CertificateId)
+            .Exclude(x => x.Id);
+    
+        var certificateIds = await _collection
+            .Find(Builders<BlockchainTransaction>.Filter.Eq(t => t.Status, Status.Confirmed))
+            .Project(x => x.CertificateId)
+            .ToListAsync();
+    
+        return certificateIds.Distinct();
+    }
 }

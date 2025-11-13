@@ -9,6 +9,7 @@ public static class Extensions
     public static IServiceCollection AddHangfireJobs(this IServiceCollection services)
     {
         services.AddScoped<UpdatePolygonTransactionStatusJob>();
+        services.AddScoped<FetchMissingPolygonMetricsJob>();
         
         return services;
     }
@@ -21,6 +22,11 @@ public static class Extensions
             "update-polygon-transaction-status",
             job => job.UpdateSubmittedTransactionsAsync(),
             Cron.HourInterval(1));
+        
+        recurringJobManager.AddOrUpdate<FetchMissingPolygonMetricsJob>(
+            "fetch-missing-polygon-metrics",
+            job => job.FetchMissingMetricsAsync(),
+            Cron.HourInterval(2));
         
         return app;
     }
