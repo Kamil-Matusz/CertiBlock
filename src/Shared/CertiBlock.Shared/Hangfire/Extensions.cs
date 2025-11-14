@@ -1,6 +1,8 @@
 ﻿using Hangfire;
+using Hangfire.Dashboard;
 using Hangfire.Mongo;
 using Hangfire.Mongo.Migration.Strategies;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
@@ -30,6 +32,16 @@ public static class Extensions
         services.AddHangfireServer();
 
         return services;
+    }
+    
+    public static IApplicationBuilder UseHangfireDashboard(this IApplicationBuilder app)
+    {
+        app.UseHangfireDashboard("/hangfire", new DashboardOptions
+        {
+            Authorization = Array.Empty<IDashboardAuthorizationFilter>()
+        });
+
+        return app;
     }
 
     private static T GetOptions<T>(this IConfiguration configuration, string sectionName) 

@@ -58,6 +58,8 @@ public static class Extensions
         
         app.UseRouting();
         
+        app.UseHangfireDashboard();
+        
         app.UseHangfireJobs();
         
         return app;

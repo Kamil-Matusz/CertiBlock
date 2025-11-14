@@ -90,10 +90,6 @@ public class EthereumRepository : IEthereumRepository
 
     public async Task<IEnumerable<Guid>> GetAllCertificateIdsAsync()
     {
-        var projection = Builders<BlockchainTransaction>.Projection
-            .Include(x => x.CertificateId)
-            .Exclude(x => x.Id);
-    
         var certificateIds = await _collection
             .Find(Builders<BlockchainTransaction>.Filter.Eq(t => t.Status, Status.Confirmed))
             .Project(x => x.CertificateId)

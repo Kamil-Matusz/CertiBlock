@@ -57,6 +57,8 @@ public static class Extensions
         app.UseCorsPolicy();
         
         app.UseRouting();
+
+        app.UseHangfireDashboard();
         
         app.UseHangfireJobs();
 
