@@ -90,11 +90,19 @@ public class PolygonRepository : IPolygonRepository
 
     public async Task<IEnumerable<Guid>> GetAllCertificateIdsAsync()
     {
-        var certificateIds = await _collection
+        return await _collection
+            .Distinct(x => x.CertificateId, 
+                Builders<BlockchainTransaction>.Filter.Eq(t => t.Status, Status.Confirmed))
+            .ToListAsync();
+    }
+
+    public async Task<Dictionary<Guid, string>> GetConfirmedCertificateTransactionsAsync()
+    {
+        var results = await _collection
             .Find(Builders<BlockchainTransaction>.Filter.Eq(t => t.Status, Status.Confirmed))
-            .Project(x => x.CertificateId)
+            .Project(x => new { x.CertificateId, x.TransactionHash })
             .ToListAsync();
     
-        return certificateIds.Distinct();
+        return results.ToDictionary(x => x.CertificateId, x => x.TransactionHash);
     }
 }

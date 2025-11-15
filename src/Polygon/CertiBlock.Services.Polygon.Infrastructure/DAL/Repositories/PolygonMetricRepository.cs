@@ -35,11 +35,8 @@ public class PolygonMetricRepository : IPolygonMetricRepository
 
     public async Task<IEnumerable<Guid>> GetAllCertificateIdsWithMetricsAsync()
     {
-        var certificateIds = await _collection
-            .Find(_ => true)
-            .Project(x => x.CertificateId)
+        return await _collection
+            .Distinct(x => x.CertificateId, _ => true)
             .ToListAsync();
-    
-        return certificateIds.Distinct();
     }
 }

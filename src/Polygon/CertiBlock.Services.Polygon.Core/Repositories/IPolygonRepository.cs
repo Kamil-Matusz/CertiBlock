@@ -18,4 +18,5 @@ public interface IPolygonRepository
     Task<BlockchainTransaction?> GetByTransactionHashAsync(string transactionHash);
     Task DeleteBlockchainTransactionByCertificateIdAsync(Guid certificateId);
     Task<IEnumerable<Guid>> GetAllCertificateIdsAsync();
+    Task<Dictionary<Guid, string>> GetConfirmedCertificateTransactionsAsync();
 }
