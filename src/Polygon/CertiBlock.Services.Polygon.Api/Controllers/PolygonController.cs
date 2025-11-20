@@ -1,4 +1,5 @@
-﻿using CertiBlock.Services.Polygon.Application.Services;
+﻿using CertiBlock.Services.Polygon.Application.Facade;
+using CertiBlock.Services.Polygon.Application.Services;
 using CertiBlock.Services.Polygon.Application.Services.Polygon;
 using CertiBlock.Services.Polygon.Core.DTO;
 using CertiBlock.Shared.Enums;
@@ -6,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CertiBlock.Services.Polygon.Api.Controllers;
 
-public class PolygonController(IPolygonService polygonService) : BaseController
+public class PolygonController(IPolygonService polygonService, IPolygonFacade polygonFacade) : BaseController
 {
     [HttpGet("getMaticBalanceByWalletAddress/{walletAddress}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -82,4 +83,15 @@ public class PolygonController(IPolygonService polygonService) : BaseController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<BlockchainTransactionDto>> GetPolygonTransactionsByCertificateId(Guid certificateId)
         => Ok(await polygonService.GetBlockchainTransactionByCertificateIdAsync(certificateId));
+    
+    [HttpDelete("deleteTransactionByCertificateId/{certificateId}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeletePolygonTransactionCertificateById(Guid certificateId)
+    {
+        await polygonFacade.DeletePolygonTransactionWithMetricsAsync(certificateId);
+        return NoContent();
+    }
 }

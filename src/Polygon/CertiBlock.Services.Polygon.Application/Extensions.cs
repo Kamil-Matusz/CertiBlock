@@ -1,4 +1,6 @@
-﻿using CertiBlock.Services.Polygon.Application.RabbitMQ;
+﻿using CertiBlock.Services.Polygon.Application.Facade;
+using CertiBlock.Services.Polygon.Application.Hangfire;
+using CertiBlock.Services.Polygon.Application.RabbitMQ;
 using CertiBlock.Services.Polygon.Application.Services;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,6 +12,12 @@ public static class Extensions
     {
         // Services
         services.AddServices();
+        
+        // Hangfire
+        services.AddHangfireJobs();
+        
+        // Facade
+        services.AddFacade();
         
         services.AddScoped<MetricPublisher>();
         

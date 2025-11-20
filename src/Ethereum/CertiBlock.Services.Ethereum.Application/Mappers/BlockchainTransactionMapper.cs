@@ -10,6 +10,7 @@ public static class BlockchainTransactionMapper
         Id = transaction.Id,
         CertificateId = transaction.CertificateId,
         CertificateHash = transaction.CertificateHash,
+        TransactionHash = transaction.TransactionHash,
         Issuer = transaction.Issuer
     };
 

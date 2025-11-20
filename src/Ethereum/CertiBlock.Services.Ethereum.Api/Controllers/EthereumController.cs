@@ -1,4 +1,5 @@
-﻿using CertiBlock.Services.Ethereum.Application.Services;
+﻿using CertiBlock.Services.Ethereum.Application.Facade;
+using CertiBlock.Services.Ethereum.Application.Services;
 using CertiBlock.Services.Ethereum.Application.Services.Ethereum;
 using CertiBlock.Services.Ethereum.Core.DTO;
 using CertiBlock.Shared.Enums;
@@ -6,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CertiBlock.Services.Ethereum.Api.Controllers;
 
-public class EthereumController(IEthereumService ethereumService) : BaseController
+public class EthereumController(IEthereumService ethereumService, IEthereumFacade ethereumFacade) : BaseController
 {
     [HttpGet("getEthBalanceByWalletAddress/{walletAddress}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -82,4 +83,15 @@ public class EthereumController(IEthereumService ethereumService) : BaseControll
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<BlockchainTransactionDto>> GetEthereumTransactionsByCertificateId(Guid certificateId)
         => Ok(await ethereumService.GetBlockchainTransactionByCertificateIdAsync(certificateId));
+    
+    [HttpDelete("deleteTransactionByCertificateId/{certificateId}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteEthereumTransactionCertificateById(Guid certificateId)
+    {
+        await ethereumFacade.DeleteEthereumTransactionWithMetricsAsync(certificateId);
+        return NoContent();
+    }
 }

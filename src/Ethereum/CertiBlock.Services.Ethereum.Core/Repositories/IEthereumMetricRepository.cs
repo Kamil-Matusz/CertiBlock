@@ -7,4 +7,5 @@ public interface IEthereumMetricRepository
     Task SaveEthereumMetricsAsync(EthereumMetrics ethereumMetrics);
     Task<EthereumMetrics> GetTransactionMetricsByCertificateAsync(Guid certificateId);
     Task DeleteTransactionMetricsByCertificateIdAsync(Guid certificateId);
+    Task<IEnumerable<Guid>> GetAllCertificateIdsWithMetricsAsync();
 }

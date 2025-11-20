@@ -16,4 +16,7 @@ public interface IEthereumRepository
     Task<IEnumerable<BlockchainTransaction>> GetTransactionsByStatusAsync(params Status[] statuses);
     Task<long> GetTransactionCountAsync();
     Task<BlockchainTransaction?> GetByTransactionHashAsync(string transactionHash);
+    Task DeleteBlockchainTransactionByCertificateIdAsync(Guid certificateId);
+    Task<IEnumerable<Guid>> GetAllCertificateIdsAsync();
+    Task<Dictionary<Guid, string>> GetConfirmedCertificateTransactionsAsync();
 }

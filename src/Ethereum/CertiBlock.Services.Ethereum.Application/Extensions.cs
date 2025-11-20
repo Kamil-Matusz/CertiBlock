@@ -1,4 +1,7 @@
-﻿using CertiBlock.Services.Ethereum.Application.RabbitMQ;
+﻿using CertiBlock.Services.Ethereum.Application.Facade;
+using CertiBlock.Services.Ethereum.Application.Hangfire;
+using CertiBlock.Services.Ethereum.Application.RabbitMQ;
+using CertiBlock.Services.Ethereum.Application.Services;
 using CertiBlock.Services.Ethereum.Application.Services.CoinGecko;
 using CertiBlock.Services.Ethereum.Application.Services.Ethereum;
 using CertiBlock.Services.Ethereum.Application.Services.EthereumMetrics;
@@ -11,9 +14,14 @@ public static class Extensions
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         // Services
-        services.AddScoped<IEthereumService, EthereumService>();
-        services.AddHttpClient<ICoinGeckoService, CoinGeckoService>();
-        services.AddScoped<IEthereumMetricService, EthereumMetricService>();
+        services.AddServices();
+        
+        // Hangfire
+        services.AddHangfireJobs();
+        
+        // Facade
+        services.AddFacade();
+        
         services.AddScoped<MetricPublisher>();
         
         return services;

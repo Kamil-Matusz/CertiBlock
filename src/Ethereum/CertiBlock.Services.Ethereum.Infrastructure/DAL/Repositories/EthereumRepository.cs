@@ -81,4 +81,28 @@ public class EthereumRepository : IEthereumRepository
         var filter = Builders<BlockchainTransaction>.Filter.Eq(x => x.TransactionHash, transactionHash);
         return await _collection.Find(filter).FirstOrDefaultAsync();
     }
+
+    public async Task DeleteBlockchainTransactionByCertificateIdAsync(Guid certificateId)
+    {
+        var filter = Builders<BlockchainTransaction>.Filter.Eq(c => c.CertificateId, certificateId);
+        await _collection.DeleteOneAsync(filter);
+    }
+
+    public async Task<IEnumerable<Guid>> GetAllCertificateIdsAsync()
+    {
+        return await _collection
+            .Distinct(x => x.CertificateId, 
+                Builders<BlockchainTransaction>.Filter.Eq(t => t.Status, Status.Confirmed))
+            .ToListAsync();
+    }
+
+    public async Task<Dictionary<Guid, string>> GetConfirmedCertificateTransactionsAsync()
+    {
+        var results = await _collection
+            .Find(Builders<BlockchainTransaction>.Filter.Eq(t => t.Status, Status.Confirmed))
+            .Project(x => new { x.CertificateId, x.TransactionHash })
+            .ToListAsync();
+    
+        return results.ToDictionary(x => x.CertificateId, x => x.TransactionHash);
+    }
 }

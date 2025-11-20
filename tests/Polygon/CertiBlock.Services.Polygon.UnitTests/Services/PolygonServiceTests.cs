@@ -265,4 +265,50 @@ public class PolygonServiceTests
     }
 
     #endregion
+    
+    #region DeletePolygonTransactionByCertificateIdAsync Tests
+
+    [Fact]
+    public async Task DeletePolygonTransactionByCertificateIdAsync_WithExistingTransaction_ShouldDeleteTransaction()
+    {
+        // Arrange
+        var certificateId = Guid.NewGuid();
+        var transaction = new BlockchainTransaction 
+        { 
+            Id = Guid.NewGuid(),
+            CertificateId = certificateId 
+        };
+
+        _polygonRepositoryMock
+            .Setup(x => x.GetBlockchainTransactionByIdAsync(certificateId))
+            .ReturnsAsync(transaction);
+
+        _polygonRepositoryMock
+            .Setup(x => x.DeleteBlockchainTransactionAsync(certificateId))
+            .Returns(Task.CompletedTask);
+
+        // Act
+        await _polygonService.DeletePolygonTransactionByCertificateIdAsync(certificateId);
+
+        // Assert
+        _polygonRepositoryMock.Verify(x => x.DeleteBlockchainTransactionAsync(certificateId), Times.Once);
+    }
+
+    [Fact]
+    public async Task DeletePolygonTransactionByCertificateIdAsync_WithNonExistingTransaction_ShouldThrowNotFoundException()
+    {
+        // Arrange
+        var certificateId = Guid.NewGuid();
+        _polygonRepositoryMock
+            .Setup(x => x.GetBlockchainTransactionByIdAsync(certificateId))!
+            .ReturnsAsync((BlockchainTransaction)null!);
+
+        // Act & Assert
+        await Should.ThrowAsync<PolygonTransactionsNotFoundException>(
+            () => _polygonService.DeletePolygonTransactionByCertificateIdAsync(certificateId));
+
+        _polygonRepositoryMock.Verify(x => x.DeleteBlockchainTransactionAsync(It.IsAny<Guid>()), Times.Never);
+    }
+
+    #endregion
 }
