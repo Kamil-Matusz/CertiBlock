@@ -9,6 +9,7 @@ public static class Extensions
 {
     public static IServiceCollection AddServices(this IServiceCollection services)
     {
+        services.AddMemoryCache();
         services.AddScoped<IEthereumService, EthereumService>();
         services.AddScoped<IEthereumMetricService, EthereumMetricService>();
         services.AddHttpClient<ICoinGeckoService, CoinGeckoService>();
