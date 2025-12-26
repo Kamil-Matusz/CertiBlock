@@ -115,43 +115,112 @@ export const RegisterPage = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 minHeight: '100vh',
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                padding: 2
+                background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
+                padding: 2,
+                position: 'relative',
+                overflow: 'hidden',
+                '&::before': {
+                    content: '""',
+                    position: 'absolute',
+                    top: '-50%',
+                    left: '-50%',
+                    width: '200%',
+                    height: '200%',
+                    background: 'radial-gradient(circle at 30% 30%, rgba(6, 182, 212, 0.1) 0%, transparent 50%), radial-gradient(circle at 70% 70%, rgba(139, 92, 246, 0.1) 0%, transparent 50%)',
+                    animation: 'rotate 30s linear infinite',
+                    '@keyframes rotate': {
+                        '0%': { transform: 'rotate(0deg)' },
+                        '100%': { transform: 'rotate(360deg)' },
+                    },
+                },
             }}
         >
-            <Card sx={{ maxWidth: 500, width: '100%', borderRadius: 3, boxShadow: 6 }}>
+            <Card
+                sx={{
+                    maxWidth: 480,
+                    width: '100%',
+                    borderRadius: '24px',
+                    boxShadow: '0 25px 50px rgba(0, 0, 0, 0.5), 0 0 100px rgba(6, 182, 212, 0.1)',
+                    backgroundColor: 'rgba(26, 26, 46, 0.95)',
+                    backdropFilter: 'blur(20px)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    position: 'relative',
+                    zIndex: 1,
+                }}
+            >
                 <CardContent sx={{ p: 4 }}>
                     <Box display="flex" flexDirection="column" alignItems="center" mb={3}>
                         <Box
                             sx={{
-                                width: 60,
-                                height: 60,
-                                borderRadius: '50%',
-                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                width: 70,
+                                height: 70,
+                                borderRadius: '20px',
+                                background: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                mb: 2
+                                mb: 2,
+                                boxShadow: '0 10px 30px rgba(6, 182, 212, 0.4)',
+                                animation: 'pulse 2s ease-in-out infinite',
+                                '@keyframes pulse': {
+                                    '0%, 100%': { transform: 'scale(1)' },
+                                    '50%': { transform: 'scale(1.05)' },
+                                },
                             }}
                         >
-                            <PersonAddIcon sx={{ color: 'white', fontSize: 32 }} />
+                            <PersonAddIcon sx={{ color: 'white', fontSize: 36 }} />
                         </Box>
-                        <Typography variant="h4" fontWeight={700} gutterBottom>
+                        <Typography
+                            variant="h4"
+                            sx={{
+                                fontWeight: 700,
+                                background: 'linear-gradient(90deg, #00d4ff, #7c3aed, #f472b6)',
+                                backgroundSize: '200% 200%',
+                                WebkitBackgroundClip: 'text',
+                                WebkitTextFillColor: 'transparent',
+                                backgroundClip: 'text',
+                                animation: 'gradient-shift 3s ease infinite',
+                                '@keyframes gradient-shift': {
+                                    '0%, 100%': { backgroundPosition: '0% 50%' },
+                                    '50%': { backgroundPosition: '100% 50%' },
+                                },
+                            }}
+                        >
                             Create Account
                         </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                            Fill in the details to register
+                        <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.6)', mt: 1 }}>
+                            Join CertiBlock and start securing your certificates
                         </Typography>
                     </Box>
 
                     {error && (
-                        <Alert severity="error" sx={{ mb: 3 }}>
+                        <Alert
+                            severity="error"
+                            sx={{
+                                mb: 3,
+                                borderRadius: '12px',
+                                backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                border: '1px solid rgba(239, 68, 68, 0.3)',
+                                '& .MuiAlert-icon': { color: '#ef4444' },
+                                color: '#fca5a5',
+                            }}
+                        >
                             {error}
                         </Alert>
                     )}
 
                     {success && (
-                        <Alert severity="success" sx={{ mb: 3 }}>
+                        <Alert
+                            severity="success"
+                            sx={{
+                                mb: 3,
+                                borderRadius: '12px',
+                                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                                border: '1px solid rgba(16, 185, 129, 0.3)',
+                                '& .MuiAlert-icon': { color: '#10b981' },
+                                color: '#6ee7b7',
+                            }}
+                        >
                             Registration successful! Redirecting to login...
                         </Alert>
                     )}
@@ -167,6 +236,32 @@ export const RegisterPage = () => {
                             margin="normal"
                             disabled={loading || success}
                             autoComplete="email"
+                            sx={{
+                                '& .MuiOutlinedInput-root': {
+                                    borderRadius: '12px',
+                                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                                    transition: 'all 0.3s ease',
+                                    '&:hover': {
+                                        backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                                    },
+                                    '&.Mui-focused': {
+                                        backgroundColor: 'rgba(6, 182, 212, 0.1)',
+                                        '& .MuiOutlinedInput-notchedOutline': {
+                                            borderColor: '#06b6d4',
+                                            borderWidth: '2px',
+                                        },
+                                    },
+                                },
+                                '& .MuiInputLabel-root': {
+                                    color: 'rgba(255, 255, 255, 0.7)',
+                                },
+                                '& .MuiOutlinedInput-input': {
+                                    color: '#fff',
+                                },
+                                '& .MuiFormHelperText-root': {
+                                    color: 'rgba(255, 255, 255, 0.5)',
+                                },
+                            }}
                         />
 
                         <TextField
@@ -180,6 +275,32 @@ export const RegisterPage = () => {
                             disabled={loading || success}
                             autoComplete="new-password"
                             helperText="Minimum 6 characters"
+                            sx={{
+                                '& .MuiOutlinedInput-root': {
+                                    borderRadius: '12px',
+                                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                                    transition: 'all 0.3s ease',
+                                    '&:hover': {
+                                        backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                                    },
+                                    '&.Mui-focused': {
+                                        backgroundColor: 'rgba(6, 182, 212, 0.1)',
+                                        '& .MuiOutlinedInput-notchedOutline': {
+                                            borderColor: '#06b6d4',
+                                            borderWidth: '2px',
+                                        },
+                                    },
+                                },
+                                '& .MuiInputLabel-root': {
+                                    color: 'rgba(255, 255, 255, 0.7)',
+                                },
+                                '& .MuiOutlinedInput-input': {
+                                    color: '#fff',
+                                },
+                                '& .MuiFormHelperText-root': {
+                                    color: 'rgba(255, 255, 255, 0.5)',
+                                },
+                            }}
                         />
 
                         <TextField
@@ -192,6 +313,29 @@ export const RegisterPage = () => {
                             margin="normal"
                             disabled={loading || success}
                             autoComplete="new-password"
+                            sx={{
+                                '& .MuiOutlinedInput-root': {
+                                    borderRadius: '12px',
+                                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                                    transition: 'all 0.3s ease',
+                                    '&:hover': {
+                                        backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                                    },
+                                    '&.Mui-focused': {
+                                        backgroundColor: 'rgba(6, 182, 212, 0.1)',
+                                        '& .MuiOutlinedInput-notchedOutline': {
+                                            borderColor: '#06b6d4',
+                                            borderWidth: '2px',
+                                        },
+                                    },
+                                },
+                                '& .MuiInputLabel-root': {
+                                    color: 'rgba(255, 255, 255, 0.7)',
+                                },
+                                '& .MuiOutlinedInput-input': {
+                                    color: '#fff',
+                                },
+                            }}
                         />
 
                         <TextField
@@ -202,6 +346,32 @@ export const RegisterPage = () => {
                             onChange={handleChange('role')}
                             margin="normal"
                             disabled={loading || success}
+                            sx={{
+                                '& .MuiOutlinedInput-root': {
+                                    borderRadius: '12px',
+                                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                                    transition: 'all 0.3s ease',
+                                    '&:hover': {
+                                        backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                                    },
+                                    '&.Mui-focused': {
+                                        backgroundColor: 'rgba(6, 182, 212, 0.1)',
+                                        '& .MuiOutlinedInput-notchedOutline': {
+                                            borderColor: '#06b6d4',
+                                            borderWidth: '2px',
+                                        },
+                                    },
+                                },
+                                '& .MuiInputLabel-root': {
+                                    color: 'rgba(255, 255, 255, 0.7)',
+                                },
+                                '& .MuiOutlinedInput-input': {
+                                    color: '#fff',
+                                },
+                                '& .MuiSelect-icon': {
+                                    color: 'rgba(255, 255, 255, 0.7)',
+                                },
+                            }}
                         >
                             <MenuItem value="User">User</MenuItem>
                             <MenuItem value="Admin">Admin</MenuItem>
@@ -213,10 +383,22 @@ export const RegisterPage = () => {
                                     checked={formData.isActive}
                                     onChange={handleCheckboxChange}
                                     disabled={loading || success}
+                                    sx={{
+                                        color: 'rgba(255, 255, 255, 0.5)',
+                                        '&.Mui-checked': {
+                                            color: '#06b6d4',
+                                        },
+                                    }}
                                 />
                             }
                             label="Active Account"
-                            sx={{ mt: 2, mb: 2 }}
+                            sx={{
+                                mt: 2,
+                                mb: 2,
+                                '& .MuiFormControlLabel-label': {
+                                    color: 'rgba(255, 255, 255, 0.7)',
+                                },
+                            }}
                         />
 
                         <Button
@@ -228,18 +410,30 @@ export const RegisterPage = () => {
                             sx={{
                                 mt: 2,
                                 py: 1.5,
-                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                borderRadius: '12px',
+                                fontSize: '1rem',
+                                fontWeight: 600,
+                                textTransform: 'none',
+                                background: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)',
+                                boxShadow: '0 4px 20px rgba(6, 182, 212, 0.4)',
+                                transition: 'all 0.3s ease',
                                 '&:hover': {
-                                    background: 'linear-gradient(135deg, #5568d3 0%, #63407a 100%)',
-                                }
+                                    background: 'linear-gradient(135deg, #0891b2 0%, #0e7490 100%)',
+                                    transform: 'translateY(-2px)',
+                                    boxShadow: '0 6px 25px rgba(6, 182, 212, 0.6)',
+                                },
+                                '&:disabled': {
+                                    background: 'rgba(255, 255, 255, 0.1)',
+                                    color: 'rgba(255, 255, 255, 0.3)',
+                                },
                             }}
                         >
-                            {loading ? 'Registering...' : 'Register'}
+                            {loading ? 'Creating Account...' : 'Create Account'}
                         </Button>
                     </form>
 
                     <Box mt={3} textAlign="center">
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.6)' }}>
                             Already have an account?{' '}
                             <Link
                                 component="button"
@@ -248,8 +442,13 @@ export const RegisterPage = () => {
                                 sx={{
                                     cursor: 'pointer',
                                     fontWeight: 600,
+                                    color: '#06b6d4',
                                     textDecoration: 'none',
-                                    '&:hover': { textDecoration: 'underline' }
+                                    transition: 'all 0.3s ease',
+                                    '&:hover': {
+                                        color: '#22d3ee',
+                                        textDecoration: 'underline'
+                                    }
                                 }}
                             >
                                 Sign In
