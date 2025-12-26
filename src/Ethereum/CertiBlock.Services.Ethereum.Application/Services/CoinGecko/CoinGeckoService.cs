@@ -6,11 +6,8 @@ using Microsoft.Extensions.Options;
 
 namespace CertiBlock.Services.Ethereum.Application.Services.CoinGecko;
 
-public class CoinGeckoService(
-    HttpClient httpClient, 
-    IMemoryCache memoryCache, 
-    ILogger<CoinGeckoService> logger, 
-    IOptions<CoinGeckoOptions> options) : ICoinGeckoService, IDisposable
+public class CoinGeckoService(HttpClient httpClient, IMemoryCache memoryCache, ILogger<CoinGeckoService> logger, IOptions<CoinGeckoOptions> options) 
+    : ICoinGeckoService, IDisposable
 {
     private readonly CoinGeckoOptions _options = options.Value;
     private readonly TimeSpan _cacheExpiry = TimeSpan.FromMinutes(options.Value.CacheExpiryMinutes);
