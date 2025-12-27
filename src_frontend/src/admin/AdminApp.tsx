@@ -8,6 +8,7 @@ import { PolygonTransactionList } from './components/Polygon/PolygonTransactionL
 import { WalletBalanceChecker } from './components/Wallets/WalletBalanceChecker';
 import { CustomLoginPage } from './components/Auth/CustomLoginPage';
 import { WalletDashboard } from './components/Wallets/WalletDashboard';
+import { CustomLayout } from './components/Layout/CustomLayout';
 import CardMembershipIcon from '@mui/icons-material/CardMembership';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
@@ -16,9 +17,10 @@ import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 export default function AdminApp() {
     return (
         <Admin basename="/admin"
-               dataProvider={dataProvider}
-               authProvider={authProvider}
-               loginPage={CustomLoginPage}
+            dataProvider={dataProvider}
+            authProvider={authProvider}
+            loginPage={CustomLoginPage}
+            layout={CustomLayout}
         >
             <Resource
                 name="certificates"
