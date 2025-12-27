@@ -1,4 +1,4 @@
-import { AppBar, TitlePortal, UserMenu, Logout } from 'react-admin';
+import { AppBar, TitlePortal } from 'react-admin';
 import { Link } from 'react-router-dom';
 import { Box, Button } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
@@ -26,8 +26,5 @@ export const CustomAppBar = () => (
         >
             Create Certificate
         </Button>
-        <UserMenu>
-            <Logout />
-        </UserMenu>
     </AppBar>
 );
