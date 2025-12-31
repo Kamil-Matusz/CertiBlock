@@ -216,30 +216,33 @@ const MetricsModal = ({ open, onClose, certificateId }: MetricsModalProps) => {
                             </Typography>
                             <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" gap={2}>
                                 <Box>
-                                    <Typography variant="caption" color="text.secondary" display="block" mb={0.5}>
+                                    <Typography variant="body2" sx={{ color: '#374151', fontWeight: 600, mb: 1 }}>
                                         Blockchain
                                     </Typography>
                                     <Chip label={metrics.blockchain} color="primary" size="small" sx={{ fontWeight: 600 }} />
                                 </Box>
                                 <Box>
-                                    <Typography variant="caption" color="text.secondary" display="block" mb={0.5}>
+                                    <Typography variant="body2" sx={{ color: '#374151', fontWeight: 600, mb: 1 }}>
                                         Operation
                                     </Typography>
                                     <Chip label={metrics.operation} color="secondary" size="small" sx={{ fontWeight: 600 }} />
                                 </Box>
                                 <Box gridColumn="1 / -1">
-                                    <Typography variant="caption" color="text.secondary" display="block" mb={0.5}>
+                                    <Typography variant="body2" sx={{ color: '#374151', fontWeight: 600, mb: 1 }}>
                                         Transaction Hash
                                     </Typography>
                                     <Box
                                         sx={{
                                             fontFamily: 'monospace',
-                                            backgroundColor: '#f3f4f6',
-                                            padding: 1.5,
+                                            backgroundColor: '#1e293b',
+                                            padding: 2,
                                             borderRadius: '8px',
                                             wordBreak: 'break-all',
-                                            fontSize: '0.85rem',
-                                            border: '1px solid #e5e7eb'
+                                            fontSize: '0.9rem',
+                                            color: '#a78bfa',
+                                            border: '1px solid #334155',
+                                            fontWeight: 500,
+                                            letterSpacing: '0.025em'
                                         }}
                                     >
                                         {metrics.transactionHash}

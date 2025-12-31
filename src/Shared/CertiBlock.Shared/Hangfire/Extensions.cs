@@ -38,7 +38,7 @@ public static class Extensions
     {
         app.UseHangfireDashboard("/hangfire", new DashboardOptions
         {
-            Authorization = Array.Empty<IDashboardAuthorizationFilter>()
+            Authorization = []
         });
 
         return app;

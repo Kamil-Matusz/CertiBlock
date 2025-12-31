@@ -1,11 +1,14 @@
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from "react-router-dom";
 import AdminApp from "./admin/AdminApp";
 import { RegisterPage } from "./admin/components/Auth/RegisterPage";
 import { CertificateCreateForm } from "./components/Certificates/CertificateCreateForm";
 import { useEffect, useState } from "react";
+import "./App.css";
 
-function App() {
+function AppContent() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const location = useLocation();
+    const isAdminRoute = location.pathname.startsWith('/admin');
 
     useEffect(() => {
         const checkAuth = () => {
@@ -26,52 +29,77 @@ function App() {
         window.location.href = '/';
     };
 
-    return (
-        <Router>
-            <div style={{ padding: 20 }}>
-                <h1>CertiBlock Frontend</h1>
-                <nav>
-                    <Link to="/">Home</Link>
-                    {' | '}
-
-                    {!isLoggedIn && (
-                        <>
-                            <Link to="/admin">Login</Link>
-                            {' | '}
-                            <Link to="/register">Register</Link>
-                        </>
-                    )}
-
-                    {isLoggedIn && (
-                        <>
-                            <Link to="/admin">Admin Panel</Link>
-                            {' | '}
-                            <Link to="/certificates/create">Create Certificate</Link>
-                            {' | '}
-                            <button
-                                onClick={handleLogout}
-                                style={{
-                                    cursor: 'pointer',
-                                    background: 'none',
-                                    border: 'none',
-                                    color: 'blue',
-                                    fontSize: 'inherit',
-                                    padding: 0
-                                }}
-                            >
-                                Logout
-                            </button>
-                        </>
-                    )}
-                </nav>
-            </div>
-
+    // On admin routes, don't show custom header - it's handled by CustomLayout in AdminApp
+    if (isAdminRoute) {
+        return (
             <Routes>
-                <Route path="/" element={<div>Welcome to CertiBlock</div>} />
-                <Route path="/register" element={<RegisterPage />} />
-                <Route path="/certificates/create" element={<CertificateCreateForm />} />
                 <Route path="/admin/*" element={<AdminApp />} />
             </Routes>
+        );
+    }
+
+    return (
+        <>
+            <header className="app-header">
+                <div className="header-content">
+                    <h1 className="app-title">
+                        <span className="title-icon">🔗</span>
+                        CertiBlock
+                    </h1>
+                    <nav className="main-nav">
+                        <Link to="/" className="nav-btn nav-btn-home">
+                            <span className="nav-icon">🏠</span>
+                            Home
+                        </Link>
+
+                        {!isLoggedIn && (
+                            <>
+                                <Link to="/admin" className="nav-btn nav-btn-login">
+                                    <span className="nav-icon">🔐</span>
+                                    Login
+                                </Link>
+                                <Link to="/register" className="nav-btn nav-btn-register">
+                                    <span className="nav-icon">✨</span>
+                                    Register
+                                </Link>
+                            </>
+                        )}
+
+                        {isLoggedIn && (
+                            <>
+                                <Link to="/admin" className="nav-btn nav-btn-admin">
+                                    <span className="nav-icon">⚙️</span>
+                                    Admin Panel
+                                </Link>
+                                <Link to="/certificates/create" className="nav-btn nav-btn-create">
+                                    <span className="nav-icon">📜</span>
+                                    Create Certificate
+                                </Link>
+                                <button onClick={handleLogout} className="nav-btn nav-btn-logout">
+                                    <span className="nav-icon">🚪</span>
+                                    Logout
+                                </button>
+                            </>
+                        )}
+                    </nav>
+                </div>
+            </header>
+
+            <main className="app-main">
+                <Routes>
+                    <Route path="/" element={<div>Welcome to CertiBlock</div>} />
+                    <Route path="/register" element={<RegisterPage />} />
+                    <Route path="/certificates/create" element={<CertificateCreateForm />} />
+                </Routes>
+            </main>
+        </>
+    );
+}
+
+function App() {
+    return (
+        <Router>
+            <AppContent />
         </Router>
     );
 }

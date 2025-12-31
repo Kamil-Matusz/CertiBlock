@@ -13,7 +13,8 @@ public static class Extensions
         {
             options.AddDefaultPolicy(builder =>
             {
-                builder.AllowAnyOrigin()
+                builder
+                    .AllowAnyOrigin()
                     .AllowAnyMethod()
                     .AllowAnyHeader();
             });

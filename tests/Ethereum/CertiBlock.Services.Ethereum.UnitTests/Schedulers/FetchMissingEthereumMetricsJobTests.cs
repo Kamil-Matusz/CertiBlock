@@ -110,7 +110,7 @@ public class FetchMissingEthereumMetricsJobTests
 
         _ethereumMetricRepositoryMock
             .Setup(x => x.GetAllCertificateIdsWithMetricsAsync())
-            .ReturnsAsync(Array.Empty<Guid>());
+            .ReturnsAsync([]);
 
         _ethereumMetricServiceMock
             .SetupSequence(x => x.CollectMetricsAsync(It.IsAny<Guid>(), It.IsAny<string>()))
@@ -143,7 +143,7 @@ public class FetchMissingEthereumMetricsJobTests
 
         _ethereumMetricRepositoryMock
             .Setup(x => x.GetAllCertificateIdsWithMetricsAsync())
-            .ReturnsAsync(Array.Empty<Guid>());
+            .ReturnsAsync([]);
 
         _ethereumMetricServiceMock
             .Setup(x => x.CollectMetricsAsync(cert, tx))
