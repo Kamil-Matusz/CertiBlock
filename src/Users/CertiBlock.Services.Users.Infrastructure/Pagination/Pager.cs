@@ -2,90 +2,85 @@
 
 public class Pager
 {
-    private int pageIndex;
-    private int pageSize;
-    private int totalRows;
+    private int _pageIndex = 1;
+    private int _pageSize = 20;
+    private int _totalRows;
+    private int? _cachedTotalPages;
 
-    public virtual int PageIndex
+    public int PageIndex
     {
-        get
-        {
-            if (pageIndex < TotalPages)
-            {
-                return pageIndex;
-            }
-            else if (TotalPages > 0)
-            {
-                return TotalPages;
-            }
-            else
-            {
-                return 1;
-            }
-        }
+        get => Math.Min(_pageIndex, Math.Max(TotalPages, 1));
         set
         {
-            pageIndex = value > 0 ? value : 1;
+            var newValue = Math.Max(value, 1);
+            if (_pageIndex != newValue)
+            {
+                _pageIndex = newValue;
+            }
         }
     }
 
-    public virtual int PageSize
+    public int PageSize
     {
-        get
-        {
-            return pageSize;
-        }
+        get => _pageSize;
         set
         {
-            pageSize = value > 0 ? value : 1;
+            var newValue = Math.Max(value, 1);
+            if (_pageSize != newValue)
+            {
+                _pageSize = newValue;
+                _cachedTotalPages = null; // Invalidate cache
+            }
         }
     }
 
-    public virtual int TotalRows
+    public int TotalRows
     {
-        get
-        {
-            return totalRows;
-        }
+        get => _totalRows;
         set
         {
-            totalRows = value > 0 ? value : 0;
+            var newValue = Math.Max(value, 0);
+            if (_totalRows != newValue)
+            {
+                _totalRows = newValue;
+                _cachedTotalPages = null; // Invalidate cache
+            }
         }
     }
 
-    public virtual int TotalPages
+    public int TotalPages
     {
         get
         {
-            if (PageSize > 0)
-                return Convert.ToInt32(Math.Ceiling((double)TotalRows / PageSize));
-            else
+            if (_cachedTotalPages.HasValue)
+                return _cachedTotalPages.Value;
+
+            if (_pageSize == 0)
+            {
+                _cachedTotalPages = 0;
                 return 0;
+            }
+
+            _cachedTotalPages = (int)Math.Ceiling((double)_totalRows / _pageSize);
+            return _cachedTotalPages.Value;
         }
     }
 
-    public virtual int Offset
-    {
-        get
-        {
-            return (PageIndex - 1) * PageSize;
-        }
-    }
+    public int Offset => (_pageIndex - 1) * _pageSize;
 
-    public Pager() : this(1, 20)
-    {
-    }
+    public Pager() { }
 
     public Pager(Pager pager)
     {
-        totalRows = pager.totalRows;
-        pageIndex = pager.pageIndex;
-        pageSize = pager.pageSize;
+        _totalRows = pager._totalRows;
+        _pageIndex = pager._pageIndex;
+        _pageSize = pager._pageSize;
+        _cachedTotalPages = pager._cachedTotalPages;
     }
 
     public Pager(int pageIndex, int pageSize = 20)
     {
-        TotalRows = Int32.MaxValue;
+        TotalRows = int.MaxValue;
         PageIndex = pageIndex;
         PageSize = pageSize;
     }
