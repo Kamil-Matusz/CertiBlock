@@ -1,5 +1,5 @@
 ﻿import { useState, useEffect } from 'react';
-import { API_URL } from '../../../config.ts';
+import { apiEndpoints } from '../../../config.ts';
 import {
     List,
     Datagrid,
@@ -26,8 +26,6 @@ import {
     TrendingUp as TrendingUpIcon,
     Delete as DeleteIcon
 } from '@mui/icons-material';
-
-const apiUrl = API_URL;
 
 interface EthereumMetrics {
     id: string;
@@ -97,7 +95,7 @@ const MetricsModal = ({ open, onClose, certificateId }: MetricsModalProps) => {
 
             try {
                 const response = await fetch(
-                    `${apiUrl}/ethereum-service/EthereumMetrics/getEthereumTransactionMetricsByCertificateId/${certificateId}`
+                    apiEndpoints.ethereum(`../EthereumMetrics/getEthereumTransactionMetricsByCertificateId/${certificateId}`)
                 );
 
                 if (!response.ok) throw new Error('Failed to fetch metrics');
@@ -315,7 +313,7 @@ const CustomDeleteButton = ({ record }: CustomDeleteButtonProps) => {
         try {
             const token = localStorage.getItem('token');
             const response = await fetch(
-                `${apiUrl}/ethereum-service/Ethereum/deleteTransactionByCertificateId/${record.certificateId}`,
+                apiEndpoints.ethereum(`deleteTransactionByCertificateId/${record.certificateId}`),
                 {
                     method: 'DELETE',
                     headers: {

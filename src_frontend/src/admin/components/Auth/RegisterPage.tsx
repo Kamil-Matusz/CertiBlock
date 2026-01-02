@@ -16,8 +16,6 @@ import {
 import { PersonAdd as PersonAddIcon } from '@mui/icons-material';
 import { API_URL } from '../../../config.ts';
 
-const apiUrl = API_URL;
-
 export const RegisterPage = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
@@ -73,7 +71,7 @@ export const RegisterPage = () => {
         setError('');
 
         try {
-            const response = await fetch(`${apiUrl}/users-service/Users/signUp`, {
+            const response = await fetch(`${API_URL}/users-service/Users/signUp`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

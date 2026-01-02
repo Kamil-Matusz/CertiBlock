@@ -12,9 +12,7 @@ import {
     Snackbar
 } from '@mui/material';
 import { SaveOutlined, ArrowBack } from '@mui/icons-material';
-import { API_URL } from '../../config.ts';
-
-const apiUrl = API_URL;
+import { apiEndpoints } from '../../config.ts';
 
 export const CertificateCreateForm = () => {
     const navigate = useNavigate();
@@ -109,7 +107,7 @@ export const CertificateCreateForm = () => {
                 return;
             }
 
-            const response = await fetch(`${apiUrl}/certificate-service/Certificates`, {
+            const response = await fetch(apiEndpoints.certificate(''), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

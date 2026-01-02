@@ -12,7 +12,7 @@ import {
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { IconButton } from '@mui/material';
-import { API_URL } from '../../../config.ts';
+import { apiEndpoints } from '../../../config.ts';
 
 interface WalletBalance {
     address: string;
@@ -49,12 +49,14 @@ const WalletCard = ({ wallet }: { wallet: WalletConfig }) => {
         setError(null);
 
         try {
-            const service = wallet.blockchain === 'Ethereum'
-                ? 'ethereum-service/Ethereum/getEthBalanceByWalletAddress'
-                : 'polygon-service/Polygon/getMaticBalanceByWalletAddress';
+            const endpoint = wallet.blockchain === 'Ethereum'
+                ? `getEthBalanceByWalletAddress/${wallet.address}`
+                : `getMaticBalanceByWalletAddress/${wallet.address}`;
 
             const response = await fetch(
-                `${API_URL}/${service}/${wallet.address}`
+                wallet.blockchain === 'Ethereum'
+                    ? apiEndpoints.ethereum(endpoint)
+                    : apiEndpoints.polygon(endpoint)
             );
 
             if (!response.ok) {

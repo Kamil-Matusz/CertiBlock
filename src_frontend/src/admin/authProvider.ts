@@ -1,8 +1,6 @@
 ﻿import type { AuthProvider } from 'react-admin';
 import { API_URL } from '../config.ts';
 
-const apiUrl = API_URL;
-
 const decodeJWT = (token: string) => {
     try {
         const base64Url = token.split('.')[1];
@@ -22,7 +20,7 @@ const decodeJWT = (token: string) => {
 export const authProvider: AuthProvider = {
     login: async ({ username, password }) => {
         try {
-            const response = await fetch(`${apiUrl}/users-service/Users/signIn`, {
+            const response = await fetch(`${API_URL}/users-service/Users/signIn`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

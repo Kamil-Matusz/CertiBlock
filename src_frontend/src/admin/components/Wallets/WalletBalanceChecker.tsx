@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import SearchIcon from '@mui/icons-material/Search';
-import { API_URL } from '../../../config.ts';
+import { apiEndpoints } from '../../../config.ts';
 
 interface WalletBalance {
     address: string;
@@ -56,7 +56,7 @@ export const WalletBalanceChecker = () => {
 
         try {
             const response = await fetch(
-                `${API_URL}/ethereum-service/Ethereum/getEthBalanceByWalletAddress/${ethAddress}`
+                apiEndpoints.ethereum(`getEthBalanceByWalletAddress/${ethAddress}`)
             );
 
             if (!response.ok) {
@@ -83,7 +83,7 @@ export const WalletBalanceChecker = () => {
 
         try {
             const response = await fetch(
-                `${API_URL}/polygon-service/Polygon/getPolygonBalanceByWalletAddress/${polygonAddress}`
+                apiEndpoints.polygon(`getPolygonBalanceByWalletAddress/${polygonAddress}`)
             );
 
             if (!response.ok) {

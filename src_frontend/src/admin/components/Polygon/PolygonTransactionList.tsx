@@ -1,5 +1,5 @@
 ﻿import { useState, useEffect } from 'react';
-import { API_URL } from '../../../config.ts';
+import { apiEndpoints } from '../../../config.ts';
 import {
     List,
     Datagrid,
@@ -27,7 +27,7 @@ import {
     Delete as DeleteIcon
 } from '@mui/icons-material';
 
-const apiUrl = API_URL;
+
 
 interface PolygonMetrics {
     id: string;
@@ -97,7 +97,7 @@ const MetricsModal = ({ open, onClose, certificateId }: MetricsModalProps) => {
 
             try {
                 const response = await fetch(
-                    `${apiUrl}/polygon-service/PolygonMetrics/getPolygonTransactionMetricsByCertificateId/${certificateId}`
+                    apiEndpoints.polygon(`../PolygonMetrics/getPolygonTransactionMetricsByCertificateId/${certificateId}`)
                 );
 
                 if (!response.ok) throw new Error('Failed to fetch metrics');
@@ -315,7 +315,7 @@ const CustomDeleteButton = ({ record }: CustomDeleteButtonProps) => {
         try {
             const token = localStorage.getItem('token');
             const response = await fetch(
-                `${apiUrl}/polygon-service/Polygon/deleteTransactionByCertificateId/${record.certificateId}`,
+                apiEndpoints.polygon(`deleteTransactionByCertificateId/${record.certificateId}`),
                 {
                     method: 'DELETE',
                     headers: {
