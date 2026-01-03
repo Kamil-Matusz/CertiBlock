@@ -8,7 +8,7 @@ public static class Extensions
 {
     private const string RabbitSectionName = "RabbitMq";
 
-    public static IServiceCollection AddRabbitMq(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddRabbitMq(this IServiceCollection services, IConfiguration configuration, bool addHealthCheck = true)
     {
         var section = configuration.GetSection(RabbitSectionName);
         services.Configure<RabbitMqOptions>(section);
@@ -31,6 +31,14 @@ public static class Extensions
 
             return factory.CreateConnection();
         });
+
+        // Add health check for RabbitMQ if enabled
+        if (addHealthCheck)
+        {
+            var rabbitConnectionString = $"amqp://{options.Username}:{options.Password}@{options.HostName}:{options.Port}{options.VirtualHost}";
+            services.AddHealthChecks()
+                .AddRabbitMQ(rabbitConnectionString, name: "rabbitmq", tags: new[] { "rabbitmq", "messaging" });
+        }
 
         return services;
     }
