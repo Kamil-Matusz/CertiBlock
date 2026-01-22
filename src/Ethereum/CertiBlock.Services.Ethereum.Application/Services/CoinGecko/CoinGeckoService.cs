@@ -78,9 +78,7 @@ public class CoinGeckoService(HttpClient httpClient, IMemoryCache memoryCache, I
                 return price;
             }
 
-            logger.LogWarning(
-                "Asset {AssetId} not found or has invalid price in CoinGecko response. Using fallback", 
-                assetId);
+            logger.LogWarning("Asset {AssetId} not found or has invalid price in CoinGecko response. Using fallback", assetId);
             CacheFallbackPrice(cacheKey);
         }
         catch (HttpRequestException ex)

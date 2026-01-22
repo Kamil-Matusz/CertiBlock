@@ -11,8 +11,6 @@
       <PackageReference Include="Hangfire.AspNetCore" Version="1.8.22" />
       <PackageReference Include="Hangfire.Mongo" Version="1.12.1" />
       <PackageReference Include="InfluxDB.Client" Version="4.15.0" />
-      <PackageReference Include="MassTransit.AspNetCore" Version="7.3.1" />
-      <PackageReference Include="MassTransit.RabbitMQ" Version="7.3.1" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.6" />
       <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.6" />
       <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.6" />

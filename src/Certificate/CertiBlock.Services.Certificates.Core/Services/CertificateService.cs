@@ -10,7 +10,6 @@ using CertiBlock.Services.Certificates.Core.Events;
 using CertiBlock.Services.Certificates.Core.Exceptions;
 using CertiBlock.Services.Certificates.Core.Mappers;
 using CertiBlock.Shared.DTO;
-using MassTransit;
 using Microsoft.Extensions.Logging;
 
 namespace CertiBlock.Services.Certificates.Core.Services;
