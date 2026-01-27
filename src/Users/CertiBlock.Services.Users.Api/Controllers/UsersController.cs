@@ -8,15 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CertiBlock.Services.Users.Api.Controllers;
 
-public class UsersController(
-    ICommandHandler<SignUp> signUpHandler,
-    ICommandHandler<SignIn> signInHandler,
-    ICommandHandler<DeleteUserAccount> deleteAccountHandler,
-    ICommandHandler<ChangeUserRole> changeUserRoleHandler,
-    IQueryHandler<GetAccountInfo, AccountDto> getAccountInfo,
-    IQueryHandler<GetAllUsers, IEnumerable<UserDto>> getAllUsersHandler,
-    ICommandHandler<ChangeUserPassword> changeUserPasswordHandler,
-    ITokenStorage tokenStorage) : BaseController
+public class UsersController(ICommandHandler<SignUp> signUpHandler, ICommandHandler<SignIn> signInHandler,
+    ICommandHandler<DeleteUserAccount> deleteAccountHandler, ICommandHandler<ChangeUserRole> changeUserRoleHandler,
+    IQueryHandler<GetAccountInfo, AccountDto> getAccountInfo, IQueryHandler<GetAllUsers, IEnumerable<UserDto>> getAllUsersHandler,
+    ICommandHandler<ChangeUserPassword> changeUserPasswordHandler, ITokenStorage tokenStorage) : BaseController
 {
     [HttpPost("signUp")]
     [ProducesResponseType(StatusCodes.Status201Created)]
@@ -49,7 +44,6 @@ public class UsersController(
     public async Task<ActionResult<AccountDto>> GetUser(Guid userId)
     {
         var user = await getAccountInfo.HandlerAsync(new GetAccountInfo() {UserId = userId});
-
         return Ok(user);
     }
     
