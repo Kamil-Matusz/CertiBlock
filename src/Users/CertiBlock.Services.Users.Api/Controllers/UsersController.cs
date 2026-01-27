@@ -49,10 +49,6 @@ public class UsersController(
     public async Task<ActionResult<AccountDto>> GetUser(Guid userId)
     {
         var user = await getAccountInfo.HandlerAsync(new GetAccountInfo() {UserId = userId});
-        if (user is null)
-        {
-            return NotFound();
-        }
 
         return Ok(user);
     }
@@ -70,12 +66,7 @@ public class UsersController(
         }
         
         var userId = Guid.Parse(User.Identity?.Name);
-        
         var user = await getAccountInfo.HandlerAsync(new GetAccountInfo() {UserId = userId});
-        if (user is null)
-        {
-            return NotFound();
-        }
 
         return Ok(user);
     }

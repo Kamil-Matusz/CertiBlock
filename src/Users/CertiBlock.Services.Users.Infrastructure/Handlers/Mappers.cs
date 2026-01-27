@@ -16,8 +16,7 @@ public static class Mappers
         };
     
     public static UserDto AsUsersDto(this User entity)
-    {
-        return new UserDto
+        => new()
         {
             UserId = entity.UserId,
             Email = entity.Email,
@@ -25,5 +24,4 @@ public static class Mappers
             IsActive = entity.IsActive,
             CreatedAt = entity.CreatedAt
         };
-    }
 }

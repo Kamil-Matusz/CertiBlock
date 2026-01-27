@@ -40,12 +40,7 @@ public class CertificateService(
         };
         
         await certificateRepository.SaveCertificateAsync(entity);
-        
-        var certificateRegistered = new CertificateRegistered(
-            entity.Id,
-            certificateHash,
-            request.IssuedBy,
-            request.Blockchain);
+        var certificateRegistered = new CertificateRegistered(entity.Id, certificateHash, request.IssuedBy, request.Blockchain);
         
         try
         {
