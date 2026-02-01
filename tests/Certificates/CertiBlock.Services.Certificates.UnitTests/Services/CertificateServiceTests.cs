@@ -6,7 +6,6 @@ using CertiBlock.Services.Certificates.Core.Entities;
 using CertiBlock.Services.Certificates.Core.Exceptions;
 using CertiBlock.Services.Certificates.Core.Services;
 using CertiBlock.Shared.Enums;
-using MassTransit;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Shouldly;
