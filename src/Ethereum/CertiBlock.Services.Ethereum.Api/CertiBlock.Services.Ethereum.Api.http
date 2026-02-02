@@ -1,0 +1,167 @@
+@CertiBlock.Services.Ethereum.Api_HostAddress = http://localhost:5055
+
+@walletAddress = 0x742d35Cc6634C0532925a3b8D6AC6d08C85F3d1b
+@testWalletAddress = 0x8ba1f109551bD432803012645Hac136c30BF
+@transactionHash = 0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef
+@transactionId = 3fa85f64-5717-4562-b3fc-2c963f66afa6
+@certificateId = 36bc8881-a786-432f-b5de-bca03f8193ba
+@pageIndex = 0
+@pageSize = 10
+
+### 1. Get ETH Balance by Wallet Address - Sprawdzenie salda portfela
+GET {{CertiBlock.Services.Ethereum.Api_HostAddress}}/ethereum-service/Ethereum/getEthBalanceByWalletAddress/{{walletAddress}}
+Accept: application/json
+
+### 2. Get ETH Balance - Przykładowy portfel Ethereum
+GET {{CertiBlock.Services.Ethereum.Api_HostAddress}}/ethereum-service/Ethereum/getEthBalanceByWalletAddress/{{testWalletAddress}}
+Accept: application/json
+
+### 3. Get ETH Balance - Vitalik's wallet (przykład znanego adresu)
+GET {{CertiBlock.Services.Ethereum.Api_HostAddress}}/ethereum-service/Ethereum/getEthBalanceByWalletAddress/0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045
+Accept: application/json
+
+### 4. Register Certificate on Blockchain - Rejestracja certyfikatu
+POST {{CertiBlock.Services.Ethereum.Api_HostAddress}}/ethereum-service/Ethereum/registerCertificate
+Content-Type: application/json
+Accept: application/json
+
+{
+  "id": "{{transactionId}}",
+  "certificateId": "{{certificateId}}",
+  "certificateHash": "0x1a2b3c4d5e6f7890abcdef1234567890abcdef1234567890abcdef1234567890",
+  "issuer": "Uniwersytet Techniczny Warszawa"
+}
+
+### 5. Register Certificate - Drugi przykład
+POST {{CertiBlock.Services.Ethereum.Api_HostAddress}}/ethereum-service/Ethereum/registerCertificate
+Content-Type: application/json
+Accept: application/json
+
+{
+  "id": "123e4567-e89b-12d3-a456-426614174000",
+  "certificateId": "456e7890-e89b-12d3-a456-426614174111",
+  "certificateHash": "0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890ab",
+  "issuer": "Tech Academy Poland"
+}
+
+### 6. Get Transaction Status by Hash - Status transakcji po hash
+GET {{CertiBlock.Services.Ethereum.Api_HostAddress}}/ethereum-service/Ethereum/getEthereumTransactionStatus/{{transactionHash}}
+Accept: application/json
+
+### 7. Get Transaction Status - Przykładowy hash transakcji
+GET {{CertiBlock.Services.Ethereum.Api_HostAddress}}/ethereum-service/Ethereum/getEthereumTransactionStatus/0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890ab
+Accept: application/json
+
+### 8. Get Transactions by Status - Transakcje potwierdzone
+GET {{CertiBlock.Services.Ethereum.Api_HostAddress}}/ethereum-service/Ethereum/getEthereumTransactionByStatus/Confirmed
+Accept: application/json
+
+### 9. Get Transactions by Status - Transakcje wysłane
+GET {{CertiBlock.Services.Ethereum.Api_HostAddress}}/ethereum-service/Ethereum/getEthereumTransactionByStatus/Submitted
+Accept: application/json
+
+### 10. Get Transactions by Status - Transakcje nieudane
+GET {{CertiBlock.Services.Ethereum.Api_HostAddress}}/ethereum-service/Ethereum/getEthereumTransactionByStatus/Failed
+Accept: application/json
+
+### 11. Get Transactions by Status Filter - Filtr po wielu statusach
+GET {{CertiBlock.Services.Ethereum.Api_HostAddress}}/ethereum-service/Ethereum/getEthereumTransactionByStatusFilter?statuses=Confirmed&statuses=Submitted
+Accept: application/json
+
+### 12. Get Transactions by Status Filter - Tylko potwierdzone i nieudane
+GET {{CertiBlock.Services.Ethereum.Api_HostAddress}}/ethereum-service/Ethereum/getEthereumTransactionByStatusFilter?statuses=Confirmed&statuses=Failed
+Accept: application/json
+
+### 13. Count All Ethereum Transactions - Liczba wszystkich transakcji
+GET {{CertiBlock.Services.Ethereum.Api_HostAddress}}/ethereum-service/Ethereum/countEthereumTransactions
+Accept: application/json
+
+### 14. Get Ethereum Transactions with Pagination - Transakcje z paginacją
+GET {{CertiBlock.Services.Ethereum.Api_HostAddress}}/ethereum-service/Ethereum/getEthereumTransactions?pageIndex={{pageIndex}}&pageSize={{pageSize}}
+Accept: application/json
+
+### 15. Get Ethereum Transactions - Druga strona
+GET {{CertiBlock.Services.Ethereum.Api_HostAddress}}/ethereum-service/Ethereum/getEthereumTransactions?pageIndex=1&pageSize=5
+Accept: application/json
+
+### 16. Get Ethereum Transactions - Bez parametrów paginacji
+GET {{CertiBlock.Services.Ethereum.Api_HostAddress}}/ethereum-service/Ethereum/getEthereumTransactions
+Accept: application/json
+
+### 17. Get All Ethereum Transactions - Wszystkie transakcje bez paginacji
+GET {{CertiBlock.Services.Ethereum.Api_HostAddress}}/ethereum-service/Ethereum/getEthereumAllTransactions
+Accept: application/json
+
+### 18. Get Transaction by ID - Transakcja po ID
+GET {{CertiBlock.Services.Ethereum.Api_HostAddress}}/ethereum-service/Ethereum/getEthereumTransactionById/{{transactionId}}
+Accept: application/json
+
+### 19. Get Transaction by Certificate ID - Transakcja po ID certyfikatu
+GET {{CertiBlock.Services.Ethereum.Api_HostAddress}}/ethereum-service/Ethereum/getEthereumTransactionByCertificateId/{{certificateId}}
+Accept: application/json
+
+### 20. Delete Transaction by ID - Usunięcie transakcji
+DELETE {{CertiBlock.Services.Ethereum.Api_HostAddress}}/ethereum-service/Ethereum/deleteTransactionById/{{transactionId}}
+Accept: application/json
+
+### 21. Delete Transaction - Przykład usunięcia innej transakcji
+DELETE {{CertiBlock.Services.Ethereum.Api_HostAddress}}/ethereum-service/Ethereum/deleteTransactionById/123e4567-e89b-12d3-a456-426614174000
+Accept: application/json
+
+### === TEST SCENARIOS - Scenariusze testowe ===
+
+### Test 1: Nieprawidłowy adres portfela (powinno zwrócić 400)
+GET {{CertiBlock.Services.Ethereum.Api_HostAddress}}/ethereum-service/Ethereum/getEthBalanceByWalletAddress/invalid-wallet-address
+Accept: application/json
+
+### Test 2: Nieprawidłowy hash transakcji (powinno zwrócić 400/404)
+GET {{CertiBlock.Services.Ethereum.Api_HostAddress}}/ethereum-service/Ethereum/getEthereumTransactionStatus/invalid-hash
+Accept: application/json
+
+### Test 3: Nieprawidłowy status transakcji (powinno zwrócić 400)
+GET {{CertiBlock.Services.Ethereum.Api_HostAddress}}/ethereum-service/Ethereum/getEthereumTransactionByStatus/InvalidStatus
+Accept: application/json
+
+### Test 4: Nieistniejące ID transakcji (powinno zwrócić 404)
+GET {{CertiBlock.Services.Ethereum.Api_HostAddress}}/ethereum-service/Ethereum/getEthereumTransactionById/00000000-0000-0000-0000-000000000000
+Accept: application/json
+
+### Test 5: Nieistniejące ID certyfikatu (powinno zwrócić 404)
+GET {{CertiBlock.Services.Ethereum.Api_HostAddress}}/ethereum-service/Ethereum/getEthereumTransactionByCertificateId/00000000-0000-0000-0000-000000000000
+Accept: application/json
+
+### Test 6: Rejestracja certyfikatu z pustymi danymi (powinno zwrócić 400)
+POST {{CertiBlock.Services.Ethereum.Api_HostAddress}}/ethereum-service/Ethereum/registerCertificate
+Content-Type: application/json
+Accept: application/json
+
+{
+  "id": "",
+  "certificateId": "",
+  "certificateHash": "",
+  "issuer": ""
+}
+
+### Test 7: Rejestracja certyfikatu z nieprawidłowym UUID
+POST {{CertiBlock.Services.Ethereum.Api_HostAddress}}/ethereum-service/Ethereum/registerCertificate
+Content-Type: application/json
+Accept: application/json
+
+{
+  "id": "invalid-uuid",
+  "certificateId": "invalid-uuid",
+  "certificateHash": "0x1234567890abcdef",
+  "issuer": "Test Issuer"
+}
+
+### Test 8: Usunięcie nieistniejącej transakcji (powinno zwrócić 404)
+DELETE {{CertiBlock.Services.Ethernet.Api_HostAddress}}/ethereum-service/Ethereum/deleteTransactionById/00000000-0000-0000-0000-000000000000
+Accept: application/json
+
+### Test 9: Filtr po statusach z pustą tablicą
+GET {{CertiBlock.Services.Ethereum.Api_HostAddress}}/ethereum-service/Ethereum/getEthereumTransactionByStatusFilter
+Accept: application/json
+
+### Test 10: Paginacja z nieprawidłowymi parametrami
+GET {{CertiBlock.Services.Ethereum.Api_HostAddress}}/ethereum-service/Ethereum/getEthereumTransactions?pageIndex=-1&pageSize=0
+Accept: application/json

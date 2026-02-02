@@ -1,0 +1,96 @@
+﻿services:
+  postgres:
+    image: postgres
+    shm_size: '4gb'
+    container_name: certiBlock_postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_DB=CertiBlock
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
+  mongo:
+    image: mongo:7
+    container_name: certiBlock_mongo
+    restart: unless-stopped
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=secret
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo:/data/db
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: certiBlock_rabbitmq
+    restart: unless-stopped
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq
+
+  seq:
+    image: datalust/seq:latest
+    container_name: certiBlock_seq
+    restart: unless-stopped
+    environment:
+      - ACCEPT_EULA=Y
+      - SEQ_FIRSTRUN_NOAUTHENTICATION=true
+    ports:
+      - 8081:80
+      - 5341:5341
+    volumes:
+      - seq:/data
+
+  influxdb:
+    image: influxdb:2
+    container_name: certiBlock_influxdb
+    restart: unless-stopped
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=secretpassword
+      - DOCKER_INFLUXDB_INIT_ORG=certiblock
+      - DOCKER_INFLUXDB_INIT_BUCKET=metrics
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=my-super-secret-auth-token
+    ports:
+      - 8086:8086
+    volumes:
+      - influxdb:/var/lib/influxdb2
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: certiBlock_grafana
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_INSTALL_PLUGINS=
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana:/var/lib/grafana
+    depends_on:
+      - influxdb
+
+volumes:
+  postgres:
+    driver: local
+  mongo:
+    driver: local
+  rabbitmq:
+    driver: local
+  seq:
+    driver: local
+  influxdb:
+    driver: local
+  grafana:
+    driver: local
