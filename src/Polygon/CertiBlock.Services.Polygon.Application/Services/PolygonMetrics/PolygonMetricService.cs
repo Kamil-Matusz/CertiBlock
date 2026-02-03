@@ -11,8 +11,9 @@ using Nethereum.Web3;
 
 namespace CertiBlock.Services.Polygon.Application.Services.PolygonMetrics;
 
-public class PolygonMetricService(IPolygonMetricRepository polygonMetricRepository, ILogger<PolygonMetricService> logger,
-    IWeb3 web3, ICoinGeckoService coinGeckoService, MetricPublisher metricPublisher) : IPolygonMetricService
+public class PolygonMetricService(IPolygonMetricRepository polygonMetricRepository, IPolygonRepository polygonRepository,
+    ILogger<PolygonMetricService> logger, IWeb3 web3, ICoinGeckoService coinGeckoService,
+    MetricPublisher metricPublisher) : IPolygonMetricService
 {
     public async Task<Core.Entities.PolygonMetrics> CollectMetricsAsync(Guid certificateId, string transactionHash)
     {
@@ -24,7 +25,14 @@ public class PolygonMetricService(IPolygonMetricRepository polygonMetricReposito
 
             if (txn == null || receipt == null)
                 throw new PolygonTransactionsByHashNotFoundException($"Transaction {transactionHash} not found.");
-            
+
+            var block = await web3.Eth.Blocks.GetBlockWithTransactionsByNumber.SendRequestAsync(receipt.BlockNumber);
+            var blockTimestamp = DateTimeOffset.FromUnixTimeSeconds((long)block.Timestamp.Value).UtcDateTime;
+
+            var transaction = await polygonRepository.GetBlockchainTransactionByCertificateIdAsync(certificateId);
+            var submittedAt = transaction?.CreatedAt ?? blockTimestamp;
+            var inclusionTimeSeconds = (blockTimestamp - submittedAt).TotalSeconds;
+
             var dataSizeBytes = string.IsNullOrEmpty(txn.Input) ? 0 : (txn.Input.Length - 2) / 2;
             var confirmations = (int)(latestBlock.Value - receipt.BlockNumber.Value);
             var gasUsed = (long)receipt.GasUsed.Value;
@@ -50,14 +58,15 @@ public class PolygonMetricService(IPolygonMetricRepository polygonMetricReposito
                 TransactionCostNative = transactionCostNative,
                 TransactionCostUsd = transactionCostUsd,
                 GasUsed = gasUsed,
-                GasUtilizationRatio = gasUtilizationRatio
+                GasUtilizationRatio = gasUtilizationRatio,
+                InclusionTimeSeconds = inclusionTimeSeconds
             };
 
             await polygonMetricRepository.SavePolygonMetricsAsync(metrics);
             
             var metricEvent = new MetricCollectedEvent(
                 metrics.CertificateId,
-                Blockchain.Ethereum,
+                Blockchain.Polygon,
                 Operation.Register,
                 metrics.GasUsed,
                 1.25,

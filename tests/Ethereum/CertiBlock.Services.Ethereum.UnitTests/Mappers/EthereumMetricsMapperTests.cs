@@ -21,7 +21,8 @@ public class EthereumMetricsMapperTests
             TransactionCostUsd = 3.45m,
             TransactionCostNative = 0.0021m,
             GasUsed = 21000,
-            GasUtilizationRatio = 0.95
+            GasUtilizationRatio = 0.95,
+            InclusionTimeSeconds = 15.5
         };
     }
 
@@ -47,6 +48,7 @@ public class EthereumMetricsMapperTests
         Assert.Equal(metrics.TransactionCostNative, result.TransactionCostNative);
         Assert.Equal(metrics.GasUsed, result.GasUsed);
         Assert.Equal(metrics.GasUtilizationRatio, result.GasUtilizationRatio);
+        Assert.Equal(metrics.InclusionTimeSeconds, result.InclusionTimeSeconds);
     }
 
     [Fact]

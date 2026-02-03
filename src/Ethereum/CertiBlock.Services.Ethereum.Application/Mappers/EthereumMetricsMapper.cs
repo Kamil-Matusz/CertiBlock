@@ -17,7 +17,8 @@ public static class EthereumMetricsMapper
         TransactionCostUsd = metrics.TransactionCostUsd,
         TransactionCostNative = metrics.TransactionCostNative,
         GasUsed = metrics.GasUsed,
-        GasUtilizationRatio = metrics.GasUtilizationRatio
+        GasUtilizationRatio = metrics.GasUtilizationRatio,
+        InclusionTimeSeconds = metrics.InclusionTimeSeconds
     };
 
     public static IEnumerable<T> MapAll<T>(IEnumerable<EthereumMetrics> metrics) where T : EthereumMetricDetailsDto, new()

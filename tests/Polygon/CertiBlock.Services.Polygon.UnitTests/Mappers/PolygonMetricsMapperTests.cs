@@ -21,7 +21,8 @@ public class PolygonMetricsMapperTests
             TransactionCostUsd = 0.75m,
             TransactionCostNative = 0.15m,
             GasUsed = 50000,
-            GasUtilizationRatio = 0.85
+            GasUtilizationRatio = 0.85,
+            InclusionTimeSeconds = 3.2
         };
     }
 
@@ -47,6 +48,7 @@ public class PolygonMetricsMapperTests
         Assert.Equal(metrics.TransactionCostNative, result.TransactionCostNative);
         Assert.Equal(metrics.GasUsed, result.GasUsed);
         Assert.Equal(metrics.GasUtilizationRatio, result.GasUtilizationRatio);
+        Assert.Equal(metrics.InclusionTimeSeconds, result.InclusionTimeSeconds);
     }
 
     [Fact]

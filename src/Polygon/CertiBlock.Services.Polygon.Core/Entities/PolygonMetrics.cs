@@ -17,4 +17,5 @@ public class PolygonMetrics
     public decimal TransactionCostNative { get; set; }
     public long GasUsed { get; set; }
     public double GasUtilizationRatio { get; set; }
+    public double InclusionTimeSeconds { get; set; }
 }

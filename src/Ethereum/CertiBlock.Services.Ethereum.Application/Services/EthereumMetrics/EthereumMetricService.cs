@@ -11,8 +11,9 @@ using Nethereum.Web3;
 
 namespace CertiBlock.Services.Ethereum.Application.Services.EthereumMetrics;
 
-public class EthereumMetricService(IEthereumMetricRepository metricsRepository, ILogger<EthereumMetricService> logger, 
-    IWeb3 web3, ICoinGeckoService coinGeckoService, MetricPublisher metricPublisher) : IEthereumMetricService
+public class EthereumMetricService(IEthereumMetricRepository metricsRepository, IEthereumRepository ethereumRepository,
+    ILogger<EthereumMetricService> logger, IWeb3 web3, ICoinGeckoService coinGeckoService,
+    MetricPublisher metricPublisher) : IEthereumMetricService
 {
     public async Task<Core.Entities.EthereumMetrics> CollectMetricsAsync(Guid certificateId, string transactionHash)
     {
@@ -24,7 +25,14 @@ public class EthereumMetricService(IEthereumMetricRepository metricsRepository, 
 
             if (txn == null || receipt == null)
                 throw new EthereumTransactionsByHashNotFoundException($"Transaction {transactionHash} not found.");
-            
+
+            var block = await web3.Eth.Blocks.GetBlockWithTransactionsByNumber.SendRequestAsync(receipt.BlockNumber);
+            var blockTimestamp = DateTimeOffset.FromUnixTimeSeconds((long)block.Timestamp.Value).UtcDateTime;
+
+            var transaction = await ethereumRepository.GetBlockchainTransactionByCertificateIdAsync(certificateId);
+            var submittedAt = transaction?.CreatedAt ?? blockTimestamp;
+            var inclusionTimeSeconds = (blockTimestamp - submittedAt).TotalSeconds;
+
             var dataSizeBytes = string.IsNullOrEmpty(txn.Input) ? 0 : (txn.Input.Length - 2) / 2;
             var confirmations = (int)(latestBlock.Value - receipt.BlockNumber.Value);
             var gasUsed = (long)receipt.GasUsed.Value;
@@ -50,7 +58,8 @@ public class EthereumMetricService(IEthereumMetricRepository metricsRepository, 
                 TransactionCostNative = transactionCostNative,
                 TransactionCostUsd = transactionCostUsd,
                 GasUsed = gasUsed,
-                GasUtilizationRatio = gasUtilizationRatio
+                GasUtilizationRatio = gasUtilizationRatio,
+                InclusionTimeSeconds = inclusionTimeSeconds
             };
 
             await metricsRepository.SaveEthereumMetricsAsync(metrics);
