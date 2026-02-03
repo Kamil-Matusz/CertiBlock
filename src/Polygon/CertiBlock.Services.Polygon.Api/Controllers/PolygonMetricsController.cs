@@ -42,7 +42,7 @@ public class PolygonMetricsController(IPolygonMetricService polygonMetricService
             Blockchain.Polygon,
             Operation.Register,
             21000,
-            1.25,
+            3.0,
             0.00042,
             DateTime.UtcNow
         );

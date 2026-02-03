@@ -69,7 +69,7 @@ public class EthereumMetricService(IEthereumMetricRepository metricsRepository, 
                 Blockchain.Ethereum,
                 Operation.Register,
                 metrics.GasUsed,
-                1.25,
+                metrics.InclusionTimeSeconds,
                 (double)metrics.TransactionCostNative,
                 DateTime.UtcNow);
             

@@ -69,7 +69,7 @@ public class PolygonMetricService(IPolygonMetricRepository polygonMetricReposito
                 Blockchain.Polygon,
                 Operation.Register,
                 metrics.GasUsed,
-                1.25,
+                metrics.InclusionTimeSeconds,
                 (double)metrics.TransactionCostNative,
                 DateTime.UtcNow);
             

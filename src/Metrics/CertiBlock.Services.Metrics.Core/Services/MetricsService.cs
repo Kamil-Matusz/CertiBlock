@@ -21,7 +21,7 @@ public class MetricsService(IInfluxDBClient client, InfluxDbOptions options, ILo
                 .Tag("operation", metricEvent.Operation.ToString())
                 .Tag("certificate_id", metricEvent.CertificateId.ToString())
                 .Field("gas_used", metricEvent.GasUsed)
-                .Field("transaction_time_ms", metricEvent.TransactionTime)
+                .Field("inclusion_time_seconds", metricEvent.InclusionTimeSeconds)
                 .Field("transaction_fee", metricEvent.TransactionFee)
                 .Timestamp(metricEvent.Timestamp, WritePrecision.Ns);
 
