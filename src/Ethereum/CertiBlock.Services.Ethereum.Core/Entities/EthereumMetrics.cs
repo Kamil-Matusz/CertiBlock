@@ -21,4 +21,5 @@ public class EthereumMetrics
     public long BlockNumber { get; set; }
     public double? FinalizationTimeSeconds { get; set; }
     public bool IsFinalized { get; set; } = false;
+    public DateTime CollectedAt { get; set; } = DateTime.UtcNow;
 }

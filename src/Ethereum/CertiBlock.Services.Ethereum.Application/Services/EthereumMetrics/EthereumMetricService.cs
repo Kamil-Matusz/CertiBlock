@@ -12,8 +12,8 @@ using Nethereum.Web3;
 namespace CertiBlock.Services.Ethereum.Application.Services.EthereumMetrics;
 
 public class EthereumMetricService(IEthereumMetricRepository metricsRepository, IEthereumRepository ethereumRepository,
-    ILogger<EthereumMetricService> logger, IWeb3 web3, ICoinGeckoService coinGeckoService,
-    MetricPublisher metricPublisher) : IEthereumMetricService
+                                   ILogger<EthereumMetricService> logger, IWeb3 web3, ICoinGeckoService coinGeckoService,
+                                   MetricPublisher metricPublisher) : IEthereumMetricService
 {
     public async Task<Core.Entities.EthereumMetrics> CollectMetricsAsync(Guid certificateId, string transactionHash)
     {
@@ -47,6 +47,8 @@ public class EthereumMetricService(IEthereumMetricRepository metricsRepository, 
                 ? (double)gasUsed / (double)txn.Gas.Value * 100.0
                 : 0;
             
+            var collectedAt = DateTime.UtcNow;
+
             var metrics = new Core.Entities.EthereumMetrics
             {
                 CertificateId = certificateId,
@@ -62,11 +64,12 @@ public class EthereumMetricService(IEthereumMetricRepository metricsRepository, 
                 InclusionTimeSeconds = inclusionTimeSeconds,
                 BlockNumber = (long)receipt.BlockNumber.Value,
                 IsFinalized = false,
-                FinalizationTimeSeconds = null
+                FinalizationTimeSeconds = null,
+                CollectedAt = collectedAt
             };
 
             await metricsRepository.SaveEthereumMetricsAsync(metrics);
-            
+
             var metricEvent = new MetricCollectedEvent(
                 metrics.CertificateId,
                 Blockchain.Ethereum,
@@ -74,7 +77,8 @@ public class EthereumMetricService(IEthereumMetricRepository metricsRepository, 
                 metrics.GasUsed,
                 metrics.InclusionTimeSeconds,
                 (double)metrics.TransactionCostNative,
-                DateTime.UtcNow);
+                null,
+                collectedAt);
             
             metricPublisher.Publish(metricEvent);
 

@@ -12,8 +12,8 @@ using Nethereum.Web3;
 namespace CertiBlock.Services.Polygon.Application.Services.PolygonMetrics;
 
 public class PolygonMetricService(IPolygonMetricRepository polygonMetricRepository, IPolygonRepository polygonRepository,
-    ILogger<PolygonMetricService> logger, IWeb3 web3, ICoinGeckoService coinGeckoService,
-    MetricPublisher metricPublisher) : IPolygonMetricService
+                                  ILogger<PolygonMetricService> logger, IWeb3 web3, ICoinGeckoService coinGeckoService,
+                                  MetricPublisher metricPublisher) : IPolygonMetricService
 {
     public async Task<Core.Entities.PolygonMetrics> CollectMetricsAsync(Guid certificateId, string transactionHash)
     {
@@ -47,6 +47,8 @@ public class PolygonMetricService(IPolygonMetricRepository polygonMetricReposito
                 ? (double)gasUsed / (double)txn.Gas.Value * 100.0
                 : 0;
 
+            var collectedAt = DateTime.UtcNow;
+
             var metrics = new Core.Entities.PolygonMetrics
             {
                 CertificateId = certificateId,
@@ -62,11 +64,12 @@ public class PolygonMetricService(IPolygonMetricRepository polygonMetricReposito
                 InclusionTimeSeconds = inclusionTimeSeconds,
                 BlockNumber = (long)receipt.BlockNumber.Value,
                 IsFinalized = false,
-                FinalizationTimeSeconds = null
+                FinalizationTimeSeconds = null,
+                CollectedAt = collectedAt
             };
 
             await polygonMetricRepository.SavePolygonMetricsAsync(metrics);
-            
+
             var metricEvent = new MetricCollectedEvent(
                 metrics.CertificateId,
                 Blockchain.Polygon,
@@ -74,7 +77,8 @@ public class PolygonMetricService(IPolygonMetricRepository polygonMetricReposito
                 metrics.GasUsed,
                 metrics.InclusionTimeSeconds,
                 (double)metrics.TransactionCostNative,
-                DateTime.UtcNow);
+                null,
+                collectedAt);
             
             metricPublisher.Publish(metricEvent);
 

@@ -1,11 +1,14 @@
+using CertiBlock.Services.Ethereum.Application.RabbitMQ;
 using CertiBlock.Services.Ethereum.Core.Repositories;
+using CertiBlock.Shared.Enums;
+using CertiBlock.Shared.Messaging;
 using Microsoft.Extensions.Logging;
 using Nethereum.Web3;
 
 namespace CertiBlock.Services.Ethereum.Application.Hangfire;
 
 public class CheckEthereumFinalizationJob(IEthereumMetricRepository ethereumMetricRepository, IEthereumRepository ethereumRepository,
-                                          IWeb3 web3, ILogger<CheckEthereumFinalizationJob> logger)
+                                          IWeb3 web3, MetricPublisher metricPublisher, ILogger<CheckEthereumFinalizationJob> logger)
 {
     private const int FinalizationBlocks = 64;
 
@@ -47,6 +50,18 @@ public class CheckEthereumFinalizationJob(IEthereumMetricRepository ethereumMetr
                         metrics.FinalizationTimeSeconds = (DateTime.UtcNow - submittedAt).TotalSeconds;
 
                         await ethereumMetricRepository.UpdateMetricsAsync(metrics);
+
+                        var metricEvent = new MetricCollectedEvent(
+                            metrics.CertificateId,
+                            Blockchain.Ethereum,
+                            metrics.Operation,
+                            metrics.GasUsed,
+                            metrics.InclusionTimeSeconds,
+                            (double)metrics.TransactionCostNative,
+                            metrics.FinalizationTimeSeconds,
+                            metrics.CollectedAt);
+
+                        metricPublisher.Publish(metricEvent);
                         finalizedCount++;
 
                         logger.LogInformation(

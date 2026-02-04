@@ -12,8 +12,8 @@ using RabbitMQ.Client.Events;
 
 namespace CertiBlock.Services.Metrics.Core.RabbitMQ;
 
-public class MetricConsumerService(IConnection connection, IOptions<RabbitMqOptions> options, ILogger<MetricConsumerService> logger,
-    IServiceProvider serviceProvider) : BackgroundService
+public class MetricConsumerService(IConnection connection, IOptions<RabbitMqOptions> options, 
+                                   ILogger<MetricConsumerService> logger, IServiceProvider serviceProvider) : BackgroundService
 {
     private readonly RabbitMqOptions _options = options.Value;
     private IModel? _channel;

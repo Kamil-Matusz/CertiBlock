@@ -22,8 +22,12 @@ public class MetricsService(IInfluxDBClient client, InfluxDbOptions options, ILo
                 .Tag("certificate_id", metricEvent.CertificateId.ToString())
                 .Field("gas_used", metricEvent.GasUsed)
                 .Field("inclusion_time_seconds", metricEvent.InclusionTimeSeconds)
-                .Field("transaction_fee", metricEvent.TransactionFee)
-                .Timestamp(metricEvent.Timestamp, WritePrecision.Ns);
+                .Field("transaction_fee", metricEvent.TransactionFee);
+
+            if (metricEvent.FinalizationTimeSeconds.HasValue)
+                point = point.Field("finalization_time_seconds", metricEvent.FinalizationTimeSeconds.Value);
+
+            point = point.Timestamp(metricEvent.Timestamp, WritePrecision.Ns);
 
             await writeApi.WritePointAsync(point, options.Bucket, options.Organization);
             
