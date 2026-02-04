@@ -22,7 +22,11 @@ public class PolygonMetricsMapperTests
             TransactionCostNative = 0.15m,
             GasUsed = 50000,
             GasUtilizationRatio = 0.85,
-            InclusionTimeSeconds = 3.2
+            InclusionTimeSeconds = 3.2,
+            BlockNumber = 9876543,
+            FinalizationTimeSeconds = 240.8,
+            IsFinalized = true,
+            CollectedAt = new DateTime(2026, 1, 1, 12, 0, 0, DateTimeKind.Utc)
         };
     }
 
@@ -49,6 +53,9 @@ public class PolygonMetricsMapperTests
         Assert.Equal(metrics.GasUsed, result.GasUsed);
         Assert.Equal(metrics.GasUtilizationRatio, result.GasUtilizationRatio);
         Assert.Equal(metrics.InclusionTimeSeconds, result.InclusionTimeSeconds);
+        Assert.Equal(metrics.BlockNumber, result.BlockNumber);
+        Assert.Equal(metrics.FinalizationTimeSeconds, result.FinalizationTimeSeconds);
+        Assert.Equal(metrics.IsFinalized, result.IsFinalized);
     }
 
     [Fact]

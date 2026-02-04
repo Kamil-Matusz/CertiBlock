@@ -22,7 +22,11 @@ public class EthereumMetricsMapperTests
             TransactionCostNative = 0.0021m,
             GasUsed = 21000,
             GasUtilizationRatio = 0.95,
-            InclusionTimeSeconds = 15.5
+            InclusionTimeSeconds = 15.5,
+            BlockNumber = 1234567,
+            FinalizationTimeSeconds = 120.5,
+            IsFinalized = true,
+            CollectedAt = new DateTime(2026, 1, 1, 12, 0, 0, DateTimeKind.Utc)
         };
     }
 
@@ -49,6 +53,9 @@ public class EthereumMetricsMapperTests
         Assert.Equal(metrics.GasUsed, result.GasUsed);
         Assert.Equal(metrics.GasUtilizationRatio, result.GasUtilizationRatio);
         Assert.Equal(metrics.InclusionTimeSeconds, result.InclusionTimeSeconds);
+        Assert.Equal(metrics.BlockNumber, result.BlockNumber);
+        Assert.Equal(metrics.FinalizationTimeSeconds, result.FinalizationTimeSeconds);
+        Assert.Equal(metrics.IsFinalized, result.IsFinalized);
     }
 
     [Fact]
