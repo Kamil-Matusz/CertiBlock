@@ -41,6 +41,10 @@ interface PolygonMetrics {
     transactionCostNative: number;
     gasUsed: number;
     gasUtilizationRatio: number;
+    inclusionTimeSeconds: number;
+    blockNumber: number;
+    finalizationTimeSeconds: number | null;
+    isFinalized: boolean;
 }
 
 interface PolygonTransaction {
@@ -285,6 +289,20 @@ const MetricsModal = ({ open, onClose, certificateId }: MetricsModalProps) => {
                                 value={metrics.transactionCostNative.toFixed(10)}
                                 gradient="linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%)"
                             />
+                            <MetricCard
+                                label="Inclusion Time"
+                                value={metrics.inclusionTimeSeconds.toFixed(2)}
+                                suffix="s"
+                                gradient="linear-gradient(135deg, #ccfbf1 0%, #99f6e4 100%)"
+                            />
+                            {metrics.isFinalized && metrics.finalizationTimeSeconds != null && (
+                                <MetricCard
+                                    label="Finalization Time"
+                                    value={metrics.finalizationTimeSeconds.toFixed(2)}
+                                    suffix="s"
+                                    gradient="linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%)"
+                                />
+                            )}
                         </Box>
                     </Box>
                 )}

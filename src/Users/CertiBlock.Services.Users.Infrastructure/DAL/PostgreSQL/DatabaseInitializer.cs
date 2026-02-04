@@ -1,5 +1,5 @@
 ﻿using CertiBlock.Services.Users.Infrastructure.DAL.PostgreSQL.Seeders;
-using CertiBlock.Services.Users.Infrastructure.Security;
+using CertiBlock.Services.Users.Application.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -17,7 +17,7 @@ internal sealed class DatabaseInitializer(IServiceProvider serviceProvider) : IH
             await dbContext.Database.MigrateAsync(cancellationToken);
             
             // seed data
-            var passwordManager = scope.ServiceProvider.GetRequiredService<PasswordManager>();
+            var passwordManager = scope.ServiceProvider.GetRequiredService<IPasswordManager>();
             var userSeeder = new UserSeeder(dbContext, passwordManager);
             await userSeeder.SeedAsync();
         }
