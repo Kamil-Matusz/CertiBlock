@@ -10,4 +10,5 @@ public interface IPolygonMetricRepository
     Task<IEnumerable<Guid>> GetAllCertificateIdsWithMetricsAsync();
     Task<IEnumerable<PolygonMetrics>> GetUnfinalizedMetricsAsync();
     Task UpdateMetricsAsync(PolygonMetrics metrics);
+    Task<IEnumerable<PolygonMetrics>> GetAllMetricsAsync();
 }

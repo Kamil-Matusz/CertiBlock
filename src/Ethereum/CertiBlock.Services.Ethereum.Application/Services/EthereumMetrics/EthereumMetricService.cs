@@ -4,6 +4,7 @@ using CertiBlock.Services.Ethereum.Application.Services.CoinGecko;
 using CertiBlock.Services.Ethereum.Core.DTO;
 using CertiBlock.Services.Ethereum.Core.Exceptions;
 using CertiBlock.Services.Ethereum.Core.Repositories;
+using CertiBlock.Shared.DTO;
 using CertiBlock.Shared.Enums;
 using CertiBlock.Shared.Messaging;
 using Microsoft.Extensions.Logging;
@@ -112,5 +113,23 @@ public class EthereumMetricService(IEthereumMetricRepository metricsRepository, 
         }
 
         return EthereumMetricsMapper.Map<EthereumMetricDetailsDto>(ethereumTransaction);
+    }
+
+    public async Task<IEnumerable<ResearchMetricDto>> GetAllResearchMetricsAsync()
+    {
+        var allMetrics = await metricsRepository.GetAllMetricsAsync();
+
+        return allMetrics.Select(m => new ResearchMetricDto
+        {
+            CertificateId = m.CertificateId,
+            TransactionHash = m.TransactionHash,
+            TransactionCostNative = m.TransactionCostNative,
+            TransactionCostUsd = m.TransactionCostUsd,
+            FinalizationTimeSeconds = m.FinalizationTimeSeconds,
+            IsFinalized = m.IsFinalized,
+            Confirmations = m.Confirmations,
+            GasUsed = m.GasUsed,
+            InclusionTimeSeconds = m.InclusionTimeSeconds
+        });
     }
 }

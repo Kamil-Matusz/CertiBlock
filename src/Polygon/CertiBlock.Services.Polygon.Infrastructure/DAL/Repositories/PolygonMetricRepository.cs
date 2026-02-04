@@ -51,4 +51,9 @@ public class PolygonMetricRepository : IPolygonMetricRepository
         var filter = Builders<PolygonMetrics>.Filter.Eq(x => x.Id, metrics.Id);
         await _collection.ReplaceOneAsync(filter, metrics);
     }
+
+    public async Task<IEnumerable<PolygonMetrics>> GetAllMetricsAsync()
+    {
+        return await _collection.Find(_ => true).ToListAsync();
+    }
 }

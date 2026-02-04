@@ -51,4 +51,9 @@ public class EthereumMetricsRepository : IEthereumMetricRepository
         var filter = Builders<EthereumMetrics>.Filter.Eq(x => x.Id, metrics.Id);
         await _collection.ReplaceOneAsync(filter, metrics);
     }
+
+    public async Task<IEnumerable<EthereumMetrics>> GetAllMetricsAsync()
+    {
+        return await _collection.Find(_ => true).ToListAsync();
+    }
 }

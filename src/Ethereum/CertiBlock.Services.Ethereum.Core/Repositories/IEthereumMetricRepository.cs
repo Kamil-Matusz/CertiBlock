@@ -10,4 +10,5 @@ public interface IEthereumMetricRepository
     Task<IEnumerable<Guid>> GetAllCertificateIdsWithMetricsAsync();
     Task<IEnumerable<EthereumMetrics>> GetUnfinalizedMetricsAsync();
     Task UpdateMetricsAsync(EthereumMetrics metrics);
+    Task<IEnumerable<EthereumMetrics>> GetAllMetricsAsync();
 }

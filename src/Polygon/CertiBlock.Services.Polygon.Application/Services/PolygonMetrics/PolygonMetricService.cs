@@ -4,6 +4,7 @@ using CertiBlock.Services.Polygon.Application.Services.CoinGecko;
 using CertiBlock.Services.Polygon.Core.DTO;
 using CertiBlock.Services.Polygon.Core.Exceptions;
 using CertiBlock.Services.Polygon.Core.Repositories;
+using CertiBlock.Shared.DTO;
 using CertiBlock.Shared.Enums;
 using CertiBlock.Shared.Messaging;
 using Microsoft.Extensions.Logging;
@@ -111,5 +112,23 @@ public class PolygonMetricService(IPolygonMetricRepository polygonMetricReposito
         }
 
         return PolygonMetricsMapper.Map<PolygonMetricDetailsDto>(polygonTransaction);
+    }
+
+    public async Task<IEnumerable<ResearchMetricDto>> GetAllResearchMetricsAsync()
+    {
+        var allMetrics = await polygonMetricRepository.GetAllMetricsAsync();
+
+        return allMetrics.Select(m => new ResearchMetricDto
+        {
+            CertificateId = m.CertificateId,
+            TransactionHash = m.TransactionHash,
+            TransactionCostNative = m.TransactionCostNative,
+            TransactionCostUsd = m.TransactionCostUsd,
+            FinalizationTimeSeconds = m.FinalizationTimeSeconds,
+            IsFinalized = m.IsFinalized,
+            Confirmations = m.Confirmations,
+            GasUsed = m.GasUsed,
+            InclusionTimeSeconds = m.InclusionTimeSeconds
+        });
     }
 }
