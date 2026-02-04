@@ -10,7 +10,8 @@ public static class Extensions
     {
         services.AddScoped<UpdatePolygonTransactionStatusJob>();
         services.AddScoped<FetchMissingPolygonMetricsJob>();
-        
+        services.AddScoped<CheckPolygonFinalizationJob>();
+
         return services;
     }
     
@@ -27,7 +28,12 @@ public static class Extensions
             "fetch-missing-polygon-metrics",
             job => job.FetchMissingMetricsAsync(),
             Cron.HourInterval(2));
-        
+
+        recurringJobManager.AddOrUpdate<CheckPolygonFinalizationJob>(
+            "check-polygon-finalization",
+            job => job.CheckFinalizationAsync(),
+            Cron.MinuteInterval(10));
+
         return app;
     }
 }

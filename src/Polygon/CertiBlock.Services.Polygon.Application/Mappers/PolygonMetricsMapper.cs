@@ -18,7 +18,10 @@ public static class PolygonMetricsMapper
         TransactionCostNative = metrics.TransactionCostNative,
         GasUsed = metrics.GasUsed,
         GasUtilizationRatio = metrics.GasUtilizationRatio,
-        InclusionTimeSeconds = metrics.InclusionTimeSeconds
+        InclusionTimeSeconds = metrics.InclusionTimeSeconds,
+        BlockNumber = metrics.BlockNumber,
+        FinalizationTimeSeconds = metrics.FinalizationTimeSeconds,
+        IsFinalized = metrics.IsFinalized
     };
     
     public static IEnumerable<T> MapAll<T>(IEnumerable<PolygonMetrics> metrics) where T : PolygonMetricDetailsDto, new()

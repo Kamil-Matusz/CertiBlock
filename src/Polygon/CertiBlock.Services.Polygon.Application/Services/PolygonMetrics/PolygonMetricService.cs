@@ -59,7 +59,10 @@ public class PolygonMetricService(IPolygonMetricRepository polygonMetricReposito
                 TransactionCostUsd = transactionCostUsd,
                 GasUsed = gasUsed,
                 GasUtilizationRatio = gasUtilizationRatio,
-                InclusionTimeSeconds = inclusionTimeSeconds
+                InclusionTimeSeconds = inclusionTimeSeconds,
+                BlockNumber = (long)receipt.BlockNumber.Value,
+                IsFinalized = false,
+                FinalizationTimeSeconds = null
             };
 
             await polygonMetricRepository.SavePolygonMetricsAsync(metrics);

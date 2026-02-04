@@ -39,4 +39,16 @@ public class PolygonMetricRepository : IPolygonMetricRepository
             .Distinct(x => x.CertificateId, _ => true)
             .ToListAsync();
     }
+
+    public async Task<IEnumerable<PolygonMetrics>> GetUnfinalizedMetricsAsync()
+    {
+        var filter = Builders<PolygonMetrics>.Filter.Eq(x => x.IsFinalized, false);
+        return await _collection.Find(filter).ToListAsync();
+    }
+
+    public async Task UpdateMetricsAsync(PolygonMetrics metrics)
+    {
+        var filter = Builders<PolygonMetrics>.Filter.Eq(x => x.Id, metrics.Id);
+        await _collection.ReplaceOneAsync(filter, metrics);
+    }
 }

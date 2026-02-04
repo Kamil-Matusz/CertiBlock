@@ -18,4 +18,7 @@ public class PolygonMetrics
     public long GasUsed { get; set; }
     public double GasUtilizationRatio { get; set; }
     public double InclusionTimeSeconds { get; set; }
+    public long BlockNumber { get; set; }
+    public double? FinalizationTimeSeconds { get; set; }
+    public bool IsFinalized { get; set; } = false;
 }

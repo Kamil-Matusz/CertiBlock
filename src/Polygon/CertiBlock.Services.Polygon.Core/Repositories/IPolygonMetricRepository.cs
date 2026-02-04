@@ -8,4 +8,6 @@ public interface IPolygonMetricRepository
     Task<PolygonMetrics> GetTransactionMetricsByCertificateAsync(Guid certificateId);
     Task DeleteTransactionMetricsByCertificateIdAsync(Guid certificateId);
     Task<IEnumerable<Guid>> GetAllCertificateIdsWithMetricsAsync();
+    Task<IEnumerable<PolygonMetrics>> GetUnfinalizedMetricsAsync();
+    Task UpdateMetricsAsync(PolygonMetrics metrics);
 }
