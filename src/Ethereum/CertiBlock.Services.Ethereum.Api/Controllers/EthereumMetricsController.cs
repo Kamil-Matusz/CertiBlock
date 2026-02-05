@@ -37,8 +37,9 @@ public class EthereumMetricsController(IEthereumMetricService ethereumMetricServ
     public async Task<ActionResult<EthereumMetricDetailsDto>> GetEthereumTransactionsById(Guid certificateId)
         => Ok(await ethereumMetricService.GetTransactionMetricsByCertificateIdAsync(certificateId));
     
-    [HttpGet("research")]
+    [HttpGet("researchMetricsForEthereum")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<IEnumerable<ResearchMetricDto>>> GetResearchMetrics()
         => Ok(await ethereumMetricService.GetAllResearchMetricsAsync());
 

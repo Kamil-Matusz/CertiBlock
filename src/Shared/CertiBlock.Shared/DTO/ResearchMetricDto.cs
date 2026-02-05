@@ -7,7 +7,6 @@ public class ResearchMetricDto
     public decimal TransactionCostNative { get; set; }
     public decimal TransactionCostUsd { get; set; }
     public double? FinalizationTimeSeconds { get; set; }
-    public bool IsFinalized { get; set; }
     public int Confirmations { get; set; }
     public long GasUsed { get; set; }
     public double InclusionTimeSeconds { get; set; }

@@ -126,7 +126,6 @@ public class EthereumMetricService(IEthereumMetricRepository metricsRepository, 
             TransactionCostNative = m.TransactionCostNative,
             TransactionCostUsd = m.TransactionCostUsd,
             FinalizationTimeSeconds = m.FinalizationTimeSeconds,
-            IsFinalized = m.IsFinalized,
             Confirmations = m.Confirmations,
             GasUsed = m.GasUsed,
             InclusionTimeSeconds = m.InclusionTimeSeconds

@@ -125,7 +125,6 @@ public class PolygonMetricService(IPolygonMetricRepository polygonMetricReposito
             TransactionCostNative = m.TransactionCostNative,
             TransactionCostUsd = m.TransactionCostUsd,
             FinalizationTimeSeconds = m.FinalizationTimeSeconds,
-            IsFinalized = m.IsFinalized,
             Confirmations = m.Confirmations,
             GasUsed = m.GasUsed,
             InclusionTimeSeconds = m.InclusionTimeSeconds

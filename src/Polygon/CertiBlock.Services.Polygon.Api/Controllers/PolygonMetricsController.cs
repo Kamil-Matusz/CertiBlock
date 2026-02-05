@@ -34,8 +34,9 @@ public class PolygonMetricsController(IPolygonMetricService polygonMetricService
     public async Task<ActionResult<PolygonMetricDetailsDto>> GetPolygonTransactionsById(Guid certificateId)
         => Ok(await polygonMetricService.GetTransactionMetricsByCertificateIdAsync(certificateId));
     
-    [HttpGet("research")]
+    [HttpGet("researchMetricsForPolygon")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<IEnumerable<ResearchMetricDto>>> GetResearchMetrics()
         => Ok(await polygonMetricService.GetAllResearchMetricsAsync());
 
