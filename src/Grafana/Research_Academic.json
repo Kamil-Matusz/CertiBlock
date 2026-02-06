@@ -1,0 +1,1897 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
+      "id": 1,
+      "panels": [],
+      "title": "Statistical Summary - Gas Used",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "df0xwt899eoe8f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#3274D9", "mode": "fixed" },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "#3274D9", "value": null }]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 0, "y": 1 },
+      "id": 2,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "df0xwt899eoe8f"
+          },
+          "query": "from(bucket: \"metrics\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"blockchain_operations\")\r\n  |> filter(fn: (r) => r[\"blockchain\"] == \"Ethereum\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"gas_used\")\r\n  |> group()\r\n  |> mean()\r\n  |> yield(name: \"mean\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Mean Gas Used (Ethereum)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "df0xwt899eoe8f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#8F3BB8", "mode": "fixed" },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "#8F3BB8", "value": null }]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 4, "y": 1 },
+      "id": 3,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "df0xwt899eoe8f"
+          },
+          "query": "from(bucket: \"metrics\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"blockchain_operations\")\r\n  |> filter(fn: (r) => r[\"blockchain\"] == \"Polygon\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"gas_used\")\r\n  |> group()\r\n  |> mean()\r\n  |> yield(name: \"mean\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Mean Gas Used (Polygon)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "df0xwt899eoe8f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#3274D9", "mode": "fixed" },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "#3274D9", "value": null }]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 8, "y": 1 },
+      "id": 4,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "df0xwt899eoe8f"
+          },
+          "query": "from(bucket: \"metrics\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"blockchain_operations\")\r\n  |> filter(fn: (r) => r[\"blockchain\"] == \"Ethereum\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"gas_used\")\r\n  |> group()\r\n  |> median()\r\n  |> yield(name: \"median\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Median Gas Used (Ethereum)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "df0xwt899eoe8f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#8F3BB8", "mode": "fixed" },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "#8F3BB8", "value": null }]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 12, "y": 1 },
+      "id": 5,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "df0xwt899eoe8f"
+          },
+          "query": "from(bucket: \"metrics\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"blockchain_operations\")\r\n  |> filter(fn: (r) => r[\"blockchain\"] == \"Polygon\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"gas_used\")\r\n  |> group()\r\n  |> median()\r\n  |> yield(name: \"median\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Median Gas Used (Polygon)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "df0xwt899eoe8f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#3274D9", "mode": "fixed" },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "#3274D9", "value": null }]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 16, "y": 1 },
+      "id": 6,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "df0xwt899eoe8f"
+          },
+          "query": "from(bucket: \"metrics\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"blockchain_operations\")\r\n  |> filter(fn: (r) => r[\"blockchain\"] == \"Ethereum\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"gas_used\")\r\n  |> group()\r\n  |> stddev()\r\n  |> yield(name: \"stddev\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Std Dev Gas Used (Ethereum)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "df0xwt899eoe8f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#8F3BB8", "mode": "fixed" },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "#8F3BB8", "value": null }]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 20, "y": 1 },
+      "id": 7,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "df0xwt899eoe8f"
+          },
+          "query": "from(bucket: \"metrics\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"blockchain_operations\")\r\n  |> filter(fn: (r) => r[\"blockchain\"] == \"Polygon\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"gas_used\")\r\n  |> group()\r\n  |> stddev()\r\n  |> yield(name: \"stddev\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Std Dev Gas Used (Polygon)",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 5 },
+      "id": 8,
+      "panels": [],
+      "title": "Statistical Summary - Inclusion Time",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "df0xwt899eoe8f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#3274D9", "mode": "fixed" },
+          "decimals": 3,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "#3274D9", "value": null }]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 0, "y": 6 },
+      "id": 9,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "df0xwt899eoe8f"
+          },
+          "query": "from(bucket: \"metrics\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"blockchain_operations\")\r\n  |> filter(fn: (r) => r[\"blockchain\"] == \"Ethereum\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"inclusion_time_seconds\")\r\n  |> group()\r\n  |> mean()\r\n  |> yield(name: \"mean\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Mean Inclusion Time (Ethereum)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "df0xwt899eoe8f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#8F3BB8", "mode": "fixed" },
+          "decimals": 3,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "#8F3BB8", "value": null }]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 4, "y": 6 },
+      "id": 10,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "df0xwt899eoe8f"
+          },
+          "query": "from(bucket: \"metrics\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"blockchain_operations\")\r\n  |> filter(fn: (r) => r[\"blockchain\"] == \"Polygon\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"inclusion_time_seconds\")\r\n  |> group()\r\n  |> mean()\r\n  |> yield(name: \"mean\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Mean Inclusion Time (Polygon)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "df0xwt899eoe8f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#3274D9", "mode": "fixed" },
+          "decimals": 3,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "#3274D9", "value": null }]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 8, "y": 6 },
+      "id": 11,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "df0xwt899eoe8f"
+          },
+          "query": "from(bucket: \"metrics\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"blockchain_operations\")\r\n  |> filter(fn: (r) => r[\"blockchain\"] == \"Ethereum\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"inclusion_time_seconds\")\r\n  |> group()\r\n  |> median()\r\n  |> yield(name: \"median\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Median Inclusion Time (Ethereum)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "df0xwt899eoe8f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#8F3BB8", "mode": "fixed" },
+          "decimals": 3,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "#8F3BB8", "value": null }]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 12, "y": 6 },
+      "id": 12,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "df0xwt899eoe8f"
+          },
+          "query": "from(bucket: \"metrics\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"blockchain_operations\")\r\n  |> filter(fn: (r) => r[\"blockchain\"] == \"Polygon\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"inclusion_time_seconds\")\r\n  |> group()\r\n  |> median()\r\n  |> yield(name: \"median\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Median Inclusion Time (Polygon)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "df0xwt899eoe8f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#3274D9", "mode": "fixed" },
+          "decimals": 3,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "#3274D9", "value": null }]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 16, "y": 6 },
+      "id": 13,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "df0xwt899eoe8f"
+          },
+          "query": "from(bucket: \"metrics\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"blockchain_operations\")\r\n  |> filter(fn: (r) => r[\"blockchain\"] == \"Ethereum\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"inclusion_time_seconds\")\r\n  |> group()\r\n  |> stddev()\r\n  |> yield(name: \"stddev\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Std Dev Inclusion Time (Ethereum)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "df0xwt899eoe8f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#8F3BB8", "mode": "fixed" },
+          "decimals": 3,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "#8F3BB8", "value": null }]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 20, "y": 6 },
+      "id": 14,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "df0xwt899eoe8f"
+          },
+          "query": "from(bucket: \"metrics\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"blockchain_operations\")\r\n  |> filter(fn: (r) => r[\"blockchain\"] == \"Polygon\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"inclusion_time_seconds\")\r\n  |> group()\r\n  |> stddev()\r\n  |> yield(name: \"stddev\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Std Dev Inclusion Time (Polygon)",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 10 },
+      "id": 15,
+      "panels": [],
+      "title": "Statistical Summary - Transaction Fee",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "df0xwt899eoe8f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#3274D9", "mode": "fixed" },
+          "decimals": 8,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "#3274D9", "value": null }]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 0, "y": 11 },
+      "id": 16,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "df0xwt899eoe8f"
+          },
+          "query": "from(bucket: \"metrics\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"blockchain_operations\")\r\n  |> filter(fn: (r) => r[\"blockchain\"] == \"Ethereum\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"transaction_fee\")\r\n  |> group()\r\n  |> mean()\r\n  |> yield(name: \"mean\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Mean Fee (Ethereum)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "df0xwt899eoe8f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#8F3BB8", "mode": "fixed" },
+          "decimals": 8,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "#8F3BB8", "value": null }]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 4, "y": 11 },
+      "id": 17,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "df0xwt899eoe8f"
+          },
+          "query": "from(bucket: \"metrics\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"blockchain_operations\")\r\n  |> filter(fn: (r) => r[\"blockchain\"] == \"Polygon\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"transaction_fee\")\r\n  |> group()\r\n  |> mean()\r\n  |> yield(name: \"mean\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Mean Fee (Polygon)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "df0xwt899eoe8f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#3274D9", "mode": "fixed" },
+          "decimals": 8,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "#3274D9", "value": null }]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 8, "y": 11 },
+      "id": 18,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "df0xwt899eoe8f"
+          },
+          "query": "from(bucket: \"metrics\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"blockchain_operations\")\r\n  |> filter(fn: (r) => r[\"blockchain\"] == \"Ethereum\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"transaction_fee\")\r\n  |> group()\r\n  |> median()\r\n  |> yield(name: \"median\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Median Fee (Ethereum)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "df0xwt899eoe8f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#8F3BB8", "mode": "fixed" },
+          "decimals": 8,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "#8F3BB8", "value": null }]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 12, "y": 11 },
+      "id": 19,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "df0xwt899eoe8f"
+          },
+          "query": "from(bucket: \"metrics\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"blockchain_operations\")\r\n  |> filter(fn: (r) => r[\"blockchain\"] == \"Polygon\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"transaction_fee\")\r\n  |> group()\r\n  |> median()\r\n  |> yield(name: \"median\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Median Fee (Polygon)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "df0xwt899eoe8f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#3274D9", "mode": "fixed" },
+          "decimals": 8,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "#3274D9", "value": null }]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 16, "y": 11 },
+      "id": 20,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "df0xwt899eoe8f"
+          },
+          "query": "from(bucket: \"metrics\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"blockchain_operations\")\r\n  |> filter(fn: (r) => r[\"blockchain\"] == \"Ethereum\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"transaction_fee\")\r\n  |> group()\r\n  |> stddev()\r\n  |> yield(name: \"stddev\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Std Dev Fee (Ethereum)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "df0xwt899eoe8f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#8F3BB8", "mode": "fixed" },
+          "decimals": 8,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "#8F3BB8", "value": null }]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 20, "y": 11 },
+      "id": 21,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "df0xwt899eoe8f"
+          },
+          "query": "from(bucket: \"metrics\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"blockchain_operations\")\r\n  |> filter(fn: (r) => r[\"blockchain\"] == \"Polygon\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"transaction_fee\")\r\n  |> group()\r\n  |> stddev()\r\n  |> yield(name: \"stddev\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Std Dev Fee (Polygon)",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 15 },
+      "id": 22,
+      "panels": [],
+      "title": "Comparative Bar Charts",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "df0xwt899eoe8f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "lineWidth": 1,
+            "scaleDistribution": { "type": "linear" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "red", "value": 80 }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byRegexp", "options": "/.*Ethereum.*/" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "#3274D9", "mode": "fixed" } }]
+          },
+          {
+            "matcher": { "id": "byRegexp", "options": "/.*Polygon.*/" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "#8F3BB8", "mode": "fixed" } }]
+          }
+        ]
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 16 },
+      "id": 23,
+      "options": {
+        "barRadius": 0.1,
+        "barWidth": 0.8,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "vertical",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "xTickLabelRotation": 0
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "df0xwt899eoe8f"
+          },
+          "query": "from(bucket: \"metrics\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"blockchain_operations\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"gas_used\")\r\n  |> filter(fn: (r) => r[\"blockchain\"] =~ /Ethereum|Polygon/)\r\n  |> group(columns: [\"blockchain\"])\r\n  |> mean()\r\n  |> group()\r\n  |> yield(name: \"mean_gas\")",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "df0xwt899eoe8f"
+          },
+          "query": "from(bucket: \"metrics\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"blockchain_operations\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"inclusion_time_seconds\")\r\n  |> filter(fn: (r) => r[\"blockchain\"] =~ /Ethereum|Polygon/)\r\n  |> group(columns: [\"blockchain\"])\r\n  |> mean()\r\n  |> group()\r\n  |> yield(name: \"mean_inclusion\")",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "df0xwt899eoe8f"
+          },
+          "query": "from(bucket: \"metrics\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"blockchain_operations\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"transaction_fee\")\r\n  |> filter(fn: (r) => r[\"blockchain\"] =~ /Ethereum|Polygon/)\r\n  |> group(columns: [\"blockchain\"])\r\n  |> mean()\r\n  |> group()\r\n  |> yield(name: \"mean_fee\")",
+          "refId": "C"
+        }
+      ],
+      "title": "Mean Values Comparison (ETH vs Polygon)",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "df0xwt899eoe8f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "lineWidth": 1,
+            "scaleDistribution": { "type": "linear" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "red", "value": 80 }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byRegexp", "options": "/.*Ethereum.*/" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "#3274D9", "mode": "fixed" } }]
+          },
+          {
+            "matcher": { "id": "byRegexp", "options": "/.*Polygon.*/" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "#8F3BB8", "mode": "fixed" } }]
+          }
+        ]
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 16 },
+      "id": 24,
+      "options": {
+        "barRadius": 0.1,
+        "barWidth": 0.8,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "vertical",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "xTickLabelRotation": 0
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "df0xwt899eoe8f"
+          },
+          "query": "from(bucket: \"metrics\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"blockchain_operations\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"gas_used\")\r\n  |> filter(fn: (r) => r[\"blockchain\"] =~ /Ethereum|Polygon/)\r\n  |> group(columns: [\"blockchain\"])\r\n  |> max()\r\n  |> group()\r\n  |> yield(name: \"max_gas\")",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "df0xwt899eoe8f"
+          },
+          "query": "from(bucket: \"metrics\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"blockchain_operations\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"inclusion_time_seconds\")\r\n  |> filter(fn: (r) => r[\"blockchain\"] =~ /Ethereum|Polygon/)\r\n  |> group(columns: [\"blockchain\"])\r\n  |> max()\r\n  |> group()\r\n  |> yield(name: \"max_inclusion\")",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "df0xwt899eoe8f"
+          },
+          "query": "from(bucket: \"metrics\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"blockchain_operations\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"transaction_fee\")\r\n  |> filter(fn: (r) => r[\"blockchain\"] =~ /Ethereum|Polygon/)\r\n  |> group(columns: [\"blockchain\"])\r\n  |> max()\r\n  |> group()\r\n  |> yield(name: \"max_fee\")",
+          "refId": "C"
+        }
+      ],
+      "title": "Max Values Comparison (ETH vs Polygon)",
+      "type": "barchart"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 24 },
+      "id": 25,
+      "panels": [],
+      "title": "Distribution Analysis",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "df0xwt899eoe8f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#3274D9", "mode": "fixed" },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "green", "value": null }]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 6, "x": 0, "y": 25 },
+      "id": 26,
+      "options": {
+        "bucketCount": 20,
+        "combine": false,
+        "fillOpacity": 80,
+        "gradientMode": "scheme",
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": false },
+        "tooltip": { "mode": "single", "sort": "none" }
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "df0xwt899eoe8f"
+          },
+          "query": "from(bucket: \"metrics\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"blockchain_operations\")\r\n  |> filter(fn: (r) => r[\"blockchain\"] == \"Ethereum\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"gas_used\")\r\n  |> group()\r\n  |> keep(columns: [\"_value\"])\r\n  |> yield(name: \"gas_eth\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Gas Used Distribution (Ethereum)",
+      "type": "histogram"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "df0xwt899eoe8f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#8F3BB8", "mode": "fixed" },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "green", "value": null }]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 6, "x": 6, "y": 25 },
+      "id": 27,
+      "options": {
+        "bucketCount": 20,
+        "combine": false,
+        "fillOpacity": 80,
+        "gradientMode": "scheme",
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": false },
+        "tooltip": { "mode": "single", "sort": "none" }
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "df0xwt899eoe8f"
+          },
+          "query": "from(bucket: \"metrics\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"blockchain_operations\")\r\n  |> filter(fn: (r) => r[\"blockchain\"] == \"Polygon\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"gas_used\")\r\n  |> group()\r\n  |> keep(columns: [\"_value\"])\r\n  |> yield(name: \"gas_polygon\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Gas Used Distribution (Polygon)",
+      "type": "histogram"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "df0xwt899eoe8f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#3274D9", "mode": "fixed" },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "green", "value": null }]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 6, "x": 12, "y": 25 },
+      "id": 28,
+      "options": {
+        "bucketCount": 20,
+        "combine": false,
+        "fillOpacity": 80,
+        "gradientMode": "scheme",
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": false },
+        "tooltip": { "mode": "single", "sort": "none" }
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "df0xwt899eoe8f"
+          },
+          "query": "from(bucket: \"metrics\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"blockchain_operations\")\r\n  |> filter(fn: (r) => r[\"blockchain\"] == \"Ethereum\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"inclusion_time_seconds\")\r\n  |> group()\r\n  |> keep(columns: [\"_value\"])\r\n  |> yield(name: \"inclusion_eth\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Inclusion Time Distribution (Ethereum)",
+      "type": "histogram"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "df0xwt899eoe8f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#8F3BB8", "mode": "fixed" },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "green", "value": null }]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 6, "x": 18, "y": 25 },
+      "id": 29,
+      "options": {
+        "bucketCount": 20,
+        "combine": false,
+        "fillOpacity": 80,
+        "gradientMode": "scheme",
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": false },
+        "tooltip": { "mode": "single", "sort": "none" }
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "df0xwt899eoe8f"
+          },
+          "query": "from(bucket: \"metrics\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"blockchain_operations\")\r\n  |> filter(fn: (r) => r[\"blockchain\"] == \"Polygon\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"inclusion_time_seconds\")\r\n  |> group()\r\n  |> keep(columns: [\"_value\"])\r\n  |> yield(name: \"inclusion_polygon\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Inclusion Time Distribution (Polygon)",
+      "type": "histogram"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 33 },
+      "id": 30,
+      "panels": [],
+      "title": "Per-Operation Breakdown",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "df0xwt899eoe8f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "Gas Units",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "lineWidth": 1,
+            "scaleDistribution": { "type": "linear" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "red", "value": 80 }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byRegexp", "options": "/.*Ethereum.*Register.*/" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "#3274D9", "mode": "fixed" } }]
+          },
+          {
+            "matcher": { "id": "byRegexp", "options": "/.*Ethereum.*Verify.*/" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "#56A6F5", "mode": "fixed" } }]
+          },
+          {
+            "matcher": { "id": "byRegexp", "options": "/.*Polygon.*Register.*/" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "#8F3BB8", "mode": "fixed" } }]
+          },
+          {
+            "matcher": { "id": "byRegexp", "options": "/.*Polygon.*Verify.*/" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "#B565D9", "mode": "fixed" } }]
+          }
+        ]
+      },
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 34 },
+      "id": 31,
+      "options": {
+        "barRadius": 0.1,
+        "barWidth": 0.8,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "vertical",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "xTickLabelRotation": 0
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "df0xwt899eoe8f"
+          },
+          "query": "from(bucket: \"metrics\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"blockchain_operations\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"gas_used\")\r\n  |> filter(fn: (r) => r[\"blockchain\"] =~ /Ethereum|Polygon/)\r\n  |> filter(fn: (r) => r[\"operation\"] =~ /Register|Verify/)\r\n  |> group(columns: [\"blockchain\", \"operation\"])\r\n  |> mean()\r\n  |> group()\r\n  |> yield(name: \"avg_gas_by_op\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Avg Gas Used by Operation",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "df0xwt899eoe8f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "Seconds",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "lineWidth": 1,
+            "scaleDistribution": { "type": "linear" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "red", "value": 80 }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byRegexp", "options": "/.*Ethereum.*Register.*/" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "#3274D9", "mode": "fixed" } }]
+          },
+          {
+            "matcher": { "id": "byRegexp", "options": "/.*Ethereum.*Verify.*/" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "#56A6F5", "mode": "fixed" } }]
+          },
+          {
+            "matcher": { "id": "byRegexp", "options": "/.*Polygon.*Register.*/" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "#8F3BB8", "mode": "fixed" } }]
+          },
+          {
+            "matcher": { "id": "byRegexp", "options": "/.*Polygon.*Verify.*/" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "#B565D9", "mode": "fixed" } }]
+          }
+        ]
+      },
+      "gridPos": { "h": 8, "w": 8, "x": 8, "y": 34 },
+      "id": 32,
+      "options": {
+        "barRadius": 0.1,
+        "barWidth": 0.8,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "vertical",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "xTickLabelRotation": 0
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "df0xwt899eoe8f"
+          },
+          "query": "from(bucket: \"metrics\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"blockchain_operations\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"inclusion_time_seconds\")\r\n  |> filter(fn: (r) => r[\"blockchain\"] =~ /Ethereum|Polygon/)\r\n  |> filter(fn: (r) => r[\"operation\"] =~ /Register|Verify/)\r\n  |> group(columns: [\"blockchain\", \"operation\"])\r\n  |> mean()\r\n  |> group()\r\n  |> yield(name: \"avg_inclusion_by_op\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Avg Inclusion Time by Operation",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "df0xwt899eoe8f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "Fee (Native Currency)",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "lineWidth": 1,
+            "scaleDistribution": { "type": "linear" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "decimals": 8,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "red", "value": 80 }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byRegexp", "options": "/.*Ethereum.*Register.*/" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "#3274D9", "mode": "fixed" } }]
+          },
+          {
+            "matcher": { "id": "byRegexp", "options": "/.*Ethereum.*Verify.*/" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "#56A6F5", "mode": "fixed" } }]
+          },
+          {
+            "matcher": { "id": "byRegexp", "options": "/.*Polygon.*Register.*/" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "#8F3BB8", "mode": "fixed" } }]
+          },
+          {
+            "matcher": { "id": "byRegexp", "options": "/.*Polygon.*Verify.*/" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "#B565D9", "mode": "fixed" } }]
+          }
+        ]
+      },
+      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 34 },
+      "id": 33,
+      "options": {
+        "barRadius": 0.1,
+        "barWidth": 0.8,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "vertical",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "xTickLabelRotation": 0
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "df0xwt899eoe8f"
+          },
+          "query": "from(bucket: \"metrics\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"blockchain_operations\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"transaction_fee\")\r\n  |> filter(fn: (r) => r[\"blockchain\"] =~ /Ethereum|Polygon/)\r\n  |> filter(fn: (r) => r[\"operation\"] =~ /Register|Verify/)\r\n  |> group(columns: [\"blockchain\", \"operation\"])\r\n  |> mean()\r\n  |> group()\r\n  |> yield(name: \"avg_fee_by_op\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Avg Transaction Fee by Operation",
+      "type": "barchart"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 42 },
+      "id": 34,
+      "panels": [],
+      "title": "Time Series Trends",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "df0xwt899eoe8f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "Gas Units",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "red", "value": 80 }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byRegexp", "options": "/.*Ethereum.*raw.*/" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "#3274D9", "mode": "fixed" } }]
+          },
+          {
+            "matcher": { "id": "byRegexp", "options": "/.*Polygon.*raw.*/" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "#8F3BB8", "mode": "fixed" } }]
+          },
+          {
+            "matcher": { "id": "byRegexp", "options": "/.*moving_avg.*/" },
+            "properties": [
+              { "id": "custom.lineWidth", "value": 3 },
+              { "id": "custom.lineStyle", "value": { "fill": "dash", "dash": [10, 10] } },
+              { "id": "custom.fillOpacity", "value": 0 }
+            ]
+          }
+        ]
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 43 },
+      "id": 35,
+      "options": {
+        "legend": {
+          "calcs": ["mean", "max"],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "df0xwt899eoe8f"
+          },
+          "query": "from(bucket: \"metrics\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"blockchain_operations\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"gas_used\")\r\n  |> filter(fn: (r) => r[\"blockchain\"] =~ /Ethereum|Polygon/)\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean)\r\n  |> yield(name: \"raw\")",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "df0xwt899eoe8f"
+          },
+          "query": "from(bucket: \"metrics\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"blockchain_operations\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"gas_used\")\r\n  |> filter(fn: (r) => r[\"blockchain\"] =~ /Ethereum|Polygon/)\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean)\r\n  |> movingAverage(n: 7)\r\n  |> yield(name: \"moving_avg\")",
+          "refId": "B"
+        }
+      ],
+      "title": "Gas Usage Trends with Moving Average",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "df0xwt899eoe8f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "Seconds",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "red", "value": 80 }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byRegexp", "options": "/.*Ethereum.*raw.*/" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "#3274D9", "mode": "fixed" } }]
+          },
+          {
+            "matcher": { "id": "byRegexp", "options": "/.*Polygon.*raw.*/" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "#8F3BB8", "mode": "fixed" } }]
+          },
+          {
+            "matcher": { "id": "byRegexp", "options": "/.*moving_avg.*/" },
+            "properties": [
+              { "id": "custom.lineWidth", "value": 3 },
+              { "id": "custom.lineStyle", "value": { "fill": "dash", "dash": [10, 10] } },
+              { "id": "custom.fillOpacity", "value": 0 }
+            ]
+          }
+        ]
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 43 },
+      "id": 36,
+      "options": {
+        "legend": {
+          "calcs": ["mean", "max"],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "df0xwt899eoe8f"
+          },
+          "query": "from(bucket: \"metrics\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"blockchain_operations\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"inclusion_time_seconds\")\r\n  |> filter(fn: (r) => r[\"blockchain\"] =~ /Ethereum|Polygon/)\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean)\r\n  |> yield(name: \"raw\")",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "df0xwt899eoe8f"
+          },
+          "query": "from(bucket: \"metrics\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"blockchain_operations\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"inclusion_time_seconds\")\r\n  |> filter(fn: (r) => r[\"blockchain\"] =~ /Ethereum|Polygon/)\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean)\r\n  |> movingAverage(n: 7)\r\n  |> yield(name: \"moving_avg\")",
+          "refId": "B"
+        }
+      ],
+      "title": "Inclusion Time Trends with Moving Average",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 51 },
+      "id": 37,
+      "panels": [],
+      "title": "Raw Data Table",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "df0xwt899eoe8f"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "custom": {
+            "align": "auto",
+            "cellOptions": { "type": "auto" },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "red", "value": 80 }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Timestamp" },
+            "properties": [{ "id": "custom.width", "value": 180 }]
+          },
+          {
+            "matcher": { "id": "byName", "options": "blockchain" },
+            "properties": [
+              { "id": "displayName", "value": "Blockchain" },
+              { "id": "custom.width", "value": 100 }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "operation" },
+            "properties": [
+              { "id": "displayName", "value": "Operation" },
+              { "id": "custom.width", "value": 100 }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "certificate_id" },
+            "properties": [
+              { "id": "displayName", "value": "Certificate ID" },
+              { "id": "custom.width", "value": 280 }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "gas_used" },
+            "properties": [
+              { "id": "displayName", "value": "Gas Used" },
+              { "id": "decimals", "value": 2 },
+              { "id": "custom.width", "value": 120 }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "inclusion_time_seconds" },
+            "properties": [
+              { "id": "displayName", "value": "Inclusion Time (s)" },
+              { "id": "unit", "value": "s" },
+              { "id": "decimals", "value": 3 },
+              { "id": "custom.width", "value": 140 }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "transaction_fee" },
+            "properties": [
+              { "id": "displayName", "value": "Transaction Fee" },
+              { "id": "decimals", "value": 8 },
+              { "id": "custom.width", "value": 140 }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "finalization_time_seconds" },
+            "properties": [
+              { "id": "displayName", "value": "Finalization Time (s)" },
+              { "id": "unit", "value": "s" },
+              { "id": "decimals", "value": 3 },
+              { "id": "custom.width", "value": 150 },
+              { "id": "noValue", "value": "N/A" }
+            ]
+          }
+        ]
+      },
+      "gridPos": { "h": 12, "w": 24, "x": 0, "y": 52 },
+      "id": 38,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": true,
+          "fields": "",
+          "reducer": ["count"],
+          "show": true
+        },
+        "showHeader": true,
+        "sortBy": [{ "desc": true, "displayName": "Timestamp" }]
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "df0xwt899eoe8f"
+          },
+          "query": "from(bucket: \"metrics\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"blockchain_operations\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"gas_used\" or r[\"_field\"] == \"inclusion_time_seconds\" or r[\"_field\"] == \"transaction_fee\" or r[\"_field\"] == \"finalization_time_seconds\")\r\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\r\n  |> keep(columns: [\"_time\", \"blockchain\", \"operation\", \"certificate_id\", \"gas_used\", \"inclusion_time_seconds\", \"transaction_fee\", \"finalization_time_seconds\"])\r\n  |> sort(columns: [\"_time\"], desc: true)\r\n  |> rename(columns: {\"_time\": \"Timestamp\"})\r\n  |> yield(name: \"raw_data\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Full Research Data Table",
+      "type": "table"
+    }
+  ],
+  "preload": false,
+  "schemaVersion": 42,
+  "tags": ["research", "academic", "statistics", "analysis"],
+  "templating": { "list": [] },
+  "time": { "from": "now-30d", "to": "now" },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Research & Academic Analysis",
+  "uid": "",
+  "version": 1
+}
