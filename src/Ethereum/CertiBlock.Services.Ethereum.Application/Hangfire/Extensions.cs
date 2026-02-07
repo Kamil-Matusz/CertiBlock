@@ -10,6 +10,7 @@ public static class Extensions
     {
         services.AddScoped<UpdateEthereumTransactionStatusJob>();
         services.AddScoped<FetchMissingEthereumMetricsJob>();
+        services.AddScoped<CheckEthereumFinalizationJob>();
         
         return services;
     }
@@ -27,7 +28,12 @@ public static class Extensions
             "fetch-missing-ethereum-metrics",
             job => job.FetchMissingMetricsAsync(),
             Cron.HourInterval(2));
-        
+
+        recurringJobManager.AddOrUpdate<CheckEthereumFinalizationJob>(
+            "check-ethereum-finalization",
+            job => job.CheckFinalizationAsync(),
+            Cron.MinuteInterval(5));
+
         return app;
     }
 }

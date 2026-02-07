@@ -39,4 +39,16 @@ public class EthereumMetricsRepository : IEthereumMetricRepository
             .Distinct(x => x.CertificateId, _ => true)
             .ToListAsync();
     }
+
+    public async Task<IEnumerable<EthereumMetrics>> GetUnfinalizedMetricsAsync()
+    {
+        var filter = Builders<EthereumMetrics>.Filter.Eq(x => x.IsFinalized, false);
+        return await _collection.Find(filter).ToListAsync();
+    }
+
+    public async Task UpdateEthereumMetricsAsync(EthereumMetrics metrics)
+    {
+        var filter = Builders<EthereumMetrics>.Filter.Eq(x => x.Id, metrics.Id);
+        await _collection.ReplaceOneAsync(filter, metrics);
+    }
 }
