@@ -17,4 +17,9 @@ public class PolygonMetrics
     public decimal TransactionCostNative { get; set; }
     public long GasUsed { get; set; }
     public double GasUtilizationRatio { get; set; }
+    public double InclusionTimeSeconds { get; set; }
+    public long BlockNumber { get; set; }
+    public double? FinalizationTimeSeconds { get; set; }
+    public bool IsFinalized { get; set; } = false;
+    public DateTime CollectedAt { get; set; } = DateTime.UtcNow;
 }
