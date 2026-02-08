@@ -1,4 +1,5 @@
-﻿using CertiBlock.Services.Ethereum.Core.Entities;
+﻿using CertiBlock.Services.Ethereum.Core.DTO;
+using CertiBlock.Services.Ethereum.Core.Entities;
 using CertiBlock.Services.Ethereum.Core.Repositories;
 using CertiBlock.Shared.Mongo;
 using Microsoft.Extensions.Options;
@@ -50,5 +51,26 @@ public class EthereumMetricsRepository : IEthereumMetricRepository
     {
         var filter = Builders<EthereumMetrics>.Filter.Eq(x => x.Id, metrics.Id);
         await _collection.ReplaceOneAsync(filter, metrics);
+    }
+
+    public async Task<IEnumerable<EthereumMetricResearchDto>> GetAllResearchMetricsAsync()
+    {
+        return await _collection.Find(_ => true)
+            .Project(x => new EthereumMetricResearchDto
+            {
+                Id = x.Id,
+                CertificateId = x.CertificateId,
+                Blockchain = x.Blockchain,
+                Operation = x.Operation,
+                TransactionHash = x.TransactionHash,
+                DataSizeBytes = x.DataSizeBytes,
+                Confirmations = x.Confirmations,
+                GasUsed = x.GasUsed,
+                TransactionCostUsd = x.TransactionCostUsd,
+                InclusionTimeSeconds = x.InclusionTimeSeconds,
+                BlockNumber = x.BlockNumber,
+                FinalizationTimeSeconds = x.FinalizationTimeSeconds
+            })
+            .ToListAsync();
     }
 }

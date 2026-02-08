@@ -1,4 +1,5 @@
-﻿using CertiBlock.Services.Ethereum.Core.Entities;
+﻿using CertiBlock.Services.Ethereum.Core.DTO;
+using CertiBlock.Services.Ethereum.Core.Entities;
 
 namespace CertiBlock.Services.Ethereum.Core.Repositories;
 
@@ -10,4 +11,5 @@ public interface IEthereumMetricRepository
     Task<IEnumerable<Guid>> GetAllCertificateIdsWithMetricsAsync();
     Task<IEnumerable<EthereumMetrics>> GetUnfinalizedMetricsAsync();
     Task UpdateEthereumMetricsAsync(EthereumMetrics metrics);
+    Task<IEnumerable<EthereumMetricResearchDto>> GetAllResearchMetricsAsync();
 }

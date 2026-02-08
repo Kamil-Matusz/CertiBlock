@@ -112,4 +112,9 @@ public class EthereumMetricService(IEthereumMetricRepository metricsRepository, 
 
         return EthereumMetricsMapper.Map<EthereumMetricDetailsDto>(ethereumTransaction);
     }
+
+    public async Task<IEnumerable<EthereumMetricResearchDto>> GetAllResearchMetricsAsync()
+    {
+        return await metricsRepository.GetAllResearchMetricsAsync();
+    }
 }
