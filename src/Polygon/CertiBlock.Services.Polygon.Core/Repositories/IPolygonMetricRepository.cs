@@ -1,4 +1,5 @@
-﻿using CertiBlock.Services.Polygon.Core.Entities;
+﻿using CertiBlock.Services.Polygon.Core.DTO;
+using CertiBlock.Services.Polygon.Core.Entities;
 
 namespace CertiBlock.Services.Polygon.Core.Repositories;
 
@@ -10,4 +11,5 @@ public interface IPolygonMetricRepository
     Task<IEnumerable<Guid>> GetAllCertificateIdsWithMetricsAsync();
     Task<IEnumerable<PolygonMetrics>> GetUnfinalizedMetricsAsync();
     Task UpdatePolygonMetricsAsync(PolygonMetrics metrics);
+    Task<IEnumerable<PolygonMetricResearchDto>> GetAllResearchMetricsAsync();
 }

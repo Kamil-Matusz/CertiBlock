@@ -111,4 +111,9 @@ public class PolygonMetricService(IPolygonMetricRepository polygonMetricReposito
 
         return PolygonMetricsMapper.Map<PolygonMetricDetailsDto>(polygonTransaction);
     }
+
+    public async Task<IEnumerable<PolygonMetricResearchDto>> GetAllResearchMetricsAsync()
+    {
+        return await polygonMetricRepository.GetAllResearchMetricsAsync();
+    }
 }
