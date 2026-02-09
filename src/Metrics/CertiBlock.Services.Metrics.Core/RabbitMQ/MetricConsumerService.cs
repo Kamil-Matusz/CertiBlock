@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using System.Text.Json;
 using CertiBlock.Services.Metrics.Core.Services;
+using CertiBlock.Services.Metrics.Core.Services.Metrics;
 using CertiBlock.Shared.Messaging;
 using CertiBlock.Shared.RabbitMQ;
 using Microsoft.Extensions.DependencyInjection;

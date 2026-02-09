@@ -29,7 +29,7 @@ public static class Extensions
         services.AddHealthChecks();
         
         // Services
-        services.AddServices();
+        services.AddServices(configuration);
         
         // RabbitMQ
         services.AddRabbitMq(configuration);

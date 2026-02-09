@@ -5,7 +5,7 @@ using InfluxDB.Client.Api.Domain;
 using InfluxDB.Client.Writes;
 using Microsoft.Extensions.Logging;
 
-namespace CertiBlock.Services.Metrics.Core.Services;
+namespace CertiBlock.Services.Metrics.Core.Services.Metrics;
 
 public class MetricsService(IInfluxDBClient client, InfluxDbOptions options, ILogger<MetricsService> logger) : IMetricsService
 {

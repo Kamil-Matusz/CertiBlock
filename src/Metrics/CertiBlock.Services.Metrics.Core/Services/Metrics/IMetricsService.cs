@@ -1,6 +1,6 @@
 ﻿using CertiBlock.Shared.Messaging;
 
-namespace CertiBlock.Services.Metrics.Core.Services;
+namespace CertiBlock.Services.Metrics.Core.Services.Metrics;
 
 public interface IMetricsService
 {
