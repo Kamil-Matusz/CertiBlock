@@ -1,11 +1,13 @@
+using CertiBlock.Services.Polygon.Application.RabbitMQ;
 using CertiBlock.Services.Polygon.Core.Repositories;
+using CertiBlock.Shared.Messaging;
 using Microsoft.Extensions.Logging;
 using Nethereum.Web3;
 
 namespace CertiBlock.Services.Polygon.Application.Hangfire;
 
 public class CheckPolygonFinalizationJob(IPolygonMetricRepository metricsRepository, IWeb3 web3,
-    ILogger<CheckPolygonFinalizationJob> logger)
+    ILogger<CheckPolygonFinalizationJob> logger, MetricPublisher metricPublisher)
 {
     private const int RequiredConfirmations = 128;
 
@@ -23,7 +25,7 @@ public class CheckPolygonFinalizationJob(IPolygonMetricRepository metricsReposit
         var currentBlockNumber = (long)currentBlock.Value;
 
         logger.LogInformation("Checking finalization for {Count} Polygon metrics. Current block: {Block}",
-            unfinalizedMetrics.Count, currentBlockNumber);
+                               unfinalizedMetrics.Count, currentBlockNumber);
 
         int finalizedCount = 0;
         int failedCount = 0;
@@ -57,11 +59,19 @@ public class CheckPolygonFinalizationJob(IPolygonMetricRepository metricsReposit
                 metric.Confirmations = RequiredConfirmations;
 
                 await metricsRepository.UpdatePolygonMetricsAsync(metric);
+
+                var finalizedEvent = new MetricFinalizedEvent(
+                    metric.CertificateId,
+                    Shared.Enums.Blockchain.Polygon,
+                    metric.FinalizationTimeSeconds!.Value,
+                    metric.Confirmations,
+                    DateTime.UtcNow);
+                metricPublisher.Publish(finalizedEvent);
+
                 finalizedCount++;
 
-                logger.LogInformation(
-                    "Polygon metric {MetricId} finalized. Confirmations: {Confirmations}, FinalizationTime: {Time}s",
-                    metric.Id, confirmations, metric.FinalizationTimeSeconds);
+                logger.LogInformation("Polygon metric {MetricId} finalized. Confirmations: {Confirmations}, " + 
+                                      "FinalizationTime: {Time}s", metric.Id, confirmations, metric.FinalizationTimeSeconds);
 
                 await Task.Delay(300);
             }
@@ -72,8 +82,7 @@ public class CheckPolygonFinalizationJob(IPolygonMetricRepository metricsReposit
             }
         }
 
-        logger.LogInformation(
-            "Polygon finalization check completed. Finalized: {Finalized}, Failed: {Failed}, Total checked: {Total}",
-            finalizedCount, failedCount, unfinalizedMetrics.Count);
+        logger.LogInformation("Polygon finalization check completed. Finalized: {Finalized}, Failed: {Failed}, Total checked: {Total}",
+                               finalizedCount, failedCount, unfinalizedMetrics.Count);
     }
 }

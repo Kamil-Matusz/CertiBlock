@@ -49,7 +49,7 @@ public class PolygonMetricsController(IPolygonMetricService polygonMetricService
             Operation.Register,
             21000,
             1.25,
-            0.00042,
+            0.02,
             DateTime.UtcNow
         );
 

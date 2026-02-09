@@ -76,7 +76,7 @@ public class EthereumMetricService(IEthereumMetricRepository metricsRepository, 
                 Operation.Register,
                 metrics.GasUsed,
                 metrics.InclusionTimeSeconds,
-                (double)metrics.TransactionCostNative,
+                (double)metrics.TransactionCostUsd,
                 DateTime.UtcNow);
             
             metricPublisher.Publish(metricEvent);

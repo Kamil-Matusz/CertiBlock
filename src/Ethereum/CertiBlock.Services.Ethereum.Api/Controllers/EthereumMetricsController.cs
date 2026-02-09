@@ -52,7 +52,7 @@ public class EthereumMetricsController(IEthereumMetricService ethereumMetricServ
             Operation.Register,
             21000,
             1.25,
-            0.00042,
+            0.85,
             DateTime.UtcNow
         );
 

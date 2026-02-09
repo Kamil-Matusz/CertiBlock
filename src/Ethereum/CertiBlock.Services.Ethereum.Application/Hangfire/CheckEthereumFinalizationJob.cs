@@ -1,11 +1,13 @@
+using CertiBlock.Services.Ethereum.Application.RabbitMQ;
 using CertiBlock.Services.Ethereum.Core.Repositories;
+using CertiBlock.Shared.Messaging;
 using Microsoft.Extensions.Logging;
 using Nethereum.Web3;
 
 namespace CertiBlock.Services.Ethereum.Application.Hangfire;
 
 public class CheckEthereumFinalizationJob(IEthereumMetricRepository metricsRepository, IWeb3 web3,
-    ILogger<CheckEthereumFinalizationJob> logger)
+    ILogger<CheckEthereumFinalizationJob> logger, MetricPublisher metricPublisher)
 {
     private const int RequiredConfirmations = 64;
 
@@ -23,7 +25,7 @@ public class CheckEthereumFinalizationJob(IEthereumMetricRepository metricsRepos
         var currentBlockNumber = (long)currentBlock.Value;
 
         logger.LogInformation("Checking finalization for {Count} Ethereum metrics. Current block: {Block}",
-            unfinalizedMetrics.Count, currentBlockNumber);
+                               unfinalizedMetrics.Count, currentBlockNumber);
 
         int finalizedCount = 0;
         int failedCount = 0;
@@ -57,11 +59,19 @@ public class CheckEthereumFinalizationJob(IEthereumMetricRepository metricsRepos
                 metric.Confirmations = RequiredConfirmations;
 
                 await metricsRepository.UpdateEthereumMetricsAsync(metric);
+
+                var finalizedEvent = new MetricFinalizedEvent(
+                    metric.CertificateId,
+                    Shared.Enums.Blockchain.Ethereum,
+                    metric.FinalizationTimeSeconds!.Value,
+                    metric.Confirmations,
+                    DateTime.UtcNow);
+                metricPublisher.Publish(finalizedEvent);
+
                 finalizedCount++;
 
-                logger.LogInformation(
-                    "Ethereum metric {MetricId} finalized. Confirmations: {Confirmations}, FinalizationTime: {Time}s",
-                    metric.Id, confirmations, metric.FinalizationTimeSeconds);
+                logger.LogInformation("Ethereum metric {MetricId} finalized. Confirmations: {Confirmations}, " +
+                                      "FinalizationTime: {Time}s", metric.Id, confirmations, metric.FinalizationTimeSeconds);
 
                 await Task.Delay(300);
             }
@@ -72,8 +82,7 @@ public class CheckEthereumFinalizationJob(IEthereumMetricRepository metricsRepos
             }
         }
 
-        logger.LogInformation(
-            "Ethereum finalization check completed. Finalized: {Finalized}, Failed: {Failed}, Total checked: {Total}",
-            finalizedCount, failedCount, unfinalizedMetrics.Count);
+        logger.LogInformation("Ethereum finalization check completed. Finalized: {Finalized}, Failed: {Failed}, " +
+                              "Total checked: {Total}", finalizedCount, failedCount, unfinalizedMetrics.Count);
     }
 }

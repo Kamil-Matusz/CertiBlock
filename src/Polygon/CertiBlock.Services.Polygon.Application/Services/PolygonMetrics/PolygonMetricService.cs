@@ -76,7 +76,7 @@ public class PolygonMetricService(IPolygonMetricRepository polygonMetricReposito
                 Operation.Register,
                 metrics.GasUsed,
                 metrics.InclusionTimeSeconds,
-                (double)metrics.TransactionCostNative,
+                (double)metrics.TransactionCostUsd,
                 DateTime.UtcNow);
             
             metricPublisher.Publish(metricEvent);
