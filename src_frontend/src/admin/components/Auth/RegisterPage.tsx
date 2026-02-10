@@ -15,9 +15,11 @@ import {
 } from '@mui/material';
 import { PersonAdd as PersonAddIcon } from '@mui/icons-material';
 import { API_URL } from '../../../config.ts';
+import { useApiError } from '../../../hooks/useApiError';
 
 export const RegisterPage = () => {
     const navigate = useNavigate();
+    const { error, errorMessage, setErrorFromResponse, setErrorMessage, clearError } = useApiError();
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -26,7 +28,6 @@ export const RegisterPage = () => {
         isActive: true
     });
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
 
     const handleChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,7 +35,7 @@ export const RegisterPage = () => {
             ...formData,
             [field]: event.target.value
         });
-        setError('');
+        clearError();
     };
 
     const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,27 +49,27 @@ export const RegisterPage = () => {
         event.preventDefault();
 
         if (!formData.email || !formData.password) {
-            setError('Email and password are required');
+            setErrorMessage('Email and password are required');
             return;
         }
 
         if (formData.password !== formData.confirmPassword) {
-            setError('Passwords do not match');
+            setErrorMessage('Passwords do not match');
             return;
         }
 
         if (formData.password.length < 6) {
-            setError('Password must be at least 6 characters long');
+            setErrorMessage('Password must be at least 6 characters long');
             return;
         }
 
         if (formData.password.length > 200) {
-            setError('Password cannot be longer than 200 characters');
+            setErrorMessage('Password cannot be longer than 200 characters');
             return;
         }
 
         setLoading(true);
-        setError('');
+        clearError();
 
         try {
             const response = await fetch(`${API_URL}/users-service/Users/signUp`, {
@@ -86,8 +87,8 @@ export const RegisterPage = () => {
             });
 
             if (!response.ok) {
-                const errorData = await response.json().catch(() => ({}));
-                throw new Error(errorData.message || 'Registration failed');
+                await setErrorFromResponse(response);
+                return;
             }
 
             setSuccess(true);
@@ -96,7 +97,7 @@ export const RegisterPage = () => {
             }, 2000);
 
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'Registration failed. Please try again.');
+            setErrorMessage(err instanceof Error ? err.message : 'Registration failed. Please try again.');
         } finally {
             setLoading(false);
         }
@@ -203,7 +204,7 @@ export const RegisterPage = () => {
                                 color: '#fca5a5',
                             }}
                         >
-                            {error}
+                            {errorMessage}
                         </Alert>
                     )}
 
