@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <PackageReference Include="AspNetCore.HealthChecks.RabbitMQ" Version="8.0.2" />
+      <PackageReference Include="Humanizer" Version="2.14.1" />
       <PackageReference Include="Hangfire.AspNetCore" Version="1.8.22" />
       <PackageReference Include="Hangfire.Mongo" Version="1.12.1" />
       <PackageReference Include="InfluxDB.Client" Version="4.15.0" />

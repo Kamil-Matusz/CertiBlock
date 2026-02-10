@@ -2,9 +2,9 @@
 using CertiBlock.Services.Users.Infrastructure.Auth;
 using CertiBlock.Services.Users.Infrastructure.DAL;
 using CertiBlock.Services.Users.Infrastructure.DAL.Repositories;
-using CertiBlock.Services.Users.Infrastructure.Errors;
 using CertiBlock.Services.Users.Infrastructure.Security;
 using CertiBlock.Shared.CORS;
+using CertiBlock.Shared.Exceptions;
 using CertiBlock.Shared.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
