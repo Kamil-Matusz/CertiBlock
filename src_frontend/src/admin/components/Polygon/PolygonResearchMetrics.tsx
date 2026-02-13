@@ -235,7 +235,7 @@ export const PolygonResearchMetrics = () => {
                                                 fontFamily: 'monospace'
                                             }}
                                         >
-                                            ${metric.transactionCostUsd.toFixed(6)}
+                                            ${metric.transactionCostUsd.toFixed(4)}
                                         </Box>
                                     </TableCell>
                                     <TableCell align="right" sx={{ fontFamily: 'monospace' }}>

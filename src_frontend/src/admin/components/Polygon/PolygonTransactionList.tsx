@@ -281,7 +281,7 @@ const MetricsModal = ({ open, onClose, certificateId }: MetricsModalProps) => {
                             />
                             <MetricCard
                                 label="Cost (USD)"
-                                value={`$${metrics.transactionCostUsd.toFixed(6)}`}
+                                value={`$${metrics.transactionCostUsd.toFixed(4)}`}
                                 gradient="linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%)"
                             />
                             <MetricCard
