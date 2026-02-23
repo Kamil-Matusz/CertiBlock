@@ -12,17 +12,13 @@ public class SignUpTests
         var userId = Guid.NewGuid();
         var email = "testemail@test.com";
         var password = "password";
-        var role = "Nurse";
-        var isActive = true;
 
         // Act
-        var signUpCommand = new SignUp(userId, email, password, role, isActive);
+        var signUpCommand = new SignUp(userId, email, password);
 
         // Assert
         signUpCommand.UserId.ShouldBe(userId);
         signUpCommand.Email.ShouldBe(email);
         signUpCommand.Password.ShouldBe(password);
-        signUpCommand.Role.ShouldBe(role);
-        signUpCommand.IsActive.ShouldBe(isActive);
     }
 }

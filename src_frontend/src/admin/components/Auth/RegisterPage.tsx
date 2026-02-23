@@ -9,9 +9,6 @@ import {
     Typography,
     Alert,
     Link,
-    FormControlLabel,
-    Checkbox,
-    MenuItem
 } from '@mui/material';
 import { PersonAdd as PersonAddIcon } from '@mui/icons-material';
 import { API_URL } from '../../../config.ts';
@@ -24,8 +21,6 @@ export const RegisterPage = () => {
         email: '',
         password: '',
         confirmPassword: '',
-        role: 'User',
-        isActive: true
     });
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
@@ -36,13 +31,6 @@ export const RegisterPage = () => {
             [field]: event.target.value
         });
         clearError();
-    };
-
-    const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData({
-            ...formData,
-            isActive: event.target.checked
-        });
     };
 
     const handleSubmit = async (event: React.FormEvent) => {
@@ -81,8 +69,6 @@ export const RegisterPage = () => {
                     userId: '00000000-0000-0000-0000-000000000000',
                     email: formData.email,
                     password: formData.password,
-                    role: formData.role,
-                    isActive: formData.isActive
                 }),
             });
 
@@ -333,69 +319,6 @@ export const RegisterPage = () => {
                                 },
                                 '& .MuiOutlinedInput-input': {
                                     color: '#fff',
-                                },
-                            }}
-                        />
-
-                        <TextField
-                            label="Role"
-                            select
-                            fullWidth
-                            value={formData.role}
-                            onChange={handleChange('role')}
-                            margin="normal"
-                            disabled={loading || success}
-                            sx={{
-                                '& .MuiOutlinedInput-root': {
-                                    borderRadius: '12px',
-                                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                                    transition: 'all 0.3s ease',
-                                    '&:hover': {
-                                        backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                                    },
-                                    '&.Mui-focused': {
-                                        backgroundColor: 'rgba(6, 182, 212, 0.1)',
-                                        '& .MuiOutlinedInput-notchedOutline': {
-                                            borderColor: '#06b6d4',
-                                            borderWidth: '2px',
-                                        },
-                                    },
-                                },
-                                '& .MuiInputLabel-root': {
-                                    color: 'rgba(255, 255, 255, 0.7)',
-                                },
-                                '& .MuiOutlinedInput-input': {
-                                    color: '#fff',
-                                },
-                                '& .MuiSelect-icon': {
-                                    color: 'rgba(255, 255, 255, 0.7)',
-                                },
-                            }}
-                        >
-                            <MenuItem value="User">User</MenuItem>
-                            <MenuItem value="Admin">Admin</MenuItem>
-                        </TextField>
-
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={formData.isActive}
-                                    onChange={handleCheckboxChange}
-                                    disabled={loading || success}
-                                    sx={{
-                                        color: 'rgba(255, 255, 255, 0.5)',
-                                        '&.Mui-checked': {
-                                            color: '#06b6d4',
-                                        },
-                                    }}
-                                />
-                            }
-                            label="Active Account"
-                            sx={{
-                                mt: 2,
-                                mb: 2,
-                                '& .MuiFormControlLabel-label': {
-                                    color: 'rgba(255, 255, 255, 0.7)',
                                 },
                             }}
                         />
