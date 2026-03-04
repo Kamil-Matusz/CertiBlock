@@ -39,6 +39,10 @@ interface EthereumMetrics {
     transactionCostNative: number;
     gasUsed: number;
     gasUtilizationRatio: number;
+    inclusionTimeSeconds: number;
+    blockNumber: number;
+    finalizationTimeSeconds?: number;
+    isFinalized: boolean;
 }
 
 interface EthereumTransaction {
@@ -275,13 +279,39 @@ const MetricsModal = ({ open, onClose, certificateId }: MetricsModalProps) => {
                             />
                             <MetricCard
                                 label="Cost (USD)"
-                                value={`$${metrics.transactionCostUsd.toFixed(6)}`}
+                                value={`$${metrics.transactionCostUsd.toFixed(4)}`}
                                 gradient="linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%)"
                             />
                             <MetricCard
                                 label="Cost (ETH)"
                                 value={metrics.transactionCostNative.toFixed(10)}
                                 gradient="linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%)"
+                            />
+                            <MetricCard
+                                label="Block Number"
+                                value={metrics.blockNumber.toLocaleString()}
+                                gradient="linear-gradient(135deg, #fee2e2 0%, #fecaca 100%)"
+                            />
+                            <MetricCard
+                                label="Inclusion Time"
+                                value={metrics.inclusionTimeSeconds.toFixed(2)}
+                                suffix="sec"
+                                gradient="linear-gradient(135deg, #cffafe 0%, #a5f3fc 100%)"
+                            />
+                            {metrics.finalizationTimeSeconds != null && (
+                                <MetricCard
+                                    label="Finalization Time"
+                                    value={metrics.finalizationTimeSeconds.toFixed(2)}
+                                    suffix="sec"
+                                    gradient="linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%)"
+                                />
+                            )}
+                            <MetricCard
+                                label="Finalized"
+                                value={metrics.isFinalized ? 'Yes' : 'No'}
+                                gradient={metrics.isFinalized 
+                                    ? "linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%)" 
+                                    : "linear-gradient(135deg, #fecaca 0%, #fca5a5 100%)"}
                             />
                         </Box>
                     </Box>

@@ -14,15 +14,13 @@ public sealed class SignUpHandler(IClock clock, IPasswordManager passwordManager
 {
     public async Task HandlerAsync(SignUp command)
     {
-        var role = string.IsNullOrWhiteSpace(command.Role) ? Role.User() : new Role(command.Role);
-        
         if (await userRepository.GetUserByEmailAsync(command.Email) is not null)
         {
             throw new EmailAlreadyInUseException(command.Email);
         }
-        
+
         var securedPassword = passwordManager.Secure(command.Password);
-        var user = new User(command.UserId, command.Email, securedPassword, command.Role, command.IsActive, clock.CurrentDate());
+        var user = new User(command.UserId, command.Email, securedPassword, Role.User(), true, clock.CurrentDate());
 
         await userRepository.AddUserAsync(user);
     }

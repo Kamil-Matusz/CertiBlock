@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Link, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link, useLocation, Navigate } from "react-router-dom";
 import AdminApp from "./admin/AdminApp";
 import { RegisterPage } from "./admin/components/Auth/RegisterPage";
 import { CertificateCreateForm } from "./components/Certificates/CertificateCreateForm";
@@ -87,7 +87,7 @@ function AppContent() {
 
             <main className="app-main">
                 <Routes>
-                    <Route path="/" element={<div>Welcome to CertiBlock</div>} />
+                    <Route path="/" element={<Navigate to="/admin" replace />} />
                     <Route path="/register" element={<RegisterPage />} />
                     <Route path="/certificates/create" element={<CertificateCreateForm />} />
                 </Routes>

@@ -12,7 +12,8 @@ using Nethereum.Web3;
 namespace CertiBlock.Services.Polygon.Application.Services.PolygonMetrics;
 
 public class PolygonMetricService(IPolygonMetricRepository polygonMetricRepository, ILogger<PolygonMetricService> logger,
-    IWeb3 web3, ICoinGeckoService coinGeckoService, MetricPublisher metricPublisher) : IPolygonMetricService
+    IWeb3 web3, ICoinGeckoService coinGeckoService, MetricPublisher metricPublisher,
+    IPolygonRepository polygonRepository) : IPolygonMetricService
 {
     public async Task<Core.Entities.PolygonMetrics> CollectMetricsAsync(Guid certificateId, string transactionHash)
     {
@@ -24,7 +25,14 @@ public class PolygonMetricService(IPolygonMetricRepository polygonMetricReposito
 
             if (txn == null || receipt == null)
                 throw new PolygonTransactionsByHashNotFoundException($"Transaction {transactionHash} not found.");
-            
+
+            var block = await web3.Eth.Blocks.GetBlockWithTransactionsByNumber.SendRequestAsync(receipt.BlockNumber);
+            var blockTimestamp = DateTimeOffset.FromUnixTimeSeconds((long)block.Timestamp.Value).UtcDateTime;
+
+            var transaction = await polygonRepository.GetBlockchainTransactionByCertificateIdAsync(certificateId);
+            var submittedAt = transaction?.CreatedAt ?? blockTimestamp;
+            var inclusionTimeSeconds = (blockTimestamp - submittedAt).TotalSeconds;
+
             var dataSizeBytes = string.IsNullOrEmpty(txn.Input) ? 0 : (txn.Input.Length - 2) / 2;
             var confirmations = (int)(latestBlock.Value - receipt.BlockNumber.Value);
             var gasUsed = (long)receipt.GasUsed.Value;
@@ -39,6 +47,8 @@ public class PolygonMetricService(IPolygonMetricRepository polygonMetricReposito
                 ? (double)gasUsed / (double)txn.Gas.Value * 100.0
                 : 0;
 
+            var collectedAt = DateTime.UtcNow;
+
             var metrics = new Core.Entities.PolygonMetrics
             {
                 CertificateId = certificateId,
@@ -50,18 +60,23 @@ public class PolygonMetricService(IPolygonMetricRepository polygonMetricReposito
                 TransactionCostNative = transactionCostNative,
                 TransactionCostUsd = transactionCostUsd,
                 GasUsed = gasUsed,
-                GasUtilizationRatio = gasUtilizationRatio
+                GasUtilizationRatio = gasUtilizationRatio,
+                InclusionTimeSeconds = inclusionTimeSeconds,
+                BlockNumber = (long)receipt.BlockNumber.Value,
+                IsFinalized = false,
+                FinalizationTimeSeconds = null,
+                CollectedAt = collectedAt
             };
 
             await polygonMetricRepository.SavePolygonMetricsAsync(metrics);
-            
+
             var metricEvent = new MetricCollectedEvent(
                 metrics.CertificateId,
-                Blockchain.Ethereum,
+                Blockchain.Polygon,
                 Operation.Register,
                 metrics.GasUsed,
-                1.25,
-                (double)metrics.TransactionCostNative,
+                metrics.InclusionTimeSeconds,
+                (double)metrics.TransactionCostUsd,
                 DateTime.UtcNow);
             
             metricPublisher.Publish(metricEvent);
@@ -95,5 +110,10 @@ public class PolygonMetricService(IPolygonMetricRepository polygonMetricReposito
         }
 
         return PolygonMetricsMapper.Map<PolygonMetricDetailsDto>(polygonTransaction);
+    }
+
+    public async Task<IEnumerable<PolygonMetricResearchDto>> GetAllResearchMetricsAsync()
+    {
+        return await polygonMetricRepository.GetAllResearchMetricsAsync();
     }
 }

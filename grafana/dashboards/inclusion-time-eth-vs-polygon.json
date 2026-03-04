@@ -1,0 +1,740 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_INFLUXDB",
+      "label": "InfluxDB",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "influxdb",
+      "pluginName": "InfluxDB"
+    }
+  ],
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "10.0.0"
+    },
+    {
+      "type": "datasource",
+      "id": "influxdb",
+      "name": "InfluxDB",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "stat",
+      "name": "Stat",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "timeseries",
+      "name": "Time series",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "bargauge",
+      "name": "Bar gauge",
+      "version": ""
+    }
+  ],
+  "annotations": {
+    "list": []
+  },
+  "description": "Porównanie czasu pierwszego włączenia transakcji do bloku (inclusion time) na Ethereum vs Polygon",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
+      "id": 100,
+      "title": "Podsumowanie czasu inkluzji",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "influxdb", "uid": "${DS_INFLUXDB}" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "fixed", "fixedColor": "#6e9fcf" },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 30 },
+              { "color": "red", "value": 60 }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 0, "y": 1 },
+      "id": 1,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["mean"], "fields": "", "values": false },
+        "textMode": "auto"
+      },
+      "title": "Avg czas inkluzji – Ethereum",
+      "description": "Średni czas od wysłania transakcji do jej włączenia w pierwszy blok na Ethereum",
+      "type": "stat",
+      "targets": [
+        {
+          "datasource": { "type": "influxdb", "uid": "${DS_INFLUXDB}" },
+          "query": "from(bucket: \"metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"blockchain_operations\")\n  |> filter(fn: (r) => r._field == \"inclusion_time_seconds\")\n  |> filter(fn: (r) => r.blockchain == \"Ethereum\")\n  |> mean()\n  |> map(fn: (r) => ({r with _field: \"avg_inclusion_time\"}))",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "datasource": { "type": "influxdb", "uid": "${DS_INFLUXDB}" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "fixed", "fixedColor": "#8663c7" },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 5 },
+              { "color": "red", "value": 15 }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 4, "y": 1 },
+      "id": 2,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["mean"], "fields": "", "values": false },
+        "textMode": "auto"
+      },
+      "title": "Avg czas inkluzji – Polygon",
+      "description": "Średni czas od wysłania transakcji do jej włączenia w pierwszy blok na Polygon",
+      "type": "stat",
+      "targets": [
+        {
+          "datasource": { "type": "influxdb", "uid": "${DS_INFLUXDB}" },
+          "query": "from(bucket: \"metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"blockchain_operations\")\n  |> filter(fn: (r) => r._field == \"inclusion_time_seconds\")\n  |> filter(fn: (r) => r.blockchain == \"Polygon\")\n  |> mean()\n  |> map(fn: (r) => ({r with _field: \"avg_inclusion_time\"}))",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "datasource": { "type": "influxdb", "uid": "${DS_INFLUXDB}" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 5 },
+              { "color": "red", "value": 15 }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 8, "y": 1 },
+      "id": 3,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "text": {},
+        "textMode": "auto"
+      },
+      "title": "Krotność ETH / Polygon",
+      "description": "Ile razy Ethereum jest wolniejszy od Polygon przy pierwszej inkluzji transakcji",
+      "type": "stat",
+      "targets": [
+        {
+          "datasource": { "type": "influxdb", "uid": "${DS_INFLUXDB}" },
+          "query": "union(\n  tables: [\n    from(bucket: \"metrics\")\n      |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n      |> filter(fn: (r) => r._measurement == \"blockchain_operations\")\n      |> filter(fn: (r) => r._field == \"inclusion_time_seconds\")\n      |> filter(fn: (r) => r.blockchain == \"Ethereum\")\n      |> mean()\n      |> set(key: \"blockchain\", value: \"Ethereum\"),\n    from(bucket: \"metrics\")\n      |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n      |> filter(fn: (r) => r._measurement == \"blockchain_operations\")\n      |> filter(fn: (r) => r._field == \"inclusion_time_seconds\")\n      |> filter(fn: (r) => r.blockchain == \"Polygon\")\n      |> mean()\n      |> set(key: \"blockchain\", value: \"Polygon\")\n  ]\n)\n|> pivot(rowKey: [\"_start\"], columnKey: [\"blockchain\"], valueColumn: \"_value\")\n|> map(fn: (r) => ({_value: r.Ethereum / r.Polygon, _time: r._start, _field: \"ratio\"}))",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "datasource": { "type": "influxdb", "uid": "${DS_INFLUXDB}" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "fixed", "fixedColor": "#6e9fcf" },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 120 },
+              { "color": "red", "value": 300 }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 12, "y": 1 },
+      "id": 4,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "textMode": "auto"
+      },
+      "title": "P95 czas inkluzji – Ethereum",
+      "description": "95. percentyl czasu inkluzji na Ethereum — miara obciążenia mempool w skrajnych przypadkach",
+      "type": "stat",
+      "targets": [
+        {
+          "datasource": { "type": "influxdb", "uid": "${DS_INFLUXDB}" },
+          "query": "from(bucket: \"metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"blockchain_operations\")\n  |> filter(fn: (r) => r._field == \"inclusion_time_seconds\")\n  |> filter(fn: (r) => r.blockchain == \"Ethereum\")\n  |> quantile(q: 0.95, method: \"estimate_tdigest\")",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "datasource": { "type": "influxdb", "uid": "${DS_INFLUXDB}" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "fixed", "fixedColor": "#8663c7" },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 20 },
+              { "color": "red", "value": 60 }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 16, "y": 1 },
+      "id": 5,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "textMode": "auto"
+      },
+      "title": "P95 czas inkluzji – Polygon",
+      "description": "95. percentyl czasu inkluzji na Polygon — miara obciążenia sieci w skrajnych przypadkach",
+      "type": "stat",
+      "targets": [
+        {
+          "datasource": { "type": "influxdb", "uid": "${DS_INFLUXDB}" },
+          "query": "from(bucket: \"metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"blockchain_operations\")\n  |> filter(fn: (r) => r._field == \"inclusion_time_seconds\")\n  |> filter(fn: (r) => r.blockchain == \"Polygon\")\n  |> quantile(q: 0.95, method: \"estimate_tdigest\")",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "datasource": { "type": "influxdb", "uid": "${DS_INFLUXDB}" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "fixed", "fixedColor": "#73bf69" },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 20, "y": 1 },
+      "id": 6,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["count"], "fields": "", "values": false },
+        "textMode": "value_and_name"
+      },
+      "title": "Liczba transakcji",
+      "description": "Łączna liczba transakcji z zarejestrowanym czasem inkluzji (oba blockchainy)",
+      "type": "stat",
+      "targets": [
+        {
+          "datasource": { "type": "influxdb", "uid": "${DS_INFLUXDB}" },
+          "query": "from(bucket: \"metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"blockchain_operations\")\n  |> filter(fn: (r) => r._field == \"inclusion_time_seconds\")\n  |> filter(fn: (r) => r.blockchain == \"Ethereum\")\n  |> count()\n  |> set(key: \"blockchain\", value: \"Ethereum\")",
+          "refId": "A"
+        },
+        {
+          "datasource": { "type": "influxdb", "uid": "${DS_INFLUXDB}" },
+          "query": "from(bucket: \"metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"blockchain_operations\")\n  |> filter(fn: (r) => r._field == \"inclusion_time_seconds\")\n  |> filter(fn: (r) => r.blockchain == \"Polygon\")\n  |> count()\n  |> set(key: \"blockchain\", value: \"Polygon\")",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 5 },
+      "id": 101,
+      "title": "Czas inkluzji w czasie",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "influxdb", "uid": "${DS_INFLUXDB}" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "Sekundy",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "unit": "s"
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Ethereum" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "#6e9fcf", "mode": "fixed" } }]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Polygon" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "#8663c7", "mode": "fixed" } }]
+          }
+        ]
+      },
+      "gridPos": { "h": 9, "w": 16, "x": 0, "y": 6 },
+      "id": 7,
+      "options": {
+        "legend": { "calcs": ["mean", "min", "max", "last"], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "none" }
+      },
+      "title": "Średni czas inkluzji (s) – Ethereum vs Polygon",
+      "description": "Czas od wysłania transakcji do momentu jej włączenia w pierwszy blok. Ethereum typowo 15–60s, Polygon 2–5s",
+      "type": "timeseries",
+      "targets": [
+        {
+          "datasource": { "type": "influxdb", "uid": "${DS_INFLUXDB}" },
+          "query": "from(bucket: \"metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"blockchain_operations\")\n  |> filter(fn: (r) => r._field == \"inclusion_time_seconds\")\n  |> filter(fn: (r) => r.blockchain == \"Ethereum\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> set(key: \"_field\", value: \"Ethereum\")",
+          "refId": "A"
+        },
+        {
+          "datasource": { "type": "influxdb", "uid": "${DS_INFLUXDB}" },
+          "query": "from(bucket: \"metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"blockchain_operations\")\n  |> filter(fn: (r) => r._field == \"inclusion_time_seconds\")\n  |> filter(fn: (r) => r.blockchain == \"Polygon\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> set(key: \"_field\", value: \"Polygon\")",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "datasource": { "type": "influxdb", "uid": "${DS_INFLUXDB}" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "decimals": 2,
+          "mappings": [],
+          "max": 120,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 15 },
+              { "color": "red", "value": 60 }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Ethereum" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "#6e9fcf", "mode": "fixed" } }]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Polygon" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "#8663c7", "mode": "fixed" } }]
+          }
+        ]
+      },
+      "gridPos": { "h": 9, "w": 8, "x": 16, "y": 6 },
+      "id": 8,
+      "options": {
+        "displayMode": "lcd",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "orientation": "horizontal",
+        "reduceOptions": { "calcs": ["mean"], "fields": "", "values": false },
+        "showUnfilled": true,
+        "text": {}
+      },
+      "title": "Średni czas inkluzji – porównanie",
+      "type": "bargauge",
+      "targets": [
+        {
+          "datasource": { "type": "influxdb", "uid": "${DS_INFLUXDB}" },
+          "query": "from(bucket: \"metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"blockchain_operations\")\n  |> filter(fn: (r) => r._field == \"inclusion_time_seconds\")\n  |> filter(fn: (r) => r.blockchain == \"Ethereum\")\n  |> mean()\n  |> set(key: \"_field\", value: \"Ethereum\")",
+          "refId": "A"
+        },
+        {
+          "datasource": { "type": "influxdb", "uid": "${DS_INFLUXDB}" },
+          "query": "from(bucket: \"metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"blockchain_operations\")\n  |> filter(fn: (r) => r._field == \"inclusion_time_seconds\")\n  |> filter(fn: (r) => r.blockchain == \"Polygon\")\n  |> mean()\n  |> set(key: \"_field\", value: \"Polygon\")",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 15 },
+      "id": 102,
+      "title": "Zmienność i szczyty obciążenia",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "influxdb", "uid": "${DS_INFLUXDB}" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "Sekundy",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "unit": "s"
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Ethereum – max" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "#6e9fcf", "mode": "fixed" } }]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Polygon – max" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "#8663c7", "mode": "fixed" } }]
+          }
+        ]
+      },
+      "gridPos": { "h": 9, "w": 12, "x": 0, "y": 16 },
+      "id": 9,
+      "options": {
+        "legend": { "calcs": ["mean", "max", "last"], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "none" }
+      },
+      "title": "Maksymalny czas inkluzji (szczyty congestion) – Ethereum vs Polygon",
+      "description": "Wartości maksymalne wskazują momenty przeciążenia mempool / sieci. Duże wahania ETH sugerują wrażliwość na ceny gazu",
+      "type": "timeseries",
+      "targets": [
+        {
+          "datasource": { "type": "influxdb", "uid": "${DS_INFLUXDB}" },
+          "query": "from(bucket: \"metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"blockchain_operations\")\n  |> filter(fn: (r) => r._field == \"inclusion_time_seconds\")\n  |> filter(fn: (r) => r.blockchain == \"Ethereum\")\n  |> aggregateWindow(every: v.windowPeriod, fn: max, createEmpty: false)\n  |> set(key: \"_field\", value: \"Ethereum – max\")",
+          "refId": "A"
+        },
+        {
+          "datasource": { "type": "influxdb", "uid": "${DS_INFLUXDB}" },
+          "query": "from(bucket: \"metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"blockchain_operations\")\n  |> filter(fn: (r) => r._field == \"inclusion_time_seconds\")\n  |> filter(fn: (r) => r.blockchain == \"Polygon\")\n  |> aggregateWindow(every: v.windowPeriod, fn: max, createEmpty: false)\n  |> set(key: \"_field\", value: \"Polygon – max\")",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "datasource": { "type": "influxdb", "uid": "${DS_INFLUXDB}" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "Sekundy",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 15,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "unit": "s"
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Ethereum – min" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "#6e9fcf", "mode": "fixed" } },
+              { "id": "custom.lineStyle", "value": { "dash": [6, 4], "fill": "dash" } }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Ethereum – avg" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "#6e9fcf", "mode": "fixed" } }]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Polygon – min" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "#8663c7", "mode": "fixed" } },
+              { "id": "custom.lineStyle", "value": { "dash": [6, 4], "fill": "dash" } }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Polygon – avg" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "#8663c7", "mode": "fixed" } }]
+          }
+        ]
+      },
+      "gridPos": { "h": 9, "w": 12, "x": 12, "y": 16 },
+      "id": 10,
+      "options": {
+        "legend": { "calcs": ["mean", "min", "last"], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "none" }
+      },
+      "title": "Min vs avg czas inkluzji – Ethereum vs Polygon",
+      "description": "Linia ciągła = średnia, przerywana = minimum. Różnica min–avg mierzy zmienność. Duża różnica na ETH oznacza nieprzewidywalny czas inkluzji",
+      "type": "timeseries",
+      "targets": [
+        {
+          "datasource": { "type": "influxdb", "uid": "${DS_INFLUXDB}" },
+          "query": "from(bucket: \"metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"blockchain_operations\")\n  |> filter(fn: (r) => r._field == \"inclusion_time_seconds\")\n  |> filter(fn: (r) => r.blockchain == \"Ethereum\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> set(key: \"_field\", value: \"Ethereum – avg\")",
+          "refId": "A"
+        },
+        {
+          "datasource": { "type": "influxdb", "uid": "${DS_INFLUXDB}" },
+          "query": "from(bucket: \"metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"blockchain_operations\")\n  |> filter(fn: (r) => r._field == \"inclusion_time_seconds\")\n  |> filter(fn: (r) => r.blockchain == \"Ethereum\")\n  |> aggregateWindow(every: v.windowPeriod, fn: min, createEmpty: false)\n  |> set(key: \"_field\", value: \"Ethereum – min\")",
+          "refId": "B"
+        },
+        {
+          "datasource": { "type": "influxdb", "uid": "${DS_INFLUXDB}" },
+          "query": "from(bucket: \"metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"blockchain_operations\")\n  |> filter(fn: (r) => r._field == \"inclusion_time_seconds\")\n  |> filter(fn: (r) => r.blockchain == \"Polygon\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> set(key: \"_field\", value: \"Polygon – avg\")",
+          "refId": "C"
+        },
+        {
+          "datasource": { "type": "influxdb", "uid": "${DS_INFLUXDB}" },
+          "query": "from(bucket: \"metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"blockchain_operations\")\n  |> filter(fn: (r) => r._field == \"inclusion_time_seconds\")\n  |> filter(fn: (r) => r.blockchain == \"Polygon\")\n  |> aggregateWindow(every: v.windowPeriod, fn: min, createEmpty: false)\n  |> set(key: \"_field\", value: \"Polygon – min\")",
+          "refId": "D"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 25 },
+      "id": 103,
+      "title": "Inkluzja vs cena gazu",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "influxdb", "uid": "${DS_INFLUXDB}" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "Sekundy",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "unit": "s"
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Inkluzja ETH (s)" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "#6e9fcf", "mode": "fixed" } },
+              { "id": "custom.axisPlacement", "value": "left" }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Koszt ETH (USD)" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "#f2cc0c", "mode": "fixed" } },
+              { "id": "custom.axisPlacement", "value": "right" },
+              { "id": "unit", "value": "currencyUSD" },
+              { "id": "decimals", "value": 6 }
+            ]
+          }
+        ]
+      },
+      "gridPos": { "h": 9, "w": 12, "x": 0, "y": 26 },
+      "id": 11,
+      "options": {
+        "legend": { "calcs": ["mean", "last"], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "none" }
+      },
+      "title": "Inkluzja ETH vs koszt transakcji – korelacja",
+      "description": "Wyższa cena gazu (transaction_cost_usd) powinna skracać czas inkluzji na Ethereum — transakcja z wyższym fee jest priorytetyzowana przez górników/walidatorów",
+      "type": "timeseries",
+      "targets": [
+        {
+          "datasource": { "type": "influxdb", "uid": "${DS_INFLUXDB}" },
+          "query": "from(bucket: \"metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"blockchain_operations\")\n  |> filter(fn: (r) => r._field == \"inclusion_time_seconds\")\n  |> filter(fn: (r) => r.blockchain == \"Ethereum\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> set(key: \"_field\", value: \"Inkluzja ETH (s)\")",
+          "refId": "A"
+        },
+        {
+          "datasource": { "type": "influxdb", "uid": "${DS_INFLUXDB}" },
+          "query": "from(bucket: \"metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"blockchain_operations\")\n  |> filter(fn: (r) => r._field == \"transaction_cost_usd\")\n  |> filter(fn: (r) => r.blockchain == \"Ethereum\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> set(key: \"_field\", value: \"Koszt ETH (USD)\")",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "datasource": { "type": "influxdb", "uid": "${DS_INFLUXDB}" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "Sekundy",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "unit": "s"
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Inkluzja Polygon (s)" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "#8663c7", "mode": "fixed" } },
+              { "id": "custom.axisPlacement", "value": "left" }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Koszt Polygon (USD)" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "#f2cc0c", "mode": "fixed" } },
+              { "id": "custom.axisPlacement", "value": "right" },
+              { "id": "unit", "value": "currencyUSD" },
+              { "id": "decimals", "value": 6 }
+            ]
+          }
+        ]
+      },
+      "gridPos": { "h": 9, "w": 12, "x": 12, "y": 26 },
+      "id": 12,
+      "options": {
+        "legend": { "calcs": ["mean", "last"], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "none" }
+      },
+      "title": "Inkluzja Polygon vs koszt transakcji – korelacja",
+      "description": "Na Polygon krótki czas bloku (~2s) sprawia, że koszt gazu ma mniejszy wpływ na czas inkluzji niż na Ethereum",
+      "type": "timeseries",
+      "targets": [
+        {
+          "datasource": { "type": "influxdb", "uid": "${DS_INFLUXDB}" },
+          "query": "from(bucket: \"metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"blockchain_operations\")\n  |> filter(fn: (r) => r._field == \"inclusion_time_seconds\")\n  |> filter(fn: (r) => r.blockchain == \"Polygon\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> set(key: \"_field\", value: \"Inkluzja Polygon (s)\")",
+          "refId": "A"
+        },
+        {
+          "datasource": { "type": "influxdb", "uid": "${DS_INFLUXDB}" },
+          "query": "from(bucket: \"metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"blockchain_operations\")\n  |> filter(fn: (r) => r._field == \"transaction_cost_usd\")\n  |> filter(fn: (r) => r.blockchain == \"Polygon\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> set(key: \"_field\", value: \"Koszt Polygon (USD)\")",
+          "refId": "B"
+        }
+      ]
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 38,
+  "tags": ["certiblock", "blockchain", "inkluzja", "inclusion-time", "ethereum", "polygon", "research"],
+  "templating": {
+    "list": []
+  },
+  "time": { "from": "now-7d", "to": "now" },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "CertiBlock – Czas Inkluzji Transakcji: Ethereum vs Polygon",
+  "uid": "certiblock-inclusion-eth-poly",
+  "version": 1,
+  "weekStart": ""
+}

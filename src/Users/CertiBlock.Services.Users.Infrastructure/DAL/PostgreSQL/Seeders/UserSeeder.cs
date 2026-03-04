@@ -1,11 +1,11 @@
 using CertiBlock.Services.Users.Core.Entities;
 using CertiBlock.Services.Users.Core.ValueObjects;
-using CertiBlock.Services.Users.Infrastructure.Security;
+using CertiBlock.Services.Users.Application.Security;
 using Microsoft.EntityFrameworkCore;
 
 namespace CertiBlock.Services.Users.Infrastructure.DAL.PostgreSQL.Seeders;
 
-internal sealed class UserSeeder(UsersDbContext dbContext, PasswordManager passwordManager)
+internal sealed class UserSeeder(UsersDbContext dbContext, IPasswordManager passwordManager)
 {
     public async Task SeedAsync()
     {
