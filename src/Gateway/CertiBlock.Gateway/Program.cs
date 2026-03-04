@@ -4,6 +4,7 @@ using CertiBlock.Shared.Exceptions;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSwaggerGen();
+builder.Services.AddHealthChecks();
 
 builder.Services.AddGatewayExtensions(builder.Configuration);
 
@@ -21,6 +22,7 @@ app.UseHttpsRedirection();
 
 app.UseErrorHandling();
 
+app.MapHealthChecks("/health");
 app.MapReverseProxy();
 
 app.Run();
