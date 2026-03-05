@@ -9,7 +9,7 @@ public static class Extensions
     public static IServiceCollection AddGatewayExtensions(this IServiceCollection services, IConfiguration configuration)
     {
         // CORS
-        services.AddCorsPolicy();
+        services.AddCorsPolicy(configuration);
         
         // Logger
         services.AddLogging();
