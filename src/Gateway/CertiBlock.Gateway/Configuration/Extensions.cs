@@ -7,7 +7,6 @@ public static class Extensions
         services.AddAuthorization(options =>
         {
             options.AddPolicy("RequireAuth", policy => policy.RequireAuthenticatedUser());
-            options.AddPolicy("AllowAnonymous", policy => policy.RequireAssertion(_ => true));
         });
 
         services
