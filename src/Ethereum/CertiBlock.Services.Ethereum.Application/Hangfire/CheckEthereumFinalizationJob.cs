@@ -54,7 +54,8 @@ public class CheckEthereumFinalizationJob(IEthereumMetricRepository metricsRepos
                     .SendRequestAsync(new Nethereum.Hex.HexTypes.HexBigInteger(finalityBlockNumber));
                 var finalityBlockTimestamp = DateTimeOffset.FromUnixTimeSeconds((long)finalityBlock.Timestamp.Value).UtcDateTime;
 
-                metric.FinalizationTimeSeconds = (finalityBlockTimestamp - txBlockTimestamp).TotalSeconds;
+                var confirmationWindowSeconds = (finalityBlockTimestamp - txBlockTimestamp).TotalSeconds;
+                metric.FinalizationTimeSeconds = metric.InclusionTimeSeconds + confirmationWindowSeconds;
                 metric.IsFinalized = true;
                 metric.Confirmations = RequiredConfirmations;
 
