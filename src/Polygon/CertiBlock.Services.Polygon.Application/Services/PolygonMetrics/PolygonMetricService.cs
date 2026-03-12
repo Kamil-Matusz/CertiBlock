@@ -39,7 +39,7 @@ public class PolygonMetricService(IPolygonMetricRepository polygonMetricReposito
             var effectiveGasPrice = (decimal)receipt.EffectiveGasPrice.Value;
             var transactionCostNative = (gasUsed * effectiveGasPrice) / 1_000_000_000_000_000_000m;
             
-            var assetId = "matic-network";
+            var assetId = "polygon-ecosystem-token";
             var maticUsdPrice = await coinGeckoService.GetPriceUsdAsync(assetId);
             var transactionCostUsd = transactionCostNative * maticUsdPrice;
             
