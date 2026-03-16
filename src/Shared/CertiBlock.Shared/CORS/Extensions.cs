@@ -24,7 +24,7 @@ public static class Extensions
 
     public static IServiceCollection AddCorsPolicy(this IServiceCollection services, IConfiguration configuration)
     {
-        var corsOptions = configuration.GetSection("Cors").Get<CorsOptions>() ?? new CorsOptions();
+        var corsOptions = configuration.GetSection("Cors").Get<CorsSettings>() ?? new CorsSettings();
 
         services.AddCors(options =>
         {
