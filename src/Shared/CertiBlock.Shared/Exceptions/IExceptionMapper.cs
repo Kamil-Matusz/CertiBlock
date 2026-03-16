@@ -2,5 +2,5 @@ namespace CertiBlock.Shared.Exceptions;
 
 public interface IExceptionMapper
 {
-    ExceptionResponse Map(Exception exception);
+    ExceptionResponse? Map(Exception exception);
 }

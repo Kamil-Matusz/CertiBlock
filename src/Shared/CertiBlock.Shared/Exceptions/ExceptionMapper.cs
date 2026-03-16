@@ -8,7 +8,7 @@ internal sealed class ExceptionMapper : IExceptionMapper
 {
     private static readonly ConcurrentDictionary<Type, string> Codes = new();
 
-    public ExceptionResponse Map(Exception exception)
+    public ExceptionResponse? Map(Exception exception)
         => exception switch
         {
             CustomException ex => new ExceptionResponse(

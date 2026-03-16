@@ -1,4 +1,5 @@
 ﻿using CertiBlock.Services.Users.Application.Abstractions;
+using CertiBlock.Services.Users.Core.Exceptions;
 using CertiBlock.Services.Users.Infrastructure.Auth;
 using CertiBlock.Services.Users.Infrastructure.DAL;
 using CertiBlock.Services.Users.Infrastructure.DAL.Repositories;
@@ -29,6 +30,7 @@ public static class Extensions
         services.AddRepositories();
         
         services.AddErrorHandling();
+        services.AddSingleton<IExceptionMapper, UserExceptionMapper>();
         
         services.AddControllers();
 

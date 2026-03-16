@@ -3,6 +3,7 @@ using CertiBlock.Services.Certificates.Core.Clients;
 using CertiBlock.Services.Certificates.Core.Configurations;
 using CertiBlock.Services.Certificates.Core.DAL;
 using CertiBlock.Services.Certificates.Core.Entities;
+using CertiBlock.Services.Certificates.Core.Exceptions;
 using CertiBlock.Services.Certificates.Core.Services;
 using CertiBlock.Services.Certificates.Core.Validators;
 using CertiBlock.Shared.CORS;
@@ -54,6 +55,7 @@ public static class Extensions
 
         // Error Handling
         services.AddErrorHandling();
+        services.AddSingleton<IExceptionMapper, CertificateExceptionMapper>();
 
         return services;
     }

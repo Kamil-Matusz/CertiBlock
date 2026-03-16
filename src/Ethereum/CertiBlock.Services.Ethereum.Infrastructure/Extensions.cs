@@ -1,5 +1,6 @@
 ﻿using CertiBlock.Services.Ethereum.Application.Hangfire;
 using CertiBlock.Services.Ethereum.Core.Entities;
+using CertiBlock.Services.Ethereum.Core.Exceptions;
 using CertiBlock.Services.Ethereum.Infrastructure.Configurations;
 using CertiBlock.Services.Ethereum.Infrastructure.DAL;
 using CertiBlock.Shared.CoinGecko;
@@ -52,6 +53,7 @@ public static class Extensions
 
         // Error Handling
         services.AddErrorHandling();
+        services.AddSingleton<IExceptionMapper, EthereumExceptionMapper>();
 
         return services;
     }

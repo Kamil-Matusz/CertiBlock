@@ -1,5 +1,6 @@
 ﻿using CertiBlock.Services.Polygon.Application.Hangfire;
 using CertiBlock.Services.Polygon.Core.Entities;
+using CertiBlock.Services.Polygon.Core.Exceptions;
 using CertiBlock.Services.Polygon.Infrastructure.Configurations;
 using CertiBlock.Services.Polygon.Infrastructure.DAL;
 using CertiBlock.Shared.CoinGecko;
@@ -52,6 +53,7 @@ public static class Extensions
 
         // Error Handling
         services.AddErrorHandling();
+        services.AddSingleton<IExceptionMapper, PolygonExceptionMapper>();
 
         return services;
     }
