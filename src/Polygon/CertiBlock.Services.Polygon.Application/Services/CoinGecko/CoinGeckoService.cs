@@ -57,7 +57,9 @@ public class CoinGeckoService(HttpClient httpClient, ILogger<CoinGeckoService> l
     {
         try
         {
-            var url = $"{_options.ApiUrl}?ids={assetId}&vs_currencies=usd";
+            var url = string.IsNullOrWhiteSpace(_options.ApiKey)
+                ? $"{_options.ApiUrl}?ids={assetId}&vs_currencies=usd"
+                : $"{_options.ApiUrl}?ids={assetId}&vs_currencies=usd&x_cg_demo_api_key={_options.ApiKey}";
             
             using var response = await httpClient.GetAsync(url);
             
