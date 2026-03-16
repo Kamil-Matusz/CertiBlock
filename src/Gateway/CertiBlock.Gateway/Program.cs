@@ -3,7 +3,6 @@ using CertiBlock.Shared.Exceptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSwaggerGen();
 builder.Services.AddHealthChecks();
 
 builder.Services.AddGatewayExtensions(builder.Configuration);
@@ -12,9 +11,6 @@ builder.Services.AddGatewayExtensions(builder.Configuration);
 builder.Services.AddErrorHandling();
 
 var app = builder.Build();
-
-app.UseSwagger();
-app.UseSwaggerUI();
 
 app.UseCors();
 
