@@ -59,12 +59,34 @@ function getFallbackMessage(status: number): string {
 }
 
 export const errorCodeMessages: Record<string, string> = {
-    'email_already_in_use': 'Ten adres email jest już zajęty.',
-    'user_not_found': 'Użytkownik nie został znaleziony.',
-    'certificate_not_found': 'Certyfikat nie został znaleziony.',
-    'account_is_not_active': 'Konto nie jest aktywne.',
-    'invalid_role': 'Nieprawidłowa rola użytkownika.',
-    'error': 'Wystąpił błąd. Spróbuj ponownie.',
+    // Users
+    'email_already_in_use': 'This email address is already in use.',
+    'user_not_found': 'User was not found.',
+    'user_role_not_exist': 'This user role does not exist.',
+    'account_is_not_active': 'The account is inactive. Unable to sign in.',
+    'invalid_role': 'The selected user role is invalid.',
+
+    // Certificates
+    'certificate_not_found': 'Certificate was not found.',
+    'cetrtificate_for_user_not_found': 'Certificate for this user was not found.',
+    'unsupported_blockchain': 'This blockchain is not supported for certificate registration.',
+    'blockchain_transaction_failed': 'Certificate registration on the blockchain has failed.',
+    'blockchain_configuration': 'Blockchain configuration is invalid. Please contact support.',
+
+    // Ethereum
+    'ethereum_balance': 'Failed to get ETH balance for this address.',
+    'ethereum_transactions_not_found': 'Ethereum transaction was not found.',
+    'ethereum_transactions_by_certificate_id_not_found': 'Ethereum transaction for this certificate was not found.',
+    'ethereum_transactions_hash_not_found': 'Ethereum transaction with this hash was not found.',
+
+    // Polygon
+    'polygon_balance': 'Failed to get Polygon balance for this address.',
+    'polygon_transactions_not_found': 'Polygon transaction was not found.',
+    'polygon_transactions_by_certificate_id_not_found': 'Polygon transaction for this certificate was not found.',
+    'polygon_transactions_by_hash_not_found': 'Polygon transaction with this hash was not found.',
+
+    // Generic fallback
+    'error': 'An error occurred. Please try again.',
 };
 
 export function getErrorMessage(code: string, originalMessage: string): string {
