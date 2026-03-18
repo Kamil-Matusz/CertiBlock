@@ -19,6 +19,9 @@ app.UseHttpsRedirection();
 
 app.UseErrorHandling();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapHealthChecks("/health");
 app.MapReverseProxy();
 

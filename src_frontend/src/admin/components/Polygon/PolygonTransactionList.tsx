@@ -100,8 +100,10 @@ const MetricsModal = ({ open, onClose, certificateId }: MetricsModalProps) => {
             setMetrics(null);
 
             try {
+                const token = localStorage.getItem('token');
                 const response = await fetch(
-                    apiEndpoints.polygon(`../PolygonMetrics/getPolygonTransactionMetricsByCertificateId/${certificateId}`)
+                    apiEndpoints.polygon(`../PolygonMetrics/getPolygonTransactionMetricsByCertificateId/${certificateId}`),
+                    { headers: { ...(token && { 'Authorization': `Bearer ${token}` }) } }
                 );
 
                 if (!response.ok) throw new Error('Failed to fetch metrics');

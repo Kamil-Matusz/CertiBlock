@@ -55,8 +55,10 @@ export const WalletBalanceChecker = () => {
         setError(null);
 
         try {
+            const token = localStorage.getItem('token');
             const response = await fetch(
-                apiEndpoints.ethereum(`getEthBalanceByWalletAddress/${ethAddress}`)
+                apiEndpoints.ethereum(`getEthBalanceByWalletAddress/${ethAddress}`),
+                { headers: { ...(token && { 'Authorization': `Bearer ${token}` }) } }
             );
 
             if (!response.ok) {
@@ -82,8 +84,10 @@ export const WalletBalanceChecker = () => {
         setError(null);
 
         try {
+            const token = localStorage.getItem('token');
             const response = await fetch(
-                apiEndpoints.polygon(`getPolygonBalanceByWalletAddress/${polygonAddress}`)
+                apiEndpoints.polygon(`getPolygonBalanceByWalletAddress/${polygonAddress}`),
+                { headers: { ...(token && { 'Authorization': `Bearer ${token}` }) } }
             );
 
             if (!response.ok) {
