@@ -1,5 +1,8 @@
-﻿using System.Text;
+﻿using System.Net;
+using System.Text;
+using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.IdentityModel.Tokens;
 
 namespace CertiBlock.Gateway.Configuration;
@@ -7,6 +10,7 @@ namespace CertiBlock.Gateway.Configuration;
 public static class Extensions
 {
     private const string SectionName = "Auth";
+    public const string AuthRateLimitPolicy = "auth-limit";
 
     public static IServiceCollection AddGateway(this IServiceCollection services, IConfiguration configuration)
     {
@@ -34,6 +38,12 @@ public static class Extensions
         services.AddAuthorization(options =>
         {
             options.AddPolicy("RequireAuth", policy => policy.RequireAuthenticatedUser());
+        });
+
+        services.AddRateLimiter(options =>
+        {
+            options.AddPolicy<IPAddress, AuthRateLimiterPolicy>(AuthRateLimitPolicy);
+            options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
         });
 
         services
