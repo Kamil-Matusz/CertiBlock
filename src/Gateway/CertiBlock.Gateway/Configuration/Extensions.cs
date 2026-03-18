@@ -46,6 +46,12 @@ public static class Extensions
             options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
         });
 
+        services.AddRequestTimeouts(options =>
+        {
+            options.AddPolicy("default", TimeSpan.FromSeconds(30));
+            options.AddPolicy("blockchain", TimeSpan.FromSeconds(120));
+        });
+
         services
             .AddReverseProxy()
             .LoadFromConfig(configuration.GetSection("ReverseProxy"));

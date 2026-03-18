@@ -19,6 +19,7 @@ app.UseHttpsRedirection();
 
 app.UseErrorHandling();
 
+app.UseRequestTimeouts();
 app.UseRateLimiter();
 
 app.UseAuthentication();
