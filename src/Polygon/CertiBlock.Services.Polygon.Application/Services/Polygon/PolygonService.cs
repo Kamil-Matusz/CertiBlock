@@ -22,9 +22,11 @@ public class PolygonService(IPolygonRepository polygonRepository, ILogger<Polygo
             var account = new Nethereum.Web3.Accounts.Account(polygonOptions.PrivateKey);
             var web3WithAccount = new Web3(account, polygonOptions.InfuraUrl);
 
-            var data = dto.CertificateHash.StartsWith("0x")
-                ? dto.CertificateHash
-                : "0x" + dto.CertificateHash;
+            var hashBytes = Convert.FromHexString(dto.CertificateHash.StartsWith("0x")
+                ? dto.CertificateHash[2..]
+                : dto.CertificateHash);
+            var issuerBytes = System.Text.Encoding.UTF8.GetBytes(dto.Issuer);
+            var data = "0x" + Convert.ToHexString(hashBytes.Concat(issuerBytes).ToArray()).ToLower();
             
             var txnInput = new TransactionInput
             {

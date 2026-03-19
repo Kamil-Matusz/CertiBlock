@@ -1,5 +1,6 @@
 ﻿import type { AuthProvider } from 'react-admin';
 import { API_URL } from '../config.ts';
+import { parseApiError } from '../utils/apiError';
 
 const decodeJWT = (token: string) => {
     try {
@@ -32,7 +33,8 @@ export const authProvider: AuthProvider = {
             });
 
             if (!response.ok) {
-                throw new Error('Invalid credentials');
+                const errorInfo = await parseApiError(response);
+                return Promise.reject(new Error(errorInfo.message));
             }
 
             const data = await response.json();
@@ -43,7 +45,10 @@ export const authProvider: AuthProvider = {
             localStorage.setItem('userRole', decoded?.['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] || 'User');
 
             return Promise.resolve();
-        } catch {
+        } catch (error) {
+            if (error instanceof Error) {
+                return Promise.reject(error);
+            }
             return Promise.reject(new Error('Invalid email or password'));
         }
     },

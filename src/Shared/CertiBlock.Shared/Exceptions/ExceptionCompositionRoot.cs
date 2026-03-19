@@ -1,20 +1,12 @@
-﻿using CertiBlock.Services.Users.Infrastructure.Exceptions;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CertiBlock.Services.Users.Infrastructure.Errors;
+namespace CertiBlock.Shared.Exceptions;
 
-internal class ExceptionCompositionRoot : IExceptionCompositionRoot
+internal sealed class ExceptionCompositionRoot(IServiceProvider serviceProvider) : IExceptionCompositionRoot
 {
-    private readonly IServiceProvider _serviceProvider;
-
-    public ExceptionCompositionRoot(IServiceProvider serviceProvider)
-    {
-        _serviceProvider = serviceProvider;
-    }
-
     public ExceptionResponse Map(Exception exception)
     {
-        using var scope = _serviceProvider.CreateScope();
+        using var scope = serviceProvider.CreateScope();
         var mappers = scope.ServiceProvider.GetServices<IExceptionMapper>().ToArray();
         var nonDefaultMappers = mappers.Where(x => x is not ExceptionMapper);
         var result = nonDefaultMappers

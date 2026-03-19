@@ -1,11 +1,12 @@
-﻿using System.Net;
+using System.Net;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace CertiBlock.Services.Users.Infrastructure.Errors;
+namespace CertiBlock.Shared.Exceptions;
 
-internal class ErrorHandlerMiddleware(ILogger<ErrorHandlerMiddleware> logger, IExceptionCompositionRoot exceptionCompositionRoot)
-    : IMiddleware
+internal sealed class ErrorHandlerMiddleware(
+    ILogger<ErrorHandlerMiddleware> logger,
+    IExceptionCompositionRoot exceptionCompositionRoot) : IMiddleware
 {
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
@@ -16,11 +17,11 @@ internal class ErrorHandlerMiddleware(ILogger<ErrorHandlerMiddleware> logger, IE
         catch (Exception exception)
         {
             logger.LogError(exception, exception.Message);
-            await HandlerErrorAsync(context, exception);
+            await HandleErrorAsync(context, exception);
         }
     }
 
-    private async Task HandlerErrorAsync(HttpContext context, Exception exception)
+    private async Task HandleErrorAsync(HttpContext context, Exception exception)
     {
         var errorResponse = exceptionCompositionRoot.Map(exception);
         context.Response.StatusCode = (int)(errorResponse?.StatusCode ?? HttpStatusCode.InternalServerError);

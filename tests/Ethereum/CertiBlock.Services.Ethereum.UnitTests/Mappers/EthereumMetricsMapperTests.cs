@@ -7,6 +7,8 @@ namespace CertiBlock.Services.Ethereum.UnitTests.Mappers;
 
 public class EthereumMetricsMapperTests
 {
+    private static readonly DateTime SampleCollectedAt = new(2025, 6, 1, 12, 0, 0, DateTimeKind.Utc);
+
     private EthereumMetrics CreateSampleMetrics()
     {
         return new EthereumMetrics
@@ -17,11 +19,16 @@ public class EthereumMetricsMapperTests
             Operation = Operation.Register,
             TransactionHash = "0xabcdef1234567890abcdef1234567890abcdef12",
             DataSizeBytes = 2048,
-            Confirmations = 12,
+            Confirmations = 64,
             TransactionCostUsd = 3.45m,
             TransactionCostNative = 0.0021m,
             GasUsed = 21000,
-            GasUtilizationRatio = 0.95
+            GasUtilizationRatio = 0.95,
+            InclusionTimeSeconds = 14.5,
+            BlockNumber = 19000000,
+            FinalizationTimeSeconds = 768.0,
+            IsFinalized = true,
+            CollectedAt = SampleCollectedAt
         };
     }
 
@@ -47,6 +54,11 @@ public class EthereumMetricsMapperTests
         Assert.Equal(metrics.TransactionCostNative, result.TransactionCostNative);
         Assert.Equal(metrics.GasUsed, result.GasUsed);
         Assert.Equal(metrics.GasUtilizationRatio, result.GasUtilizationRatio);
+        Assert.Equal(metrics.InclusionTimeSeconds, result.InclusionTimeSeconds);
+        Assert.Equal(metrics.BlockNumber, result.BlockNumber);
+        Assert.Equal(metrics.FinalizationTimeSeconds, result.FinalizationTimeSeconds);
+        Assert.Equal(metrics.IsFinalized, result.IsFinalized);
+        Assert.Equal(metrics.CollectedAt, result.CollectedAt);
     }
 
     [Fact]

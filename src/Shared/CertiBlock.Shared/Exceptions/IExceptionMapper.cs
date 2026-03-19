@@ -1,4 +1,4 @@
-﻿namespace CertiBlock.Services.Users.Infrastructure.Exceptions;
+namespace CertiBlock.Shared.Exceptions;
 
 public interface IExceptionMapper
 {

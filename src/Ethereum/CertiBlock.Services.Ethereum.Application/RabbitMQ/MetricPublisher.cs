@@ -49,6 +49,37 @@ public class MetricPublisher : IDisposable
         }
     }
 
+    public void Publish(MetricFinalizedEvent metric)
+    {
+        try
+        {
+            var json = JsonSerializer.Serialize(metric);
+            var body = Encoding.UTF8.GetBytes(json);
+
+            var props = _channel.CreateBasicProperties();
+            props.Persistent = true;
+            props.ContentType = "application/json";
+            props.DeliveryMode = 2;
+
+            _channel.BasicPublish(
+                exchange: "",
+                routingKey: "certiblock.finalization.ethereum",
+                basicProperties: props,
+                body: body
+            );
+
+            _channel.WaitForConfirmsOrDie(TimeSpan.FromSeconds(5));
+            _logger.LogInformation("Published Ethereum finalization metric for certificate {CertificateId}",
+                                    metric.CertificateId);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to publish finalization metric for certificate {CertificateId}",
+                             metric.CertificateId);
+            throw;
+        }
+    }
+
     public void Dispose()
     {
         _channel?.Close();

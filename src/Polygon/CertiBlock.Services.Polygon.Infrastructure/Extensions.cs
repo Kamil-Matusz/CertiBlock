@@ -4,6 +4,7 @@ using CertiBlock.Services.Polygon.Infrastructure.Configurations;
 using CertiBlock.Services.Polygon.Infrastructure.DAL;
 using CertiBlock.Shared.CoinGecko;
 using CertiBlock.Shared.CORS;
+using CertiBlock.Shared.Exceptions;
 using CertiBlock.Shared.Hangfire;
 using CertiBlock.Shared.Logging;
 using CertiBlock.Shared.Mongo;
@@ -48,14 +49,18 @@ public static class Extensions
         
         // RabbitMQ
         services.AddRabbitMq(configuration);
-        
+
+        // Error Handling
+        services.AddErrorHandling();
+
         return services;
     }
 
     public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder app)
     {
         app.UseCorsPolicy();
-        
+
+        app.UseErrorHandling();
         app.UseRouting();
         
         app.UseHangfireDashboard();

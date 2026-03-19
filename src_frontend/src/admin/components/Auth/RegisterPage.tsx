@@ -9,24 +9,20 @@ import {
     Typography,
     Alert,
     Link,
-    FormControlLabel,
-    Checkbox,
-    MenuItem
 } from '@mui/material';
 import { PersonAdd as PersonAddIcon } from '@mui/icons-material';
 import { API_URL } from '../../../config.ts';
+import { useApiError } from '../../../hooks/useApiError';
 
 export const RegisterPage = () => {
     const navigate = useNavigate();
+    const { error, errorMessage, setErrorFromResponse, setErrorMessage, clearError } = useApiError();
     const [formData, setFormData] = useState({
         email: '',
         password: '',
         confirmPassword: '',
-        role: 'User',
-        isActive: true
     });
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
 
     const handleChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,41 +30,34 @@ export const RegisterPage = () => {
             ...formData,
             [field]: event.target.value
         });
-        setError('');
-    };
-
-    const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData({
-            ...formData,
-            isActive: event.target.checked
-        });
+        clearError();
     };
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
 
         if (!formData.email || !formData.password) {
-            setError('Email and password are required');
+            setErrorMessage('Email and password are required');
             return;
         }
 
         if (formData.password !== formData.confirmPassword) {
-            setError('Passwords do not match');
+            setErrorMessage('Passwords do not match');
             return;
         }
 
         if (formData.password.length < 6) {
-            setError('Password must be at least 6 characters long');
+            setErrorMessage('Password must be at least 6 characters long');
             return;
         }
 
         if (formData.password.length > 200) {
-            setError('Password cannot be longer than 200 characters');
+            setErrorMessage('Password cannot be longer than 200 characters');
             return;
         }
 
         setLoading(true);
-        setError('');
+        clearError();
 
         try {
             const response = await fetch(`${API_URL}/users-service/Users/signUp`, {
@@ -80,14 +69,12 @@ export const RegisterPage = () => {
                     userId: '00000000-0000-0000-0000-000000000000',
                     email: formData.email,
                     password: formData.password,
-                    role: formData.role,
-                    isActive: formData.isActive
                 }),
             });
 
             if (!response.ok) {
-                const errorData = await response.json().catch(() => ({}));
-                throw new Error(errorData.message || 'Registration failed');
+                await setErrorFromResponse(response);
+                return;
             }
 
             setSuccess(true);
@@ -96,7 +83,7 @@ export const RegisterPage = () => {
             }, 2000);
 
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'Registration failed. Please try again.');
+            setErrorMessage(err instanceof Error ? err.message : 'Registration failed. Please try again.');
         } finally {
             setLoading(false);
         }
@@ -203,7 +190,7 @@ export const RegisterPage = () => {
                                 color: '#fca5a5',
                             }}
                         >
-                            {error}
+                            {errorMessage}
                         </Alert>
                     )}
 
@@ -332,69 +319,6 @@ export const RegisterPage = () => {
                                 },
                                 '& .MuiOutlinedInput-input': {
                                     color: '#fff',
-                                },
-                            }}
-                        />
-
-                        <TextField
-                            label="Role"
-                            select
-                            fullWidth
-                            value={formData.role}
-                            onChange={handleChange('role')}
-                            margin="normal"
-                            disabled={loading || success}
-                            sx={{
-                                '& .MuiOutlinedInput-root': {
-                                    borderRadius: '12px',
-                                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                                    transition: 'all 0.3s ease',
-                                    '&:hover': {
-                                        backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                                    },
-                                    '&.Mui-focused': {
-                                        backgroundColor: 'rgba(6, 182, 212, 0.1)',
-                                        '& .MuiOutlinedInput-notchedOutline': {
-                                            borderColor: '#06b6d4',
-                                            borderWidth: '2px',
-                                        },
-                                    },
-                                },
-                                '& .MuiInputLabel-root': {
-                                    color: 'rgba(255, 255, 255, 0.7)',
-                                },
-                                '& .MuiOutlinedInput-input': {
-                                    color: '#fff',
-                                },
-                                '& .MuiSelect-icon': {
-                                    color: 'rgba(255, 255, 255, 0.7)',
-                                },
-                            }}
-                        >
-                            <MenuItem value="User">User</MenuItem>
-                            <MenuItem value="Admin">Admin</MenuItem>
-                        </TextField>
-
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={formData.isActive}
-                                    onChange={handleCheckboxChange}
-                                    disabled={loading || success}
-                                    sx={{
-                                        color: 'rgba(255, 255, 255, 0.5)',
-                                        '&.Mui-checked': {
-                                            color: '#06b6d4',
-                                        },
-                                    }}
-                                />
-                            }
-                            label="Active Account"
-                            sx={{
-                                mt: 2,
-                                mb: 2,
-                                '& .MuiFormControlLabel-label': {
-                                    color: 'rgba(255, 255, 255, 0.7)',
                                 },
                             }}
                         />

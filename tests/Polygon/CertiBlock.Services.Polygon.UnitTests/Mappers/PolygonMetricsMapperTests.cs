@@ -7,6 +7,8 @@ namespace CertiBlock.Services.Polygon.UnitTests.Mappers;
 
 public class PolygonMetricsMapperTests
 {
+    private static readonly DateTime SampleCollectedAt = new(2025, 6, 1, 12, 0, 0, DateTimeKind.Utc);
+
     private PolygonMetrics CreateSampleMetrics()
     {
         return new PolygonMetrics
@@ -17,11 +19,16 @@ public class PolygonMetricsMapperTests
             Operation = Operation.Register,
             TransactionHash = "0xabcdef1234567890abcdef1234567890abcdef12",
             DataSizeBytes = 4096,
-            Confirmations = 25,
+            Confirmations = 128,
             TransactionCostUsd = 0.75m,
             TransactionCostNative = 0.15m,
             GasUsed = 50000,
-            GasUtilizationRatio = 0.85
+            GasUtilizationRatio = 0.85,
+            InclusionTimeSeconds = 2.3,
+            BlockNumber = 55000000,
+            FinalizationTimeSeconds = 256.0,
+            IsFinalized = true,
+            CollectedAt = SampleCollectedAt
         };
     }
 
@@ -47,6 +54,11 @@ public class PolygonMetricsMapperTests
         Assert.Equal(metrics.TransactionCostNative, result.TransactionCostNative);
         Assert.Equal(metrics.GasUsed, result.GasUsed);
         Assert.Equal(metrics.GasUtilizationRatio, result.GasUtilizationRatio);
+        Assert.Equal(metrics.InclusionTimeSeconds, result.InclusionTimeSeconds);
+        Assert.Equal(metrics.BlockNumber, result.BlockNumber);
+        Assert.Equal(metrics.FinalizationTimeSeconds, result.FinalizationTimeSeconds);
+        Assert.Equal(metrics.IsFinalized, result.IsFinalized);
+        Assert.Equal(metrics.CollectedAt, result.CollectedAt);
     }
 
     [Fact]

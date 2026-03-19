@@ -34,6 +34,12 @@ public class PolygonMetricsController(IPolygonMetricService polygonMetricService
     public async Task<ActionResult<PolygonMetricDetailsDto>> GetPolygonTransactionsById(Guid certificateId)
         => Ok(await polygonMetricService.GetTransactionMetricsByCertificateIdAsync(certificateId));
     
+    [HttpGet("getPolygonResearchMetrics")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<IEnumerable<PolygonMetricResearchDto>>> GetResearchMetrics()
+        => Ok(await polygonMetricService.GetAllResearchMetricsAsync());
+    
     [HttpPost("test")]
     public IActionResult PublishTestMetric()
     {
@@ -43,7 +49,7 @@ public class PolygonMetricsController(IPolygonMetricService polygonMetricService
             Operation.Register,
             21000,
             1.25,
-            0.00042,
+            0.02,
             DateTime.UtcNow
         );
 

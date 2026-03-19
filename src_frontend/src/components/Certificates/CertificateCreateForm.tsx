@@ -13,9 +13,11 @@ import {
 } from '@mui/material';
 import { SaveOutlined, ArrowBack } from '@mui/icons-material';
 import { apiEndpoints } from '../../config.ts';
+import { useApiError } from '../../hooks/useApiError';
 
 export const CertificateCreateForm = () => {
     const navigate = useNavigate();
+    const { error, errorMessage, setErrorFromResponse, setErrorMessage, clearError } = useApiError();
     const [formData, setFormData] = useState({
         ownerName: '',
         title: '',
@@ -24,7 +26,6 @@ export const CertificateCreateForm = () => {
         blockchain: 'Ethereum'
     });
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
     const [showToast, setShowToast] = useState(false);
     const [fieldErrors, setFieldErrors] = useState({
         ownerName: '',
@@ -72,7 +73,7 @@ export const CertificateCreateForm = () => {
             [field]: errorMsg
         });
 
-        setError('');
+        clearError();
     };
 
     const handleSubmit = async (event: React.FormEvent) => {
@@ -91,18 +92,18 @@ export const CertificateCreateForm = () => {
         // Check if there are any errors
         const hasErrors = Object.values(errors).some(error => error !== '');
         if (hasErrors) {
-            setError('Please fix the errors in the form');
+            setErrorMessage('Please fix the errors in the form');
             return;
         }
 
         setLoading(true);
-        setError('');
+        clearError();
 
         try {
             const token = localStorage.getItem('token');
 
             if (!token) {
-                setError('You are not logged in. Please login first.');
+                setErrorMessage('You are not logged in. Please login first.');
                 setLoading(false);
                 return;
             }
@@ -124,9 +125,11 @@ export const CertificateCreateForm = () => {
 
             if (!response.ok) {
                 if (response.status === 401) {
-                    throw new Error('Unauthorized. Please login again.');
+                    setErrorMessage('Unauthorized. Please login again.');
+                } else {
+                    await setErrorFromResponse(response);
                 }
-                throw new Error('Failed to create certificate');
+                return;
             }
 
             setShowToast(true);
@@ -145,7 +148,7 @@ export const CertificateCreateForm = () => {
             });
 
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'Failed to create certificate. Please try again.');
+            setErrorMessage(err instanceof Error ? err.message : 'Failed to create certificate. Please try again.');
         } finally {
             setLoading(false);
         }
@@ -188,7 +191,7 @@ export const CertificateCreateForm = () => {
                     <CardContent sx={{ p: 4 }}>
                         {error && (
                             <Alert severity="error" sx={{ mb: 3 }}>
-                                {error}
+                                {errorMessage}
                             </Alert>
                         )}
 
