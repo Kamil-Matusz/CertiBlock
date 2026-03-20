@@ -1,0 +1,38 @@
+﻿global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # Twoje API Gateway
+  - job_name: 'certiblock-gateway'
+    static_configs:
+      - targets: ['host.docker.internal:5000'] # <-- Sprawdź port w launchSettings.json w Gateway!
+    metrics_path: /metrics
+
+  # Twój mikroserwis Ethereum
+  - job_name: 'certiblock-ethereum'
+    static_configs:
+      - targets: ['host.docker.internal:5001'] # <-- Sprawdź port w launchSettings.json!
+    metrics_path: /metrics
+
+  # Twój mikroserwis Certificates
+  - job_name: 'certiblock-certificates'
+    static_configs:
+      - targets: ['host.docker.internal:5002']
+    metrics_path: /metrics
+
+  # Twój mikroserwis Polygon
+  - job_name: 'certiblock-polygon'
+    static_configs:
+      - targets: ['host.docker.internal:5003']
+    metrics_path: /metrics
+  
+  # Twój mikroserwis Users
+  - job_name: 'certiblock-users'
+    static_configs:
+      - targets: ['host.docker.internal:5004']
+    metrics_path: /metrics

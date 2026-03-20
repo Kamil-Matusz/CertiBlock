@@ -7,6 +7,7 @@ using CertiBlock.Services.Users.Infrastructure.Security;
 using CertiBlock.Shared.CORS;
 using CertiBlock.Shared.Exceptions;
 using CertiBlock.Shared.Logging;
+using CertiBlock.Shared.Observability;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -49,6 +50,9 @@ public static class Extensions
         
         // CORS
         services.AddCorsPolicy();
+        
+        // OpenTelemetry
+        services.AddObservability(configuration);
         
         return services;
     }

@@ -10,6 +10,7 @@ using CertiBlock.Shared.CORS;
 using CertiBlock.Shared.Exceptions;
 using CertiBlock.Shared.Logging;
 using CertiBlock.Shared.Mongo;
+using CertiBlock.Shared.Observability;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -49,6 +50,9 @@ public static class Extensions
         
         // Seq
         services.AddSeqLogging(configuration);
+        
+        // OpenTelemetry
+        services.AddObservability(configuration);
         
         // CORS
         services.AddCorsPolicy();
