@@ -49,6 +49,7 @@ public static class Extensions
                     .AddMeter(MessagingActivitySources.DefaultSourceName)
                     .AddAspNetCoreInstrumentation()
                     .AddHttpClientInstrumentation()
+                    .AddRuntimeInstrumentation()
                     .AddPrometheusExporter();
             });
 
