@@ -1,4 +1,5 @@
 using CertiBlock.Services.Metrics.Core;
+using CertiBlock.Shared.Observability;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseInfrastructure();
+
+app.UseObservability();
 
 app.MapControllers();
 

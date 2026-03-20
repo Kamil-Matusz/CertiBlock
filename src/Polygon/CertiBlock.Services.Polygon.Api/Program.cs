@@ -1,6 +1,7 @@
 using CertiBlock.Services.Polygon.Application;
 using CertiBlock.Services.Polygon.Core;
 using CertiBlock.Services.Polygon.Infrastructure;
+using CertiBlock.Shared.Observability;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,8 @@ app.UseSwaggerUI();
 app.MapOpenApi();
 
 app.UseInfrastructure();
+
+app.UseObservability();
 
 app.MapControllers();
 

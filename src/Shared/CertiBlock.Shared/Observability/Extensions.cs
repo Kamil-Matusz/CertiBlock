@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
@@ -52,6 +53,13 @@ public static class Extensions
             });
 
         return services;
+    }
+    
+    public static WebApplication UseObservability(this WebApplication app)
+    {
+        app.MapPrometheusScrapingEndpoint();
+    
+        return app;
     }
 
     private static T GetOptions<T>(this IConfiguration configuration, string sectionName) where T : class, new()
