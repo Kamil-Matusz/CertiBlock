@@ -76,11 +76,14 @@
       - GF_INSTALL_PLUGINS=
     ports:
       - 3000:3000
-    volumes:
-      - grafana:/var/lib/grafana
     depends_on:
       - influxdb
       - prometheus
+    volumes:
+      - grafana:/var/lib/grafana
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ./grafana/dashboards:/etc/grafana/dashboards
 
   jaeger:
     image: jaegertracing/all-in-one:latest
@@ -100,7 +103,7 @@
     ports:
       - "9090:9090"
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
 
 volumes:
   postgres:
