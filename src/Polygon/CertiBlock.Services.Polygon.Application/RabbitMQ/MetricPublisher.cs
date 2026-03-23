@@ -1,6 +1,8 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
+using System.Text;
 using System.Text.Json;
 using CertiBlock.Shared.Messaging;
+using CertiBlock.Shared.Observability;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 
@@ -10,6 +12,7 @@ public class MetricPublisher : IDisposable
 {
     private readonly IModel _channel;
     private readonly ILogger<MetricPublisher> _logger;
+    private static readonly ActivitySource ActivitySource = new(MessagingActivitySources.MessagingPublishSourceName);
 
     public MetricPublisher(IConnection connection, ILogger<MetricPublisher> logger)
     {
@@ -20,6 +23,11 @@ public class MetricPublisher : IDisposable
 
     public void Publish(MetricCollectedEvent metric)
     {
+        using var activity = ActivitySource.StartActivity("Publish MetricCollectedEvent", ActivityKind.Producer);
+        activity?.SetTag("messaging.system", "rabbitmq");
+        activity?.SetTag("messaging.destination", "certiblock.metrics.polygon");
+        activity?.SetTag("messaging.operation", "publish");
+
         try
         {
             var json = JsonSerializer.Serialize(metric);
@@ -29,6 +37,12 @@ public class MetricPublisher : IDisposable
             props.Persistent = true;
             props.ContentType = "application/json";
             props.DeliveryMode = 2;
+
+            props.Headers ??= new Dictionary<string, object>();
+            if (Activity.Current != null)
+            {
+                props.Headers["traceparent"] = Activity.Current.Id;
+            }
 
             _channel.BasicPublish(
                 exchange: "",
@@ -52,6 +66,11 @@ public class MetricPublisher : IDisposable
 
     public void Publish(MetricFinalizedEvent metric)
     {
+        using var activity = ActivitySource.StartActivity("Publish MetricFinalizedEvent", ActivityKind.Producer);
+        activity?.SetTag("messaging.system", "rabbitmq");
+        activity?.SetTag("messaging.destination", "certiblock.finalization.polygon");
+        activity?.SetTag("messaging.operation", "publish");
+
         try
         {
             var json = JsonSerializer.Serialize(metric);
@@ -61,6 +80,12 @@ public class MetricPublisher : IDisposable
             props.Persistent = true;
             props.ContentType = "application/json";
             props.DeliveryMode = 2;
+
+            props.Headers ??= new Dictionary<string, object>();
+            if (Activity.Current != null)
+            {
+                props.Headers["traceparent"] = Activity.Current.Id;
+            }
 
             _channel.BasicPublish(
                 exchange: "",
