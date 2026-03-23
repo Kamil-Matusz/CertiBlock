@@ -46,7 +46,8 @@ public class MetricConsumerService(IConnection connection, IOptions<RabbitMqOpti
                 activity?.SetTag("messaging.system", "rabbitmq");
                 activity?.SetTag("messaging.destination", queue);
                 activity?.SetTag("messaging.operation", "receive");
-                
+
+                var sw = Stopwatch.StartNew();
                 try
                 {
                     var json = Encoding.UTF8.GetString(ea.Body.Span);
@@ -65,16 +66,33 @@ public class MetricConsumerService(IConnection connection, IOptions<RabbitMqOpti
                     }
 
                     _channel.BasicAck(ea.DeliveryTag, false);
+
+                    RabbitMqMetrics.MessagesConsumed.Add(1,
+                        new KeyValuePair<string, object?>("queue", queue),
+                        new KeyValuePair<string, object?>("status", "success"));
                 }
                 catch (JsonException ex)
                 {
                     logger.LogError(ex, "JSON deserialization error for message from {Queue}", queue);
                     _channel.BasicNack(ea.DeliveryTag, false, requeue: false);
+
+                    RabbitMqMetrics.MessagesConsumed.Add(1,
+                        new KeyValuePair<string, object?>("queue", queue),
+                        new KeyValuePair<string, object?>("status", "deserialization_error"));
                 }
                 catch (Exception ex)
                 {
                     logger.LogError(ex, "Error processing message from {Queue}", queue);
                     _channel.BasicNack(ea.DeliveryTag, false, requeue: true);
+
+                    RabbitMqMetrics.MessagesConsumed.Add(1,
+                        new KeyValuePair<string, object?>("queue", queue),
+                        new KeyValuePair<string, object?>("status", "failure"));
+                }
+                finally
+                {
+                    RabbitMqMetrics.ConsumeDuration.Record(sw.Elapsed.TotalMilliseconds,
+                        new KeyValuePair<string, object?>("queue", queue));
                 }
             };
 
@@ -92,7 +110,8 @@ public class MetricConsumerService(IConnection connection, IOptions<RabbitMqOpti
                 activity?.SetTag("messaging.system", "rabbitmq");
                 activity?.SetTag("messaging.destination", queue);
                 activity?.SetTag("messaging.operation", "receive");
-                
+
+                var sw = Stopwatch.StartNew();
                 try
                 {
                     var json = Encoding.UTF8.GetString(ea.Body.Span);
@@ -111,16 +130,33 @@ public class MetricConsumerService(IConnection connection, IOptions<RabbitMqOpti
                     }
 
                     _channel.BasicAck(ea.DeliveryTag, false);
+
+                    RabbitMqMetrics.MessagesConsumed.Add(1,
+                        new KeyValuePair<string, object?>("queue", queue),
+                        new KeyValuePair<string, object?>("status", "success"));
                 }
                 catch (JsonException ex)
                 {
                     logger.LogError(ex, "JSON deserialization error for finalization message from {Queue}", queue);
                     _channel.BasicNack(ea.DeliveryTag, false, requeue: false);
+
+                    RabbitMqMetrics.MessagesConsumed.Add(1,
+                        new KeyValuePair<string, object?>("queue", queue),
+                        new KeyValuePair<string, object?>("status", "deserialization_error"));
                 }
                 catch (Exception ex)
                 {
                     logger.LogError(ex, "Error processing finalization message from {Queue}", queue);
                     _channel.BasicNack(ea.DeliveryTag, false, requeue: true);
+
+                    RabbitMqMetrics.MessagesConsumed.Add(1,
+                        new KeyValuePair<string, object?>("queue", queue),
+                        new KeyValuePair<string, object?>("status", "failure"));
+                }
+                finally
+                {
+                    RabbitMqMetrics.ConsumeDuration.Record(sw.Elapsed.TotalMilliseconds,
+                        new KeyValuePair<string, object?>("queue", queue));
                 }
             };
 

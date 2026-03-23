@@ -47,6 +47,7 @@ public static class Extensions
             {
                 metrics
                     .AddMeter(MessagingActivitySources.DefaultSourceName)
+                    .AddMeter(RabbitMqMetrics.MeterName)
                     .AddAspNetCoreInstrumentation()
                     .AddHttpClientInstrumentation()
                     .AddRuntimeInstrumentation()
