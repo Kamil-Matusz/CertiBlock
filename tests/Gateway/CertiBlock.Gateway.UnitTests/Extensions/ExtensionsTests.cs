@@ -15,7 +15,14 @@ public class ExtensionsTests
     {
         // Arrange
         var services = new ServiceCollection();
-        var configuration = new ConfigurationBuilder().Build();
+        var configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string>
+            {
+                { "Auth:Issuer", "test-issuer" },
+                { "Auth:Audience", "test-audience" },
+                { "Auth:SigningKey", "test-signing-key-that-is-long-enough" }
+            }!)
+            .Build();
 
         // Act
         services.AddGateway(configuration);
@@ -51,6 +58,9 @@ public class ExtensionsTests
     {
         var inMemorySettings = new Dictionary<string, string>
         {
+            {"Auth:Issuer", "test-issuer"},
+            {"Auth:Audience", "test-audience"},
+            {"Auth:SigningKey", "test-signing-key-that-is-long-enough"},
             {"ReverseProxy:Routes:test:ClusterId", "test-cluster"},
             {"ReverseProxy:Routes:test:Match:Path", "/test/{**catch-all}"},
             {"ReverseProxy:Clusters:test-cluster:Destinations:d1:Address", "http://localhost:5000"}
