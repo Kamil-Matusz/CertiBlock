@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using Serilog.Enrichers.Span;
 using Serilog.Events;
 
 namespace CertiBlock.Shared.Logging;
@@ -21,6 +22,8 @@ public static class Extensions
             .MinimumLevel.Is(logLevel)
             .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
             .MinimumLevel.Override("System", LogEventLevel.Warning)
+            .Enrich.FromLogContext()
+            .Enrich.WithSpan()
             .Enrich.WithProperty("Service", options.ServiceName)
             .Enrich.WithProperty("Environment", options.Environment)
             .WriteTo.Console()

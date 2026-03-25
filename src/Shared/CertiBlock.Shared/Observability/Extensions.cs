@@ -34,9 +34,11 @@ public static class Extensions
                     .AddSource(
                         MessagingActivitySources.DefaultSourceName,
                         MessagingActivitySources.MessagingPublishSourceName,
-                        MessagingActivitySources.MessagingConsumeSourceName)
+                        MessagingActivitySources.MessagingConsumeSourceName,
+                        "MongoDB.Driver")
                     .AddAspNetCoreInstrumentation()
                     .AddHttpClientInstrumentation()
+                    .AddEntityFrameworkCoreInstrumentation(ef => ef.SetDbStatementForText = true)
                     .AddOtlpExporter(otlp =>
                     {
                         otlp.Endpoint = new Uri(options.Endpoint);

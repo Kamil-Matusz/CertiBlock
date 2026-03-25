@@ -20,3 +20,15 @@ datasources:
     secureJsonData:
       token: my-super-secret-auth-token
     editable: false
+
+  - name: Jaeger
+    type: jaeger
+    access: proxy
+    url: http://jaeger:16686
+    editable: false
+
+  - name: Seq
+    type: datalust-seq-datasource
+    access: proxy
+    url: http://seq:80
+    editable: false
