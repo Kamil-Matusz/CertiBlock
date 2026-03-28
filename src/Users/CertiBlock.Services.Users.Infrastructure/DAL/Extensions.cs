@@ -9,17 +9,23 @@ public static class Extensions
 {
     private const string SectionName = "Postgres";
 
-    public static IServiceCollection AddPostgres(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddPostgres(this IServiceCollection services, IConfiguration configuration, bool addHealthCheck = true)
     {
         var section = configuration.GetSection(SectionName);
         services.Configure<PostgresOptions>(section);
         var options = configuration.GetOptions<PostgresOptions>(SectionName);
-        
+
         services.AddDbContext<UsersDbContext>(x => x.UseNpgsql(options.ConnectionString));
 
         services.AddHostedService<DatabaseInitializer>();
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-        
+
+        if (addHealthCheck)
+        {
+            services.AddHealthChecks()
+                .AddCheck<PostgreSqlHealthCheck>("postgresql", tags: new[] { "postgresql", "database" });
+        }
+
         return services;
     }
 
