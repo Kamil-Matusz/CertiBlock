@@ -23,33 +23,11 @@ CertiBlock is a microservice-based application developed as part of a master's t
 
 CertiBlock follows a **microservices architecture** managed via Docker Compose. All services communicate asynchronously through **RabbitMQ**.
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                        Frontend (React)                     │
-│               Vite + TypeScript + MUI + react-admin         │
-└─────────────────────────┬───────────────────────────────────┘
-                          │ HTTP
-                ┌─────────▼──────────┐
-                │    API Gateway     │
-                │  (YARP / Ocelot)   │
-                └──┬──┬──┬──┬──┬────┘
-                   │  │  │  │  │
-       ┌───────────┘  │  │  │  └───────────┐
-       │              │  │  │              │
-  ┌────▼────┐  ┌──────▼┐ │ ┌▼────────┐ ┌─▼──────┐
-  │  Users  │  │ Certs │ │ │Ethereum │ │Polygon │
-  │ Service │  │Service│ │ │Service  │ │Service │
-  └─────────┘  └───────┘ │ └─────────┘ └────────┘
-                          │
-                   ┌──────▼──────┐
-                   │   Metrics   │
-                   │   Service   │
-                   └─────────────┘
+### Application Layer
+![Application Layer](/assets/app-layer.png)
 
-  Infrastructure: PostgreSQL · MongoDB · RabbitMQ · InfluxDB · Seq · Grafana
-```
-
----
+### Application Archtecture
+![Application Schema](/assets/app-schema.png)
 
 ## 🧩 Services
 
