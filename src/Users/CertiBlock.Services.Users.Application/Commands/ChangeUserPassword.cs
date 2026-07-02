@@ -2,4 +2,4 @@
 
 namespace CertiBlock.Services.Users.Application.Commands;
 
-public record ChangeUserPassword(Guid UserId, string Password) : ICommand;
+public record ChangeUserPassword(Guid UserId, string CurrentPassword, string NewPassword) : ICommand;

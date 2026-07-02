@@ -3,8 +3,10 @@ using CertiBlock.Services.Users.Application.Commands;
 using CertiBlock.Services.Users.Application.Queries;
 using CertiBlock.Services.Users.Application.Security;
 using CertiBlock.Services.Users.Core.DTO;
+using CertiBlock.Services.Users.Infrastructure.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace CertiBlock.Services.Users.Api.Controllers;
 
@@ -13,6 +15,7 @@ public class UsersController(ICommandHandler<SignUp> signUpHandler, ICommandHand
     IQueryHandler<GetAccountInfo, AccountDto> getAccountInfo, IQueryHandler<GetAllUsers, IEnumerable<UserDto>> getAllUsersHandler,
     ICommandHandler<ChangeUserPassword> changeUserPasswordHandler, ITokenStorage tokenStorage) : BaseController
 {
+    [EnableRateLimiting(AuthRateLimiterPolicy.PolicyName)]
     [HttpPost("signUp")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -25,6 +28,7 @@ public class UsersController(ICommandHandler<SignUp> signUpHandler, ICommandHand
         return Ok(user);
     }
     
+    [EnableRateLimiting(AuthRateLimiterPolicy.PolicyName)]
     [HttpPost("signIn")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -107,8 +111,13 @@ public class UsersController(ICommandHandler<SignUp> signUpHandler, ICommandHand
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> ChangePassword(ChangeUserPassword command)
     {
-        var userId = Guid.Parse(User.Identity?.Name);
-        await changeUserPasswordHandler.HandlerAsync(command with { UserId = userId, Password  = command.Password });
+        if (string.IsNullOrWhiteSpace(User.Identity?.Name))
+        {
+            return NotFound();
+        }
+
+        var userId = Guid.Parse(User.Identity.Name);
+        await changeUserPasswordHandler.HandlerAsync(command with { UserId = userId });
         return NoContent();
     }
 }

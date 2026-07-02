@@ -1,4 +1,5 @@
 using System.Net;
+using System.Security.Authentication;
 using CertiBlock.Shared.Exceptions;
 
 namespace CertiBlock.Services.Users.Core.Exceptions;
@@ -22,6 +23,9 @@ public sealed class UserExceptionMapper : IExceptionMapper
 
             UserRoleNotExistException ex =>
                 new ExceptionResponse(new { code = "user_role_not_exist", message = ex.Message }, HttpStatusCode.NotFound),
+
+            InvalidCredentialException =>
+                new ExceptionResponse(new { code = "invalid_credentials", message = "Invalid credentials." }, HttpStatusCode.Unauthorized),
 
             _ => null
         };

@@ -1,4 +1,5 @@
-﻿using CertiBlock.Services.Users.Application.Abstractions;
+﻿using System.Net;
+using CertiBlock.Services.Users.Application.Abstractions;
 using CertiBlock.Services.Users.Core.Exceptions;
 using CertiBlock.Services.Users.Infrastructure.Auth;
 using CertiBlock.Services.Users.Infrastructure.DAL;
@@ -9,6 +10,8 @@ using CertiBlock.Shared.Exceptions;
 using CertiBlock.Shared.Logging;
 using CertiBlock.Shared.Observability;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -48,6 +51,13 @@ public static class Extensions
         // HealthCheck
         services.AddHealthChecks();
         
+        // Rate limiting for auth endpoints
+        services.AddRateLimiter(options =>
+        {
+            options.AddPolicy<IPAddress, AuthRateLimiterPolicy>(AuthRateLimiterPolicy.PolicyName);
+            options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+        });
+
         // CORS
         services.AddCorsPolicy();
         
@@ -63,6 +73,8 @@ public static class Extensions
         
         app.UseErrorHandling();
         app.UseRouting();
+
+        app.UseRateLimiter();
         
         app.UseAuthentication();
         app.UseAuthorization();
