@@ -47,7 +47,7 @@ public class ChangeUserPasswordTests
         _userRepository.Setup(x => x.GetUserByIdAsync(command.UserId)).ReturnsAsync((User)null!);
 
         // Act & Assert
-        await Should.ThrowAsync<UserNotFoundException>(() => CreateHandler().HandlerAsync(command));
+        await Should.ThrowAsync<UserNotFoundException>(() => CreateHandler().HandleAsync(command));
     }
 
     [Fact]
@@ -60,7 +60,7 @@ public class ChangeUserPasswordTests
         _passwordManager.Setup(x => x.Validate(command.CurrentPassword, user.Password)).Returns(false);
 
         // Act & Assert
-        await Should.ThrowAsync<InvalidCredentialException>(() => CreateHandler().HandlerAsync(command));
+        await Should.ThrowAsync<InvalidCredentialException>(() => CreateHandler().HandleAsync(command));
         _userRepository.Verify(x => x.ChangeUserPassword(It.IsAny<Guid>(), It.IsAny<string>()), Times.Never);
     }
 
@@ -75,7 +75,7 @@ public class ChangeUserPasswordTests
         _passwordManager.Setup(x => x.Secure(command.NewPassword)).Returns("securedNewPassword");
 
         // Act
-        await CreateHandler().HandlerAsync(command);
+        await CreateHandler().HandleAsync(command);
 
         // Assert
         _userRepository.Verify(x => x.ChangeUserPassword(command.UserId, "securedNewPassword"), Times.Once);

@@ -9,7 +9,7 @@ namespace CertiBlock.Services.Users.Infrastructure.Handlers;
 
 public sealed class GetAccountInfoHandler(UsersDbContext dbContext) : IQueryHandler<GetAccountInfo, AccountDto>
 {
-    public async Task<AccountDto> HandlerAsync(GetAccountInfo query)
+    public async Task<AccountDto> HandleAsync(GetAccountInfo query)
     {
         var userId = query.UserId;
         var user = await dbContext.Users

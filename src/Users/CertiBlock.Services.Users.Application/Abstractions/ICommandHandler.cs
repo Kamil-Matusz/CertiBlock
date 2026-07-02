@@ -2,5 +2,5 @@
 
 public interface ICommandHandler<in TCommand> where TCommand: class, ICommand
 {
-    Task HandlerAsync(TCommand command);
+    Task HandleAsync(TCommand command);
 }

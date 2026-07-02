@@ -10,7 +10,7 @@ namespace CertiBlock.Services.Users.Application.Handlers;
 public sealed class SignInHandler(IUserRepository userRepository, IAuthenticator authenticator, IPasswordManager passwordManager,
     ITokenStorage tokenStorage) : ICommandHandler<SignIn>
 {
-    public async Task HandlerAsync(SignIn command)
+    public async Task HandleAsync(SignIn command)
     {
         var email = command.Email.Trim().ToLowerInvariant();
         var user = await userRepository.GetUserByEmailAsync(email);

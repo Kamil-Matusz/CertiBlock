@@ -12,7 +12,7 @@ namespace CertiBlock.Services.Users.Application.Handlers;
 public sealed class SignUpHandler(IClock clock, IPasswordManager passwordManager, IUserRepository userRepository)
     : ICommandHandler<SignUp>
 {
-    public async Task HandlerAsync(SignUp command)
+    public async Task HandleAsync(SignUp command)
     {
         var email = command.Email.Trim().ToLowerInvariant();
         if (await userRepository.GetUserByEmailAsync(email) is not null)

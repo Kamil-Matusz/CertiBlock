@@ -10,7 +10,7 @@ namespace CertiBlock.Services.Users.Application.Handlers;
 public sealed class ChangeUserPasswordHandler(IPasswordManager passwordManager, IUserRepository userRepository)
     : ICommandHandler<ChangeUserPassword>
 {
-    public async Task HandlerAsync(ChangeUserPassword command)
+    public async Task HandleAsync(ChangeUserPassword command)
     {
         var user = await userRepository.GetUserByIdAsync(command.UserId);
         if (user is null)

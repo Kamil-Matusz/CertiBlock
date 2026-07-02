@@ -22,10 +22,10 @@ public class UsersController(ICommandHandler<SignUp> signUpHandler, ICommandHand
     public async Task<ActionResult> SignUp(SignUp command)
     {
         command = command with {UserId = Guid.NewGuid()};
-        await signUpHandler.HandlerAsync(command);
-        
-        var user = await getAccountInfo.HandlerAsync(new GetAccountInfo() {UserId = command.UserId});
-        return Ok(user);
+        await signUpHandler.HandleAsync(command);
+
+        var user = await getAccountInfo.HandleAsync(new GetAccountInfo() {UserId = command.UserId});
+        return CreatedAtAction(nameof(GetUser), new { userId = command.UserId }, user);
     }
     
     [EnableRateLimiting(AuthRateLimiterPolicy.PolicyName)]
@@ -34,7 +34,7 @@ public class UsersController(ICommandHandler<SignUp> signUpHandler, ICommandHand
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<JwtDto>> SignIn(SignIn command)
     {
-        await signInHandler.HandlerAsync(command);
+        await signInHandler.HandleAsync(command);
         var jwt = tokenStorage.GetToken();
         return Ok(jwt);
     }
@@ -47,7 +47,7 @@ public class UsersController(ICommandHandler<SignUp> signUpHandler, ICommandHand
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<AccountDto>> GetUser(Guid userId)
     {
-        var user = await getAccountInfo.HandlerAsync(new GetAccountInfo() {UserId = userId});
+        var user = await getAccountInfo.HandleAsync(new GetAccountInfo() {UserId = userId});
         return Ok(user);
     }
     
@@ -64,7 +64,7 @@ public class UsersController(ICommandHandler<SignUp> signUpHandler, ICommandHand
             return NotFound();
         }
 
-        var user = await getAccountInfo.HandlerAsync(new GetAccountInfo() {UserId = userId.Value});
+        var user = await getAccountInfo.HandleAsync(new GetAccountInfo() {UserId = userId.Value});
 
         return Ok(user);
     }
@@ -78,7 +78,7 @@ public class UsersController(ICommandHandler<SignUp> signUpHandler, ICommandHand
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> DeleteUserAccount(Guid userId)
     {
-        await deleteAccountHandler.HandlerAsync(new DeleteUserAccount(userId));
+        await deleteAccountHandler.HandleAsync(new DeleteUserAccount(userId));
         return NoContent();
     }
     
@@ -91,7 +91,7 @@ public class UsersController(ICommandHandler<SignUp> signUpHandler, ICommandHand
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> ChangeUserRole(Guid userId, ChangeUserRole command)
     {
-        await changeUserRoleHandler.HandlerAsync(command with { UserId = userId, Role  = command.Role });
+        await changeUserRoleHandler.HandleAsync(command with { UserId = userId, Role  = command.Role });
         return Ok();
     }
     
@@ -101,7 +101,7 @@ public class UsersController(ICommandHandler<SignUp> signUpHandler, ICommandHand
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<IEnumerable<UserDto>>> GetAllUsers([FromQuery] GetAllUsers query)
-        => Ok(await getAllUsersHandler.HandlerAsync(query));
+        => Ok(await getAllUsersHandler.HandleAsync(query));
     
     [Authorize]
     [HttpPut("changePassword")]
@@ -117,7 +117,7 @@ public class UsersController(ICommandHandler<SignUp> signUpHandler, ICommandHand
             return NotFound();
         }
 
-        await changeUserPasswordHandler.HandlerAsync(command with { UserId = userId.Value });
+        await changeUserPasswordHandler.HandleAsync(command with { UserId = userId.Value });
         return NoContent();
     }
 }

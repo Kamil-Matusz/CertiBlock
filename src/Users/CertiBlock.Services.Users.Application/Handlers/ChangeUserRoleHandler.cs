@@ -7,7 +7,7 @@ namespace CertiBlock.Services.Users.Application.Handlers;
 
 public sealed class ChangeUserRoleHandler(IUserRepository userRepository) : ICommandHandler<ChangeUserRole>
 {
-    public async Task HandlerAsync(ChangeUserRole command)
+    public async Task HandleAsync(ChangeUserRole command)
     {
         var role = new Role(command.Role);
         await userRepository.ChangeUserRoleAsync(command.UserId, role);

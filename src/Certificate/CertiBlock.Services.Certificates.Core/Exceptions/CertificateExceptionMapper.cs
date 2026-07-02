@@ -11,7 +11,7 @@ internal sealed class CertificateExceptionMapper : IExceptionMapper
             CertificateNotFoundException ex =>
                 new ExceptionResponse(new { code = "certificate_not_found", message = ex.Message }, HttpStatusCode.NotFound),
 
-            CetrtificateForUserNotFoundException ex =>
+            CertificateForUserNotFoundException ex =>
                 new ExceptionResponse(new { code = "certificate_for_user_not_found", message = ex.Message }, HttpStatusCode.NotFound),
 
             UnsupportedBlockchainException ex =>
