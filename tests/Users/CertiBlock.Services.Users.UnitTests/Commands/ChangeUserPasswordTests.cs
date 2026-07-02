@@ -44,7 +44,7 @@ public class ChangeUserPasswordTests
     {
         // Arrange
         var command = new ChangeUserPassword(Guid.NewGuid(), "old", "newPassword123");
-        _userRepository.Setup(x => x.GetUserByIdAsync(command.UserId)).ReturnsAsync((User)null);
+        _userRepository.Setup(x => x.GetUserByIdAsync(command.UserId)).ReturnsAsync((User)null!);
 
         // Act & Assert
         await Should.ThrowAsync<UserNotFoundException>(() => CreateHandler().HandlerAsync(command));

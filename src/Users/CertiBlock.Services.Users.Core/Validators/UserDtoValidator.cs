@@ -18,8 +18,6 @@ public class UserDtoValidator : AbstractValidator<UserDto>
             .MinimumLength(6).WithMessage("Password must be at least 6 characters long.")
             .MaximumLength(200).WithMessage("Password cannot be longer than 200 characters.");
         
-        RuleFor(dto => dto.IsActive).NotEmpty().WithMessage("The account must have activity information.");
-        
         RuleFor(dto => dto.CreatedAt).NotEmpty().WithMessage("The account must have a creation date.");
     }
 }

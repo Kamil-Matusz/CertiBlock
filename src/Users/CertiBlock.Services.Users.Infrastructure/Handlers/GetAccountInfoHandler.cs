@@ -1,6 +1,7 @@
 ﻿using CertiBlock.Services.Users.Application.Abstractions;
 using CertiBlock.Services.Users.Application.Queries;
 using CertiBlock.Services.Users.Core.DTO;
+using CertiBlock.Services.Users.Core.Exceptions;
 using CertiBlock.Services.Users.Infrastructure.DAL.PostgreSQL;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,8 +16,11 @@ public sealed class GetAccountInfoHandler(UsersDbContext dbContext) : IQueryHand
             .AsNoTracking()
             .SingleOrDefaultAsync(x => x.UserId == userId);
 
-        var accountDto = user.AsAccountDto();
+        if (user is null)
+        {
+            throw new UserNotFoundException(userId);
+        }
 
-        return accountDto;
+        return user.AsAccountDto();
     }
 }

@@ -58,13 +58,13 @@ public class UsersController(ICommandHandler<SignUp> signUpHandler, ICommandHand
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<AccountDto>> AccountInfo()
     {
-        if (string.IsNullOrWhiteSpace(User.Identity?.Name))
+        var userId = CurrentUserId;
+        if (userId is null)
         {
             return NotFound();
         }
-        
-        var userId = Guid.Parse(User.Identity?.Name);
-        var user = await getAccountInfo.HandlerAsync(new GetAccountInfo() {UserId = userId});
+
+        var user = await getAccountInfo.HandlerAsync(new GetAccountInfo() {UserId = userId.Value});
 
         return Ok(user);
     }
@@ -111,13 +111,13 @@ public class UsersController(ICommandHandler<SignUp> signUpHandler, ICommandHand
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> ChangePassword(ChangeUserPassword command)
     {
-        if (string.IsNullOrWhiteSpace(User.Identity?.Name))
+        var userId = CurrentUserId;
+        if (userId is null)
         {
             return NotFound();
         }
 
-        var userId = Guid.Parse(User.Identity.Name);
-        await changeUserPasswordHandler.HandlerAsync(command with { UserId = userId });
+        await changeUserPasswordHandler.HandlerAsync(command with { UserId = userId.Value });
         return NoContent();
     }
 }

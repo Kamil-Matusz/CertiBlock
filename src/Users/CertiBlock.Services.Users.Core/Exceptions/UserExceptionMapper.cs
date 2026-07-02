@@ -21,9 +21,6 @@ public sealed class UserExceptionMapper : IExceptionMapper
             InvalidRoleException ex =>
                 new ExceptionResponse(new { code = "invalid_role", message = ex.Message }, HttpStatusCode.BadRequest),
 
-            UserRoleNotExistException ex =>
-                new ExceptionResponse(new { code = "user_role_not_exist", message = ex.Message }, HttpStatusCode.NotFound),
-
             InvalidCredentialException =>
                 new ExceptionResponse(new { code = "invalid_credentials", message = "Invalid credentials." }, HttpStatusCode.Unauthorized),
 
