@@ -12,15 +12,16 @@ namespace CertiBlock.Services.Users.Application.Handlers;
 public sealed class SignUpHandler(IClock clock, IPasswordManager passwordManager, IUserRepository userRepository)
     : ICommandHandler<SignUp>
 {
-    public async Task HandlerAsync(SignUp command)
+    public async Task HandleAsync(SignUp command)
     {
-        if (await userRepository.GetUserByEmailAsync(command.Email) is not null)
+        var email = command.Email.Trim().ToLowerInvariant();
+        if (await userRepository.GetUserByEmailAsync(email) is not null)
         {
-            throw new EmailAlreadyInUseException(command.Email);
+            throw new EmailAlreadyInUseException(email);
         }
 
         var securedPassword = passwordManager.Secure(command.Password);
-        var user = new User(command.UserId, command.Email, securedPassword, Role.User(), true, clock.CurrentDate());
+        var user = new User(command.UserId, email, securedPassword, Role.User(), true, clock.CurrentDate());
 
         await userRepository.AddUserAsync(user);
     }

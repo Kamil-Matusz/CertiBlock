@@ -2,6 +2,7 @@
 using CertiBlock.Shared.Enums;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
 
 namespace CertiBlock.Services.Ethereum.Infrastructure.Configurations;
 
@@ -14,16 +15,22 @@ public static class EthereumMetricsConfiguration
             cm.AutoMap();
             
             cm.MapIdProperty(x => x.Id)
-                .SetSerializer(new MongoDB.Bson.Serialization.Serializers.GuidSerializer(BsonType.String));
+                .SetSerializer(new GuidSerializer(BsonType.String));
             
             cm.MapProperty(x => x.CertificateId)
-                .SetSerializer(new MongoDB.Bson.Serialization.Serializers.GuidSerializer(BsonType.String));
+                .SetSerializer(new GuidSerializer(BsonType.String));
             
             cm.MapProperty(x => x.Blockchain)
-                .SetSerializer(new MongoDB.Bson.Serialization.Serializers.EnumSerializer<Blockchain>(BsonType.String));
+                .SetSerializer(new EnumSerializer<Blockchain>(BsonType.String));
             
             cm.MapProperty(x => x.Operation)
-                .SetSerializer(new MongoDB.Bson.Serialization.Serializers.EnumSerializer<Operation>(BsonType.String));
+                .SetSerializer(new EnumSerializer<Operation>(BsonType.String));
+            
+            cm.MapProperty(x => x.TransactionCostNative)
+                .SetSerializer(new DecimalSerializer(BsonType.Decimal128));
+
+            cm.MapProperty(x => x.TransactionCostUsd)
+                .SetSerializer(new DecimalSerializer(BsonType.Decimal128));
         });
     }
 }

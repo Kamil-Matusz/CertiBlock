@@ -1,6 +1,7 @@
 using CertiBlock.Gateway;
 using CertiBlock.Shared.CORS;
 using CertiBlock.Shared.Exceptions;
+using CertiBlock.Shared.Observability;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,8 @@ app.UseRateLimiter();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseObservability();
 
 app.MapHealthChecks("/health");
 app.MapReverseProxy();

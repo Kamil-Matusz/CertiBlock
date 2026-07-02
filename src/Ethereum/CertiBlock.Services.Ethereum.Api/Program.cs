@@ -1,6 +1,7 @@
 using CertiBlock.Services.Ethereum.Application;
 using CertiBlock.Services.Ethereum.Core;
 using CertiBlock.Services.Ethereum.Infrastructure;
+using CertiBlock.Shared.Observability;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,8 @@ app.UseSwaggerUI();
 app.MapOpenApi();
 
 app.UseInfrastructure();
+
+app.UseObservability();
 
 app.MapControllers();
 

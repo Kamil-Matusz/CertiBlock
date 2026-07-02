@@ -34,6 +34,8 @@ public class EthereumService(IEthereumRepository ethereumRepository, ILogger<Eth
                 To = account.Address,
                 Value = new HexBigInteger(0),
                 Gas = new HexBigInteger(100000),
+                GasPrice = new HexBigInteger(Web3.Convert.ToWei(20, Nethereum.Util.UnitConversion.EthUnit.Gwei)),
+    
                 Data = data
             };
             

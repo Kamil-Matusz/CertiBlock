@@ -83,7 +83,7 @@ public class CertificateService(
 
         if (!certificates.Any())
         {
-            throw new CetrtificateForUserNotFoundException(userId);
+            throw new CertificateForUserNotFoundException(userId);
         }
 
         return CertificateMapper.MapAll<CertificateDto>(certificates);

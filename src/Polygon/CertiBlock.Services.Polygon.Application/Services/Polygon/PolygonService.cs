@@ -34,6 +34,8 @@ public class PolygonService(IPolygonRepository polygonRepository, ILogger<Polygo
                 To = account.Address,
                 Value = new HexBigInteger(0),
                 Gas = new HexBigInteger(100000),
+                GasPrice = new HexBigInteger(Web3.Convert.ToWei(50, Nethereum.Util.UnitConversion.EthUnit.Gwei)),
+    
                 Data = data
             };
             

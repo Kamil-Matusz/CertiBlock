@@ -8,7 +8,7 @@ public static class Extensions
 {
     private const string MongoSectionName = "Mongo";
 
-    public static IServiceCollection AddMongo(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddMongo(this IServiceCollection services, IConfiguration configuration, bool addHealthCheck = true)
     {
         var section = configuration.GetSection(MongoSectionName);
         services.Configure<MongoDbOptions>(section);
@@ -19,6 +19,12 @@ public static class Extensions
 
         services.AddSingleton<IMongoClient>(client);
         services.AddSingleton(database);
+
+        if (addHealthCheck)
+        {
+            services.AddHealthChecks()
+                .AddCheck<MongoDbHealthCheck>("mongodb", tags: new[] { "mongodb", "database" });
+        }
 
         return services;
     }

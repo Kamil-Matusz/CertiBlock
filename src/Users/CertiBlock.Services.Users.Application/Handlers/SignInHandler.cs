@@ -10,9 +10,10 @@ namespace CertiBlock.Services.Users.Application.Handlers;
 public sealed class SignInHandler(IUserRepository userRepository, IAuthenticator authenticator, IPasswordManager passwordManager,
     ITokenStorage tokenStorage) : ICommandHandler<SignIn>
 {
-    public async Task HandlerAsync(SignIn command)
+    public async Task HandleAsync(SignIn command)
     {
-        var user = await userRepository.GetUserByEmailAsync(command.Email);
+        var email = command.Email.Trim().ToLowerInvariant();
+        var user = await userRepository.GetUserByEmailAsync(email);
         if (user is null)
         {
             throw new InvalidCredentialException();
@@ -23,10 +24,9 @@ public sealed class SignInHandler(IUserRepository userRepository, IAuthenticator
             throw new InvalidCredentialException();
         }
 
-        bool accountIsActive = await userRepository.CheckAccountActivity(command.Email);
-        if (accountIsActive is false)
+        if (!user.IsActive)
         {
-            throw new AccountIsNotActiveException(command.Email);
+            throw new AccountIsNotActiveException(email);
         }
 
         var jwt = authenticator.CreateToken(user.UserId, user.Role);
