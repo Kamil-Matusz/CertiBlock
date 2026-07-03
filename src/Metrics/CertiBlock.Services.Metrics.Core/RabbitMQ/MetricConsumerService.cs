@@ -41,15 +41,15 @@ public class MetricConsumerService(IConnection connection, IOptions<RabbitMqOpti
             var consumer = new AsyncEventingBasicConsumer(_channel);
             consumer.Received += async (ch, ea) =>
             {
-                var parentContext = GetParentContext(ea);
-                using var activity = ActivitySource.StartActivity("Consume MetricCollectedEvent", ActivityKind.Consumer, parentContext);
-                activity?.SetTag("messaging.system", "rabbitmq");
-                activity?.SetTag("messaging.destination", queue);
-                activity?.SetTag("messaging.operation", "receive");
-
                 var sw = Stopwatch.StartNew();
                 try
                 {
+                    var parentContext = GetParentContext(ea);
+                    using var activity = ActivitySource.StartActivity("Consume MetricCollectedEvent", ActivityKind.Consumer, parentContext);
+                    activity?.SetTag("messaging.system", "rabbitmq");
+                    activity?.SetTag("messaging.destination", queue);
+                    activity?.SetTag("messaging.operation", "receive");
+
                     var json = Encoding.UTF8.GetString(ea.Body.Span);
                     var evt = JsonSerializer.Deserialize<MetricCollectedEvent>(json);
 
@@ -82,8 +82,9 @@ public class MetricConsumerService(IConnection connection, IOptions<RabbitMqOpti
                 }
                 catch (Exception ex)
                 {
-                    logger.LogError(ex, "Error processing message from {Queue}", queue);
-                    _channel.BasicNack(ea.DeliveryTag, false, requeue: true);
+                    var requeue = !ea.Redelivered;
+                    logger.LogError(ex, "Error processing message from {Queue} (requeue: {Requeue})", queue, requeue);
+                    _channel.BasicNack(ea.DeliveryTag, false, requeue);
 
                     RabbitMqMetrics.MessagesConsumed.Add(1,
                         new KeyValuePair<string, object?>("queue", queue),
@@ -105,15 +106,15 @@ public class MetricConsumerService(IConnection connection, IOptions<RabbitMqOpti
             var consumer = new AsyncEventingBasicConsumer(_channel);
             consumer.Received += async (ch, ea) =>
             {
-                var parentContext = GetParentContext(ea);
-                using var activity = ActivitySource.StartActivity("Consume MetricFinalizedEvent", ActivityKind.Consumer, parentContext);
-                activity?.SetTag("messaging.system", "rabbitmq");
-                activity?.SetTag("messaging.destination", queue);
-                activity?.SetTag("messaging.operation", "receive");
-
                 var sw = Stopwatch.StartNew();
                 try
                 {
+                    var parentContext = GetParentContext(ea);
+                    using var activity = ActivitySource.StartActivity("Consume MetricFinalizedEvent", ActivityKind.Consumer, parentContext);
+                    activity?.SetTag("messaging.system", "rabbitmq");
+                    activity?.SetTag("messaging.destination", queue);
+                    activity?.SetTag("messaging.operation", "receive");
+
                     var json = Encoding.UTF8.GetString(ea.Body.Span);
                     var evt = JsonSerializer.Deserialize<MetricFinalizedEvent>(json);
 
@@ -146,8 +147,9 @@ public class MetricConsumerService(IConnection connection, IOptions<RabbitMqOpti
                 }
                 catch (Exception ex)
                 {
-                    logger.LogError(ex, "Error processing finalization message from {Queue}", queue);
-                    _channel.BasicNack(ea.DeliveryTag, false, requeue: true);
+                    var requeue = !ea.Redelivered;
+                    logger.LogError(ex, "Error processing finalization message from {Queue} (requeue: {Requeue})", queue, requeue);
+                    _channel.BasicNack(ea.DeliveryTag, false, requeue);
 
                     RabbitMqMetrics.MessagesConsumed.Add(1,
                         new KeyValuePair<string, object?>("queue", queue),
@@ -167,12 +169,13 @@ public class MetricConsumerService(IConnection connection, IOptions<RabbitMqOpti
         await Task.Delay(Timeout.Infinite, stoppingToken);
     }
     
-    private ActivityContext GetParentContext(BasicDeliverEventArgs ea)
+    private static ActivityContext GetParentContext(BasicDeliverEventArgs ea)
     {
         if (ea.BasicProperties.Headers != null &&
-            ea.BasicProperties.Headers.TryGetValue("traceparent", out var traceId))
+            ea.BasicProperties.Headers.TryGetValue("traceparent", out var traceId) &&
+            traceId is byte[] traceparentBytes)
         {
-            var traceparent = Encoding.UTF8.GetString((byte[])traceId);
+            var traceparent = Encoding.UTF8.GetString(traceparentBytes);
             if (ActivityContext.TryParse(traceparent, null, isRemote: true, out var context))
                 return context;
         }
@@ -182,16 +185,7 @@ public class MetricConsumerService(IConnection connection, IOptions<RabbitMqOpti
 
     private void EnsureTopology(IModel channel)
     {
-        foreach (var queue in _metricQueues.Concat(_finalizationQueues))
-        {
-            channel.QueueDeclare(
-                queue: queue,
-                durable: true,
-                exclusive: false,
-                autoDelete: false,
-                arguments: null);
-        }
-
+        RabbitMqTopology.Declare(channel, _metricQueues.Concat(_finalizationQueues).ToArray());
         logger.LogInformation("RabbitMQ topology created");
     }
 

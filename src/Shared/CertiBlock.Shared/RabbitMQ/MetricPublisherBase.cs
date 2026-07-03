@@ -23,6 +23,7 @@ public abstract class MetricPublisherBase : IDisposable
         _finalizationQueue = finalizationQueue;
         _channel = connection.CreateModel();
         _channel.ConfirmSelect();
+        RabbitMqTopology.Declare(_channel, metricQueue, finalizationQueue);
     }
 
     public void Publish(MetricCollectedEvent metric)
