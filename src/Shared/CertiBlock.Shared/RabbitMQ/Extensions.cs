@@ -35,7 +35,8 @@ public static class Extensions
         // Add health check for RabbitMQ if enabled
         if (addHealthCheck)
         {
-            var rabbitConnectionString = $"amqp://{options.Username}:{options.Password}@{options.HostName}:{options.Port}{options.VirtualHost}";
+            var vhost = options.VirtualHost == "/" ? "" : "/" + Uri.EscapeDataString(options.VirtualHost);
+            var rabbitConnectionString = $"amqp://{options.Username}:{options.Password}@{options.HostName}:{options.Port}{vhost}";
             services.AddHealthChecks()
                 .AddRabbitMQ(rabbitConnectionString, name: "rabbitmq", tags: new[] { "rabbitmq", "messaging" });
         }

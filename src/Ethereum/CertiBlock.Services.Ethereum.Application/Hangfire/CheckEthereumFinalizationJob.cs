@@ -59,15 +59,15 @@ public class CheckEthereumFinalizationJob(IEthereumMetricRepository metricsRepos
                 metric.IsFinalized = true;
                 metric.Confirmations = RequiredConfirmations;
 
-                await metricsRepository.UpdateEthereumMetricsAsync(metric);
-
                 var finalizedEvent = new MetricFinalizedEvent(
                     metric.CertificateId,
                     Shared.Enums.Blockchain.Ethereum,
                     metric.FinalizationTimeSeconds!.Value,
                     metric.Confirmations,
-                    DateTime.UtcNow);
+                    finalityBlockTimestamp);
                 metricPublisher.Publish(finalizedEvent);
+
+                await metricsRepository.UpdateEthereumMetricsAsync(metric);
 
                 finalizedCount++;
 
