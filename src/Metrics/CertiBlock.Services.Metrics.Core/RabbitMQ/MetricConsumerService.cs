@@ -1,11 +1,11 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Text;
 using System.Text.Json;
-using CertiBlock.Services.Metrics.Core.Services;
 using CertiBlock.Services.Metrics.Core.Services.Metrics;
 using CertiBlock.Shared.Messaging;
 using CertiBlock.Shared.Observability;
 using CertiBlock.Shared.RabbitMQ;
+using CertiBlock.Shared.Serialization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -38,141 +38,88 @@ public class MetricConsumerService(IConnection connection, IOptions<RabbitMqOpti
 
         foreach (var queue in _metricQueues)
         {
-            var consumer = new AsyncEventingBasicConsumer(_channel);
-            consumer.Received += async (ch, ea) =>
-            {
-                var parentContext = GetParentContext(ea);
-                using var activity = ActivitySource.StartActivity("Consume MetricCollectedEvent", ActivityKind.Consumer, parentContext);
-                activity?.SetTag("messaging.system", "rabbitmq");
-                activity?.SetTag("messaging.destination", queue);
-                activity?.SetTag("messaging.operation", "receive");
-
-                var sw = Stopwatch.StartNew();
-                try
-                {
-                    var json = Encoding.UTF8.GetString(ea.Body.Span);
-                    var evt = JsonSerializer.Deserialize<MetricCollectedEvent>(json);
-
-                    if (evt != null)
-                    {
-                        await ProcessMetricAsync(evt, stoppingToken);
-
-                        logger.LogInformation("Processed metric: {Blockchain} - {Operation} - Gas: {Gas}, CostUsd: {CostUsd}",
-                            evt.Blockchain, evt.Operation, evt.GasUsed, evt.TransactionCostUsd);
-                    }
-                    else
-                    {
-                        logger.LogWarning("Received null event from queue {Queue}", queue);
-                    }
-
-                    _channel.BasicAck(ea.DeliveryTag, false);
-
-                    RabbitMqMetrics.MessagesConsumed.Add(1,
-                        new KeyValuePair<string, object?>("queue", queue),
-                        new KeyValuePair<string, object?>("status", "success"));
-                }
-                catch (JsonException ex)
-                {
-                    logger.LogError(ex, "JSON deserialization error for message from {Queue}", queue);
-                    _channel.BasicNack(ea.DeliveryTag, false, requeue: false);
-
-                    RabbitMqMetrics.MessagesConsumed.Add(1,
-                        new KeyValuePair<string, object?>("queue", queue),
-                        new KeyValuePair<string, object?>("status", "deserialization_error"));
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex, "Error processing message from {Queue}", queue);
-                    _channel.BasicNack(ea.DeliveryTag, false, requeue: true);
-
-                    RabbitMqMetrics.MessagesConsumed.Add(1,
-                        new KeyValuePair<string, object?>("queue", queue),
-                        new KeyValuePair<string, object?>("status", "failure"));
-                }
-                finally
-                {
-                    RabbitMqMetrics.ConsumeDuration.Record(sw.Elapsed.TotalMilliseconds,
-                        new KeyValuePair<string, object?>("queue", queue));
-                }
-            };
-
-            _channel.BasicConsume(queue: queue, autoAck: false, consumer: consumer);
-            logger.LogInformation("Listening on queue: {Queue}", queue);
+            ConsumeQueue<MetricCollectedEvent>(queue, ProcessMetricAsync, stoppingToken);
         }
 
         foreach (var queue in _finalizationQueues)
         {
-            var consumer = new AsyncEventingBasicConsumer(_channel);
-            consumer.Received += async (ch, ea) =>
-            {
-                var parentContext = GetParentContext(ea);
-                using var activity = ActivitySource.StartActivity("Consume MetricFinalizedEvent", ActivityKind.Consumer, parentContext);
-                activity?.SetTag("messaging.system", "rabbitmq");
-                activity?.SetTag("messaging.destination", queue);
-                activity?.SetTag("messaging.operation", "receive");
-
-                var sw = Stopwatch.StartNew();
-                try
-                {
-                    var json = Encoding.UTF8.GetString(ea.Body.Span);
-                    var evt = JsonSerializer.Deserialize<MetricFinalizedEvent>(json);
-
-                    if (evt != null)
-                    {
-                        await ProcessFinalizationAsync(evt, stoppingToken);
-
-                        logger.LogInformation("Processed finalization: {Blockchain} - FinalizationTime: {Time}s, Confirmations: {Confirmations}",
-                            evt.Blockchain, evt.FinalizationTimeSeconds, evt.Confirmations);
-                    }
-                    else
-                    {
-                        logger.LogWarning("Received null finalization event from queue {Queue}", queue);
-                    }
-
-                    _channel.BasicAck(ea.DeliveryTag, false);
-
-                    RabbitMqMetrics.MessagesConsumed.Add(1,
-                        new KeyValuePair<string, object?>("queue", queue),
-                        new KeyValuePair<string, object?>("status", "success"));
-                }
-                catch (JsonException ex)
-                {
-                    logger.LogError(ex, "JSON deserialization error for finalization message from {Queue}", queue);
-                    _channel.BasicNack(ea.DeliveryTag, false, requeue: false);
-
-                    RabbitMqMetrics.MessagesConsumed.Add(1,
-                        new KeyValuePair<string, object?>("queue", queue),
-                        new KeyValuePair<string, object?>("status", "deserialization_error"));
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex, "Error processing finalization message from {Queue}", queue);
-                    _channel.BasicNack(ea.DeliveryTag, false, requeue: true);
-
-                    RabbitMqMetrics.MessagesConsumed.Add(1,
-                        new KeyValuePair<string, object?>("queue", queue),
-                        new KeyValuePair<string, object?>("status", "failure"));
-                }
-                finally
-                {
-                    RabbitMqMetrics.ConsumeDuration.Record(sw.Elapsed.TotalMilliseconds,
-                        new KeyValuePair<string, object?>("queue", queue));
-                }
-            };
-
-            _channel.BasicConsume(queue: queue, autoAck: false, consumer: consumer);
-            logger.LogInformation("Listening on queue: {Queue}", queue);
+            ConsumeQueue<MetricFinalizedEvent>(queue, ProcessFinalizationAsync, stoppingToken);
         }
 
         await Task.Delay(Timeout.Infinite, stoppingToken);
     }
-    
-    private ActivityContext GetParentContext(BasicDeliverEventArgs ea)
+
+    private void ConsumeQueue<TEvent>(string queue, Func<TEvent, CancellationToken, Task> process, CancellationToken stoppingToken)
+        where TEvent : class
+    {
+        var consumer = new AsyncEventingBasicConsumer(_channel);
+        consumer.Received += async (_, ea) =>
+        {
+            var sw = Stopwatch.StartNew();
+            try
+            {
+                var parentContext = GetParentContext(ea);
+                using var activity = ActivitySource.StartActivity($"Consume {typeof(TEvent).Name}", ActivityKind.Consumer, parentContext);
+                activity?.SetTag("messaging.system", "rabbitmq");
+                activity?.SetTag("messaging.destination", queue);
+                activity?.SetTag("messaging.operation", "receive");
+
+                var json = Encoding.UTF8.GetString(ea.Body.Span);
+                var evt = JsonSerializer.Deserialize<TEvent>(json, SerializationOptions.Default);
+
+                if (evt != null)
+                {
+                    await process(evt, stoppingToken);
+                    logger.LogInformation("Processed {EventType} from {Queue}", typeof(TEvent).Name, queue);
+                }
+                else
+                {
+                    logger.LogWarning("Received null event from queue {Queue}", queue);
+                }
+
+                _channel.BasicAck(ea.DeliveryTag, false);
+
+                RabbitMqMetrics.MessagesConsumed.Add(1,
+                    new KeyValuePair<string, object?>("queue", queue),
+                    new KeyValuePair<string, object?>("status", "success"));
+            }
+            catch (JsonException ex)
+            {
+                logger.LogError(ex, "JSON deserialization error for message from {Queue}", queue);
+                _channel.BasicNack(ea.DeliveryTag, false, requeue: false);
+
+                RabbitMqMetrics.MessagesConsumed.Add(1,
+                    new KeyValuePair<string, object?>("queue", queue),
+                    new KeyValuePair<string, object?>("status", "deserialization_error"));
+            }
+            catch (Exception ex)
+            {
+                var requeue = !ea.Redelivered;
+                logger.LogError(ex, "Error processing message from {Queue} (requeue: {Requeue})", queue, requeue);
+                _channel.BasicNack(ea.DeliveryTag, false, requeue);
+
+                RabbitMqMetrics.MessagesConsumed.Add(1,
+                    new KeyValuePair<string, object?>("queue", queue),
+                    new KeyValuePair<string, object?>("status", "failure"));
+            }
+            finally
+            {
+                RabbitMqMetrics.ConsumeDuration.Record(sw.Elapsed.TotalMilliseconds,
+                    new KeyValuePair<string, object?>("queue", queue));
+            }
+        };
+
+        _channel.BasicConsume(queue: queue, autoAck: false, consumer: consumer);
+        logger.LogInformation("Listening on queue: {Queue}", queue);
+    }
+
+    private static ActivityContext GetParentContext(BasicDeliverEventArgs ea)
     {
         if (ea.BasicProperties.Headers != null &&
-            ea.BasicProperties.Headers.TryGetValue("traceparent", out var traceId))
+            ea.BasicProperties.Headers.TryGetValue("traceparent", out var traceId) &&
+            traceId is byte[] traceparentBytes)
         {
-            var traceparent = Encoding.UTF8.GetString((byte[])traceId);
+            var traceparent = Encoding.UTF8.GetString(traceparentBytes);
             if (ActivityContext.TryParse(traceparent, null, isRemote: true, out var context))
                 return context;
         }
@@ -182,16 +129,7 @@ public class MetricConsumerService(IConnection connection, IOptions<RabbitMqOpti
 
     private void EnsureTopology(IModel channel)
     {
-        foreach (var queue in _metricQueues.Concat(_finalizationQueues))
-        {
-            channel.QueueDeclare(
-                queue: queue,
-                durable: true,
-                exclusive: false,
-                autoDelete: false,
-                arguments: null);
-        }
-
+        RabbitMqTopology.Declare(channel, _metricQueues.Concat(_finalizationQueues).ToArray());
         logger.LogInformation("RabbitMQ topology created");
     }
 

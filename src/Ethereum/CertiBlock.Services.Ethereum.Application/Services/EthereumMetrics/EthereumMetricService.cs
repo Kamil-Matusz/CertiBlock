@@ -19,6 +19,14 @@ public class EthereumMetricService(IEthereumMetricRepository metricsRepository, 
     {
         try
         {
+            var existingMetrics = await metricsRepository.GetTransactionMetricsByCertificateAsync(certificateId);
+            if (existingMetrics is not null)
+            {
+                logger.LogInformation("Metrics for certificate {CertificateId} already collected - republishing event", certificateId);
+                metricPublisher.Publish(CreateMetricEvent(existingMetrics));
+                return existingMetrics;
+            }
+
             var txn = await web3.Eth.Transactions.GetTransactionByHash.SendRequestAsync(transactionHash);
             var receipt = await web3.Eth.Transactions.GetTransactionReceipt.SendRequestAsync(transactionHash);
             var latestBlock = await web3.Eth.Blocks.GetBlockNumber.SendRequestAsync();
@@ -69,17 +77,8 @@ public class EthereumMetricService(IEthereumMetricRepository metricsRepository, 
             };
 
             await metricsRepository.SaveEthereumMetricsAsync(metrics);
-            
-            var metricEvent = new MetricCollectedEvent(
-                metrics.CertificateId,
-                Blockchain.Ethereum,
-                Operation.Register,
-                metrics.GasUsed,
-                metrics.InclusionTimeSeconds,
-                (double)metrics.TransactionCostUsd,
-                DateTime.UtcNow);
-            
-            metricPublisher.Publish(metricEvent);
+
+            metricPublisher.Publish(CreateMetricEvent(metrics));
 
             return metrics;
         }
@@ -89,6 +88,16 @@ public class EthereumMetricService(IEthereumMetricRepository metricsRepository, 
             throw;
         }
     }
+
+    private static MetricCollectedEvent CreateMetricEvent(Core.Entities.EthereumMetrics metrics)
+        => new(
+            metrics.CertificateId,
+            Blockchain.Ethereum,
+            Operation.Register,
+            metrics.GasUsed,
+            metrics.InclusionTimeSeconds,
+            (double)metrics.TransactionCostUsd,
+            metrics.CollectedAt);
 
     public async Task DeleteTransactionMetricsByCertificateIdAsync(Guid certificateId)
     {

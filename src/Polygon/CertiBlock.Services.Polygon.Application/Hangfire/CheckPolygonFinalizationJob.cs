@@ -59,15 +59,15 @@ public class CheckPolygonFinalizationJob(IPolygonMetricRepository metricsReposit
                 metric.IsFinalized = true;
                 metric.Confirmations = RequiredConfirmations;
 
-                await metricsRepository.UpdatePolygonMetricsAsync(metric);
-
                 var finalizedEvent = new MetricFinalizedEvent(
                     metric.CertificateId,
                     Shared.Enums.Blockchain.Polygon,
                     metric.FinalizationTimeSeconds!.Value,
                     metric.Confirmations,
-                    DateTime.UtcNow);
+                    finalityBlockTimestamp);
                 metricPublisher.Publish(finalizedEvent);
+
+                await metricsRepository.UpdatePolygonMetricsAsync(metric);
 
                 finalizedCount++;
 

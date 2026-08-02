@@ -3,6 +3,7 @@ using CertiBlock.Services.Polygon.Application.Services;
 using CertiBlock.Services.Polygon.Application.Services.Polygon;
 using CertiBlock.Services.Polygon.Core.DTO;
 using CertiBlock.Shared.Enums;
+using CertiBlock.Shared.Helpers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CertiBlock.Services.Polygon.Api.Controllers;
@@ -13,7 +14,14 @@ public class PolygonController(IPolygonService polygonService, IPolygonFacade po
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<PolygonBalanceDto>> GetPolygonBalanceByWalletAddress(string walletAddress)
-        => Ok(await polygonService.GetPolygonBalanceAsync(walletAddress));
+    {
+        if (!EvmAddress.IsValid(walletAddress))
+        {
+            return BadRequest(new { code = "invalid_wallet_address", message = "Invalid wallet address format." });
+        }
+
+        return Ok(await polygonService.GetPolygonBalanceAsync(walletAddress));
+    }
 
     [HttpPost("registerCertificate")]
     [ProducesResponseType(StatusCodes.Status201Created)]
@@ -21,7 +29,10 @@ public class PolygonController(IPolygonService polygonService, IPolygonFacade po
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<BlockchainTransactionResultDto>> RegisterCertificate(
         [FromBody] BlockchainTransactionDto dto)
-        => Ok(await polygonService.RegisterPolygonTransactionAsync(dto));
+    {
+        var result = await polygonService.RegisterPolygonTransactionAsync(dto);
+        return CreatedAtAction(nameof(GetPolygonTransactionsById), new { id = result.Id }, result);
+    }
 
     [HttpGet("getPolygonTransactionStatus/{transactionHash}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -52,7 +63,10 @@ public class PolygonController(IPolygonService polygonService, IPolygonFacade po
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<BlockchainTransactionResultDto>> GetPolygonTransactionsPaged([FromQuery] int pageIndex, [FromQuery] int pageSize)
-        => Ok(await polygonService.GetPolygonTransactionsPagedAsync(pageIndex, pageSize));
+    {
+        var (page, size) = Paging.Normalize(pageIndex, pageSize);
+        return Ok(await polygonService.GetPolygonTransactionsPagedAsync(page, size));
+    }
     
     [HttpGet("getPolygonAllTransactions")]
     [ProducesResponseType(StatusCodes.Status200OK)]

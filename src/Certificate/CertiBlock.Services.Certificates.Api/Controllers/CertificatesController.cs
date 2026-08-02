@@ -17,7 +17,7 @@ public class CertificatesController(ICertificateService certificateService) : Ba
     {
         var user = UserContextProvider.FromClaimsPrincipal(User);
         var response = await certificateService.RegisterCertificateAsync(request, user);
-        return Ok(response);
+        return CreatedAtAction(nameof(GetCertificateById), new { id = response.CertificateId }, response);
     }
     
     [HttpGet("{id:guid}")]
@@ -33,8 +33,13 @@ public class CertificatesController(ICertificateService certificateService) : Ba
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetCertificatesByUser()
     {
-        var userId = Guid.Parse(User.Identity?.Name);
-        var certificates = await certificateService.GetCertificatesByUserIdAsync(userId);
+        var userId = CurrentUserId;
+        if (userId is null)
+        {
+            return NotFound();
+        }
+
+        var certificates = await certificateService.GetCertificatesByUserIdAsync(userId.Value);
         return Ok(certificates);
     }
     
@@ -59,7 +64,10 @@ public class CertificatesController(ICertificateService certificateService) : Ba
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<CertificateDto>> GetEthereumTransactionsPaged([FromQuery] int pageIndex, [FromQuery] int pageSize)
-        => Ok(await certificateService.GetCertificatesPagedAsync(pageIndex, pageSize));
+    {
+        var (page, size) = Paging.Normalize(pageIndex, pageSize);
+        return Ok(await certificateService.GetCertificatesPagedAsync(page, size));
+    }
     
     [HttpGet("countCertificates")]
     [ProducesResponseType(StatusCodes.Status200OK)]

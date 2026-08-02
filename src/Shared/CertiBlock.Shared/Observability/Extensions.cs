@@ -38,7 +38,7 @@ public static class Extensions
                         "MongoDB.Driver")
                     .AddAspNetCoreInstrumentation()
                     .AddHttpClientInstrumentation()
-                    .AddEntityFrameworkCoreInstrumentation(ef => ef.SetDbStatementForText = true)
+                    .AddEntityFrameworkCoreInstrumentation(ef => ef.SetDbStatementForText = options.IncludeSqlInTraces)
                     .AddOtlpExporter(otlp =>
                     {
                         otlp.Endpoint = new Uri(options.Endpoint);

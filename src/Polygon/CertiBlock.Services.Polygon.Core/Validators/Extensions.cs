@@ -8,9 +8,7 @@ public static class Extensions
     public static IServiceCollection AddFluentValidator(this IServiceCollection services)
     {
         services.AddFluentValidation(fv => fv
-            .RegisterValidatorsFromAssemblyContaining<PolygonAddressDtoValidator>()
-            .RegisterValidatorsFromAssemblyContaining<MetricDtoValidator>()
-            .RegisterValidatorsFromAssemblyContaining<BlockchainTransactionDtoValidator>());
+            .RegisterValidatorsFromAssemblyContaining<MetricDtoValidator>());
 
         return services;
     }
