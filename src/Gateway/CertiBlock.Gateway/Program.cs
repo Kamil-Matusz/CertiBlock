@@ -1,10 +1,11 @@
 using CertiBlock.Gateway;
+using CertiBlock.Shared.CORS;
 using CertiBlock.Shared.Exceptions;
+using CertiBlock.Shared.Observability;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddOpenApi();
-builder.Services.AddSwaggerGen();
+builder.Services.AddHealthChecks();
 
 builder.Services.AddGatewayExtensions(builder.Configuration);
 
@@ -13,16 +14,21 @@ builder.Services.AddErrorHandling();
 
 var app = builder.Build();
 
-app.UseSwagger();
-app.UseSwaggerUI();
-app.MapOpenApi();
-
-app.UseCors("AllowAll");
+app.UseCorsPolicy();
 
 app.UseHttpsRedirection();
 
 app.UseErrorHandling();
 
+app.UseRequestTimeouts();
+app.UseRateLimiter();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.UseObservability();
+
+app.MapHealthChecks("/health");
 app.MapReverseProxy();
 
 app.Run();

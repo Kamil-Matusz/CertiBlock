@@ -1,4 +1,5 @@
 using CertiBlock.Services.Certificates.Core;
+using CertiBlock.Shared.Observability;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,8 @@ app.MapOpenApi();
 app.UseHttpsRedirection();
 
 app.UseInfrastructure();
+
+app.UseObservability();
 
 app.MapControllers();
 

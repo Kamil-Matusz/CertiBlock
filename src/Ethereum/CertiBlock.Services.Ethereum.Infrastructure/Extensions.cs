@@ -1,5 +1,6 @@
 ﻿using CertiBlock.Services.Ethereum.Application.Hangfire;
 using CertiBlock.Services.Ethereum.Core.Entities;
+using CertiBlock.Services.Ethereum.Core.Exceptions;
 using CertiBlock.Services.Ethereum.Infrastructure.Configurations;
 using CertiBlock.Services.Ethereum.Infrastructure.DAL;
 using CertiBlock.Shared.CoinGecko;
@@ -8,6 +9,7 @@ using CertiBlock.Shared.Exceptions;
 using CertiBlock.Shared.Hangfire;
 using CertiBlock.Shared.Logging;
 using CertiBlock.Shared.Mongo;
+using CertiBlock.Shared.Observability;
 using CertiBlock.Shared.RabbitMQ;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -52,6 +54,10 @@ public static class Extensions
 
         // Error Handling
         services.AddErrorHandling();
+        services.AddSingleton<IExceptionMapper, EthereumExceptionMapper>();
+        
+        // OpenTelemetry
+        services.AddObservability(configuration);
 
         return services;
     }

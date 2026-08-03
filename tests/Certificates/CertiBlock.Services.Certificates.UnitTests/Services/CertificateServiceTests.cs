@@ -140,7 +140,7 @@ public class CertificateServiceTests
             .ReturnsAsync(new List<Certificate>());
 
         // Act & Assert
-        await Should.ThrowAsync<CetrtificateForUserNotFoundException>(() =>
+        await Should.ThrowAsync<CertificateForUserNotFoundException>(() =>
             _service.GetCertificatesByUserIdAsync(userId));
     }
     

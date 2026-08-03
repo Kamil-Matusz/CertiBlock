@@ -98,8 +98,10 @@ const MetricsModal = ({ open, onClose, certificateId }: MetricsModalProps) => {
             setMetrics(null);
 
             try {
+                const token = localStorage.getItem('token');
                 const response = await fetch(
-                    apiEndpoints.ethereum(`../EthereumMetrics/getEthereumTransactionMetricsByCertificateId/${certificateId}`)
+                    apiEndpoints.ethereum(`../EthereumMetrics/getEthereumTransactionMetricsByCertificateId/${certificateId}`),
+                    { headers: { ...(token && { 'Authorization': `Bearer ${token}` }) } }
                 );
 
                 if (!response.ok) throw new Error('Failed to fetch metrics');

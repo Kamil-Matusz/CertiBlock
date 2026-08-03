@@ -1,6 +1,8 @@
 ﻿using CertiBlock.Services.Users.Application.Abstractions;
 using CertiBlock.Services.Users.Application.Services;
 using CertiBlock.Services.Users.Application.Services.Clock;
+using CertiBlock.Services.Users.Application.Validators;
+using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -18,6 +20,9 @@ public static class Extensions
     
         // Services
         services.AddServices();
+
+        // Command validators
+        services.AddValidatorsFromAssemblyContaining<SignUpValidator>();
         
         return services;
     }

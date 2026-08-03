@@ -7,7 +7,7 @@ namespace CertiBlock.Services.Users.Application.Handlers;
 
 public sealed class DeleteUserAccountHandler(IUserRepository userRepository) : ICommandHandler<DeleteUserAccount>
 {
-    public async Task HandlerAsync(DeleteUserAccount command)
+    public async Task HandleAsync(DeleteUserAccount command)
     {
         var user = await userRepository.GetUserByIdAsync(command.UserId);
         if (user is null)

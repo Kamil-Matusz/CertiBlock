@@ -53,10 +53,12 @@ const WalletCard = ({ wallet }: { wallet: WalletConfig }) => {
                 ? `getEthBalanceByWalletAddress/${wallet.address}`
                 : `getMaticBalanceByWalletAddress/${wallet.address}`;
 
+            const token = localStorage.getItem('token');
             const response = await fetch(
                 wallet.blockchain === 'Ethereum'
                     ? apiEndpoints.ethereum(endpoint)
-                    : apiEndpoints.polygon(endpoint)
+                    : apiEndpoints.polygon(endpoint),
+                { headers: { ...(token && { 'Authorization': `Bearer ${token}` }) } }
             );
 
             if (!response.ok) {

@@ -77,8 +77,14 @@ export const EthereumResearchMetrics = () => {
             setError(null);
 
             try {
+                const token = localStorage.getItem('token');
                 const response = await fetch(
-                    apiEndpoints.ethereum('../EthereumMetrics/getEthereumResearchMetrics')
+                    apiEndpoints.ethereum('../EthereumMetrics/getEthereumResearchMetrics'),
+                    {
+                        headers: {
+                            ...(token && { 'Authorization': `Bearer ${token}` })
+                        }
+                    }
                 );
 
                 if (!response.ok) throw new Error('Failed to fetch research metrics');

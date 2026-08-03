@@ -26,13 +26,14 @@ public class MetricsService(IInfluxDBClient client, InfluxDbOptions options, ILo
                 .Timestamp(metricEvent.Timestamp, WritePrecision.Ns);
 
             await writeApi.WritePointAsync(point, options.Bucket, options.Organization);
-            
-            logger.LogInformation("Blockchain metric written: {Blockchain} - {Operation}", 
+
+            logger.LogInformation("Blockchain metric written: {Blockchain} - {Operation}",
                                    metricEvent.Blockchain, metricEvent.Operation);
         }
         catch (Exception ex)
         {
             logger.LogError(ex, "Error writing blockchain metric");
+            throw;
         }
     }
 
@@ -58,6 +59,7 @@ public class MetricsService(IInfluxDBClient client, InfluxDbOptions options, ILo
         catch (Exception ex)
         {
             logger.LogError(ex, "Error writing finalization metric");
+            throw;
         }
     }
 }

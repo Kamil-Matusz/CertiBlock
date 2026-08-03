@@ -1,6 +1,7 @@
 using CertiBlock.Services.Users.Application;
 using CertiBlock.Services.Users.Core;
 using CertiBlock.Services.Users.Infrastructure;
+using CertiBlock.Shared.Observability;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,14 +17,6 @@ builder.Services
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-/*if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-    app.MapOpenApi();
-}*/
-
 app.UseSwagger();
 app.UseSwaggerUI();
 app.MapOpenApi();
@@ -31,6 +24,8 @@ app.MapOpenApi();
 app.UseHttpsRedirection();
 
 app.UseInfrastructure();
+
+app.UseObservability();
 
 app.MapControllers();
 

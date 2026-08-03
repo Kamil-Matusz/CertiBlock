@@ -77,8 +77,10 @@ export const PolygonResearchMetrics = () => {
             setError(null);
 
             try {
+                const token = localStorage.getItem('token');
                 const response = await fetch(
-                    apiEndpoints.polygon('../PolygonMetrics/getPolygonResearchMetrics')
+                    apiEndpoints.polygon('../PolygonMetrics/getPolygonResearchMetrics'),
+                    { headers: { ...(token && { 'Authorization': `Bearer ${token}` }) } }
                 );
 
                 if (!response.ok) throw new Error('Failed to fetch research metrics');

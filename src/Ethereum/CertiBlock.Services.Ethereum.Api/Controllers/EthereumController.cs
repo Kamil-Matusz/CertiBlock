@@ -3,6 +3,7 @@ using CertiBlock.Services.Ethereum.Application.Services;
 using CertiBlock.Services.Ethereum.Application.Services.Ethereum;
 using CertiBlock.Services.Ethereum.Core.DTO;
 using CertiBlock.Shared.Enums;
+using CertiBlock.Shared.Helpers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CertiBlock.Services.Ethereum.Api.Controllers;
@@ -13,7 +14,14 @@ public class EthereumController(IEthereumService ethereumService, IEthereumFacad
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<EthereumBalanceDto>> GetEthereumBalanceByWalletAddress(string walletAddress)
-        => Ok(await ethereumService.GetEthBalanceAsync(walletAddress));
+    {
+        if (!EvmAddress.IsValid(walletAddress))
+        {
+            return BadRequest(new { code = "invalid_wallet_address", message = "Invalid wallet address format." });
+        }
+
+        return Ok(await ethereumService.GetEthBalanceAsync(walletAddress));
+    }
 
     [HttpPost("registerCertificate")]
     [ProducesResponseType(StatusCodes.Status201Created)]
@@ -21,7 +29,10 @@ public class EthereumController(IEthereumService ethereumService, IEthereumFacad
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<BlockchainTransactionResultDto>> RegisterCertificate(
         [FromBody] BlockchainTransactionDto dto)
-        => Ok(await ethereumService.RegisterEthereumTransactionAsync(dto));
+    {
+        var result = await ethereumService.RegisterEthereumTransactionAsync(dto);
+        return CreatedAtAction(nameof(GetEthereumTransactionsById), new { id = result.Id }, result);
+    }
 
     [HttpGet("getEthereumTransactionStatus/{transactionHash}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -52,7 +63,10 @@ public class EthereumController(IEthereumService ethereumService, IEthereumFacad
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<BlockchainTransactionResultDto>> GetEthereumTransactionsPaged([FromQuery] int pageIndex, [FromQuery] int pageSize)
-        => Ok(await ethereumService.GetEthereumTransactionsPagedAsync(pageIndex, pageSize));
+    {
+        var (page, size) = Paging.Normalize(pageIndex, pageSize);
+        return Ok(await ethereumService.GetEthereumTransactionsPagedAsync(page, size));
+    }
     
     [HttpGet("getEthereumAllTransactions")]
     [ProducesResponseType(StatusCodes.Status200OK)]

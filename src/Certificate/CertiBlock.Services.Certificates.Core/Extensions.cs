@@ -3,12 +3,14 @@ using CertiBlock.Services.Certificates.Core.Clients;
 using CertiBlock.Services.Certificates.Core.Configurations;
 using CertiBlock.Services.Certificates.Core.DAL;
 using CertiBlock.Services.Certificates.Core.Entities;
+using CertiBlock.Services.Certificates.Core.Exceptions;
 using CertiBlock.Services.Certificates.Core.Services;
 using CertiBlock.Services.Certificates.Core.Validators;
 using CertiBlock.Shared.CORS;
 using CertiBlock.Shared.Exceptions;
 using CertiBlock.Shared.Logging;
 using CertiBlock.Shared.Mongo;
+using CertiBlock.Shared.Observability;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -49,11 +51,15 @@ public static class Extensions
         // Seq
         services.AddSeqLogging(configuration);
         
+        // OpenTelemetry
+        services.AddObservability(configuration);
+        
         // CORS
         services.AddCorsPolicy();
 
         // Error Handling
         services.AddErrorHandling();
+        services.AddSingleton<IExceptionMapper, CertificateExceptionMapper>();
 
         return services;
     }

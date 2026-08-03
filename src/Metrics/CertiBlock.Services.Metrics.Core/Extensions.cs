@@ -4,6 +4,7 @@ using CertiBlock.Shared.CORS;
 using CertiBlock.Shared.Exceptions;
 using CertiBlock.Shared.InfluxDB;
 using CertiBlock.Shared.Logging;
+using CertiBlock.Shared.Observability;
 using CertiBlock.Shared.RabbitMQ;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -41,6 +42,9 @@ public static class Extensions
 
         // Error Handling
         services.AddErrorHandling();
+        
+        // OpenTelemetry
+        services.AddObservability(configuration);
 
         return services;
     }

@@ -1,0 +1,38 @@
+﻿global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'certiblock-gateway'
+    static_configs:
+      - targets: ['host.docker.internal:5126']
+    metrics_path: /metrics
+
+  - job_name: 'certiblock-ethereum'
+    static_configs:
+      - targets: ['host.docker.internal:5055']
+    metrics_path: /metrics
+
+  - job_name: 'certiblock-certificates'
+    static_configs:
+      - targets: ['host.docker.internal:5052']
+    metrics_path: /metrics
+
+  - job_name: 'certiblock-polygon'
+    static_configs:
+      - targets: ['host.docker.internal:5056']
+    metrics_path: /metrics
+  
+  - job_name: 'certiblock-users'
+    static_configs:
+      - targets: ['host.docker.internal:5097']
+    metrics_path: /metrics
+    
+  - job_name: 'certiblock-metrics'
+    static_configs:
+      - targets: [ 'host.docker.internal:5137']
+    metrics_path: /metrics
